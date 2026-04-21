@@ -1,0 +1,62 @@
+[
+  {
+    "id": "orchid-aurora-01",
+    "name": "晨曦粉霧蝴蝶蘭",
+    "category": "orchid",
+    "image": "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><rect width='800' height='600' fill='%23F8E8EF'/><rect x='110' y='144' width='580' height='312' rx='40' fill='white' opacity='0.92'/><text x='400' y='212' text-anchor='middle' fill='%23B76E79' font-family='Segoe UI, Arial, sans-serif' font-size='28' font-weight='700'>Bloom %26 Grace</text><text x='400' y='262' text-anchor='middle' fill='%236F6677' font-family='Segoe UI, Arial, sans-serif' font-size='36' font-weight='700'>晨曦粉霧蝴蝶蘭</text></svg>",
+    "originalPrice": 5680,
+    "memberPrice": 5180,
+    "description": "柔粉花瓣搭配奶白陶盆，適合升遷與溫柔送禮場合。",
+    "tag": "人氣熱銷"
+  },
+  {
+    "id": "orchid-luna-02",
+    "name": "月映白金蝴蝶蘭",
+    "category": "orchid",
+    "image": "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><rect width='800' height='600' fill='%23F8E8EF'/><rect x='110' y='144' width='580' height='312' rx='40' fill='white' opacity='0.92'/><text x='400' y='212' text-anchor='middle' fill='%23B76E79' font-family='Segoe UI, Arial, sans-serif' font-size='28' font-weight='700'>Bloom %26 Grace</text><text x='400' y='262' text-anchor='middle' fill='%236F6677' font-family='Segoe UI, Arial, sans-serif' font-size='36' font-weight='700'>月映白金蝴蝶蘭</text></svg>",
+    "originalPrice": 6880,
+    "memberPrice": 6280,
+    "description": "高雅白色蝴蝶蘭搭配淡金緞帶，適合開幕誌慶與品牌贈禮。",
+    "tag": "開幕首選"
+  },
+  {
+    "id": "basket-opus-04",
+    "name": "盛放祝賀花籃",
+    "category": "basket",
+    "image": "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><rect width='800' height='600' fill='%23FBF3E4'/><rect x='110' y='144' width='580' height='312' rx='40' fill='white' opacity='0.92'/><text x='400' y='212' text-anchor='middle' fill='%23A77B43' font-family='Segoe UI, Arial, sans-serif' font-size='28' font-weight='700'>Bloom %26 Grace</text><text x='400' y='262' text-anchor='middle' fill='%236F6677' font-family='Segoe UI, Arial, sans-serif' font-size='36' font-weight='700'>盛放祝賀花籃</text></svg>",
+    "originalPrice": 4280,
+    "memberPrice": 3890,
+    "description": "明亮色系花材與金色包裝，適合開幕、喬遷與演出祝賀。",
+    "tag": "開幕首選"
+  },
+  {
+    "id": "basket-harmony-05",
+    "name": "暖陽典雅花籃",
+    "category": "basket",
+    "image": "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><rect width='800' height='600' fill='%23FBF3E4'/><rect x='110' y='144' width='580' height='312' rx='40' fill='white' opacity='0.92'/><text x='400' y='212' text-anchor='middle' fill='%23A77B43' font-family='Segoe UI, Arial, sans-serif' font-size='28' font-weight='700'>Bloom %26 Grace</text><text x='400' y='262' text-anchor='middle' fill='%236F6677' font-family='Segoe UI, Arial, sans-serif' font-size='36' font-weight='700'>暖陽典雅花籃</text></svg>",
+    "originalPrice": 4980,
+    "memberPrice": 4520,
+    "description": "暖橘與香檳金配色，視覺飽滿，適合品牌合作送禮。",
+    "tag": "人氣熱銷"
+  },
+  {
+    "id": "potted-velvet-07",
+    "name": "霧粉玫瑰盆花",
+    "category": "potted",
+    "image": "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><rect width='800' height='600' fill='%23EEF5EA'/><rect x='110' y='144' width='580' height='312' rx='40' fill='white' opacity='0.92'/><text x='400' y='212' text-anchor='middle' fill='%236E8B62' font-family='Segoe UI, Arial, sans-serif' font-size='28' font-weight='700'>Bloom %26 Grace</text><text x='400' y='262' text-anchor='middle' fill='%236F6677' font-family='Segoe UI, Arial, sans-serif' font-size='36' font-weight='700'>霧粉玫瑰盆花</text></svg>",
+    "originalPrice": 2480,
+    "memberPrice": 2280,
+    "description": "小巧柔和的桌上型盆花，適合生日與紀念日禮物。",
+    "tag": "人氣熱銷"
+  },
+  {
+    "id": "sympathy-serene-10",
+    "name": "靜心追思花禮",
+    "category": "sympathy",
+    "image": "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><rect width='800' height='600' fill='%23F1ECF8'/><rect x='110' y='144' width='580' height='312' rx='40' fill='white' opacity='0.92'/><text x='400' y='212' text-anchor='middle' fill='%238A7AA6' font-family='Segoe UI, Arial, sans-serif' font-size='28' font-weight='700'>Bloom %26 Grace</text><text x='400' y='262' text-anchor='middle' fill='%236F6677' font-family='Segoe UI, Arial, sans-serif' font-size='36' font-weight='700'>靜心追思花禮</text></svg>",
+    "originalPrice": 3680,
+    "memberPrice": 3380,
+    "description": "白色與淡紫花材低調呈現，傳達溫柔而莊重的心意。",
+    "tag": "溫柔致意"
+  }
+]

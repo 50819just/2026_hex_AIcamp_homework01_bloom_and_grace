@@ -1,0 +1,18 @@
+model = "gpt-5.4"
+reasoning_effort = "medium"
+
+[project]
+memory_file = "AGENTS.md"
+
+[preferences]
+language = "zh-TW"
+confirm_before_destructive = true
+
+[paths]
+docs = "docs"
+plans = "docs/plans"
+plan_archive = "docs/plans/archive"
+
+[guards]
+hide_secrets_in_frontend = true
+require_docs_update_for_feature = true
