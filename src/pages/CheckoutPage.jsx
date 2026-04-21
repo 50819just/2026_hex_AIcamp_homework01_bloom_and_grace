@@ -11,7 +11,7 @@ const deliveryOptions = [
 ]
 
 const paymentOptions = [
-  { key: 'ecpay', label: '綠界金流（信用卡）', description: '送出後將跳轉至綠界測試付款頁。' },
+  { key: 'ecpay', label: '綠界付款' },
 ]
 
 function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess }) {
@@ -84,6 +84,30 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
             <h1 className="page-title">前往結帳</h1>
             <p className="page-description">依序確認商品、送貨資訊與付款方式，完成後會跳轉到綠界付款頁。</p>
           </div>
+        </div>
+
+        <div className="checkout-steps-bar">
+          <article className="checkout-step-pill">
+            <span>01</span>
+            <div>
+              <strong>確認商品</strong>
+              <p>檢查花禮品項、數量與金額</p>
+            </div>
+          </article>
+          <article className="checkout-step-pill">
+            <span>02</span>
+            <div>
+              <strong>填寫送貨資訊</strong>
+              <p>確認收件人、電話與地址</p>
+            </div>
+          </article>
+          <article className="checkout-step-pill">
+            <span>03</span>
+            <div>
+              <strong>綠界付款</strong>
+              <p>送出後跳轉至綠界付款頁</p>
+            </div>
+          </article>
         </div>
 
         <div className="checkout-steps">
@@ -210,7 +234,7 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
                     />
                     <div>
                       <strong>{option.label}</strong>
-                      <p>{option.description}</p>
+                      <p>安全付款，送出後將直接前往綠界頁面。</p>
                     </div>
                   </label>
                 ))}

@@ -105,18 +105,32 @@
   padding: 10px 14px;
   border-radius: 999px;
   color: var(--text-strong);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(34, 34, 34, 0.06);
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
   transition:
     background 0.18s ease,
     transform 0.18s ease,
-    color 0.18s ease;
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .main-nav button:hover,
 .text-button:hover,
 .secondary-button:hover,
 .icon-button:hover {
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.96);
   transform: translateY(-1px);
+}
+
+.main-nav button:hover {
+  border-color: rgba(34, 34, 34, 0.1);
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
 .nav-button-icon {
@@ -129,6 +143,33 @@
   opacity: 0.9;
 }
 
+.nav-button-icon-about {
+  color: #7b6d99;
+}
+
+.nav-button-icon-shop {
+  color: #6e8b62;
+}
+
+.nav-button-icon-cart {
+  color: #a67a52;
+}
+
+.nav-button-icon-member {
+  color: #8a6b8f;
+}
+
+.nav-button-icon-cart-empty {
+  opacity: 0.72;
+}
+
+.nav-button-icon-cart-filled {
+  color: #b56f2f;
+  opacity: 1;
+  transform: scale(1.08);
+  filter: drop-shadow(0 4px 8px rgba(181, 111, 47, 0.16));
+}
+
 .nav-button-icon svg {
   width: 100%;
   height: 100%;
@@ -137,14 +178,18 @@
 
 .nav-badge {
   margin-left: 8px;
-  min-width: 22px;
-  height: 22px;
+  min-width: 24px;
+  height: 24px;
   display: inline-grid;
   place-items: center;
   border-radius: 999px;
-  background: var(--accent);
+  background: linear-gradient(135deg, #d28b42, #b56f2f);
   color: white;
   font-size: 12px;
+  font-weight: 800;
+  box-shadow:
+    0 8px 16px rgba(181, 111, 47, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .announcement-bar {
@@ -175,12 +220,12 @@
   z-index: 50;
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  min-width: 280px;
-  max-width: min(90vw, 420px);
+  gap: 10px;
+  min-width: 220px;
+  max-width: min(88vw, 320px);
   justify-content: center;
-  padding: 20px 26px;
-  border-radius: 24px;
+  padding: 14px 18px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(34, 34, 34, 0.08);
   color: var(--text-strong);
@@ -195,7 +240,7 @@
     opacity 0.42s ease,
     transform 0.42s ease,
     box-shadow 0.42s ease;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   text-align: center;
 }
@@ -206,16 +251,32 @@
 }
 
 .toast-icon {
-  width: 34px;
-  height: 34px;
+  width: 26px;
+  height: 26px;
   display: inline-grid;
   place-items: center;
   border-radius: 999px;
   background: rgba(111, 125, 106, 0.12);
   color: var(--accent-strong);
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 800;
   flex-shrink: 0;
+  animation: toastCheckPop 0.52s ease;
+}
+
+@keyframes toastCheckPop {
+  0% {
+    transform: scale(0.6) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.16) rotate(4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
 }
 
 .main-content {
@@ -1196,6 +1257,49 @@
   gap: 20px;
 }
 
+.checkout-steps-bar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.checkout-step-pill {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.checkout-step-pill span {
+  width: 42px;
+  height: 42px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(34, 34, 34, 0.06);
+  color: var(--accent-strong);
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.checkout-step-pill strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-strong);
+}
+
+.checkout-step-pill p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 14px;
+}
+
 .checkout-form-layout {
   display: grid;
   gap: 20px;
@@ -1642,6 +1746,7 @@
   .admin-form-grid,
   .about-grid,
   .profile-layout,
+  .checkout-steps-bar,
   .checkout-form-grid {
     grid-template-columns: 1fr;
   }
@@ -1723,9 +1828,9 @@
   .toast {
     top: 78px;
     min-width: unset;
-    width: min(90vw, 360px);
-    padding: 18px 20px;
-    font-size: 16px;
+    width: min(88vw, 300px);
+    padding: 14px 16px;
+    font-size: 14px;
   }
 
   .admin-product-item {

@@ -17,20 +17,26 @@ function Navbar({ cartCount, isMember, onToggleMemberModal }) {
 
       <nav className="main-nav" aria-label="主要導覽">
         <button type="button" onClick={() => navigateTo('/about')}>
-          <span className="nav-button-icon">
+          <span className="nav-button-icon nav-button-icon-about">
             <NavIcon type="about" />
           </span>
           企業理念
         </button>
         <button type="button" onClick={() => navigateTo('/shop')}>
-          <span className="nav-button-icon">
+          <span className="nav-button-icon nav-button-icon-shop">
             <NavIcon type="shop" />
           </span>
           商品選購
         </button>
         <button type="button" onClick={() => navigateTo('/cart')}>
-          <span className="nav-button-icon">
-            <NavIcon type="cart" />
+          <span
+            className={
+              cartCount > 0
+                ? 'nav-button-icon nav-button-icon-cart nav-button-icon-cart-filled'
+                : 'nav-button-icon nav-button-icon-cart nav-button-icon-cart-empty'
+            }
+          >
+            <NavIcon type="cart" isActive={cartCount > 0} />
           </span>
           購物車 {cartCount > 0 ? <span className="nav-badge">{cartCount}</span> : null}
         </button>
@@ -45,6 +51,9 @@ function Navbar({ cartCount, isMember, onToggleMemberModal }) {
             onToggleMemberModal()
           }}
         >
+          <span className="nav-button-icon nav-button-icon-member">
+            <NavIcon type="member" />
+          </span>
           {isMember ? '會員中心' : '會員登入'}
         </button>
       </nav>

@@ -1,4 +1,19 @@
-function NavIcon({ type }) {
+function NavIcon({ type, isActive = false }) {
+  if (type === 'member') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="8.2" r="3.2" fill="none" stroke="currentColor" strokeWidth="1.7" />
+        <path
+          d="M6.2 18.5c.8-2.8 3.1-4.4 5.8-4.4 2.8 0 5 1.6 5.8 4.4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+        />
+      </svg>
+    )
+  }
+
   if (type === 'about') {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -36,7 +51,26 @@ function NavIcon({ type }) {
     )
   }
 
-  return (
+  return isActive ? (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M4 5.4h2.1l1.4 7.9h9.4l1.9-5.3H8.5"
+        fill="currentColor"
+        opacity="0.18"
+      />
+      <path
+        d="M4 5.4h2.1l1.4 7.9h9.4l1.9-5.3H8.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="9" cy="18.7" r="1.7" fill="currentColor" />
+      <circle cx="17" cy="18.7" r="1.7" fill="currentColor" />
+      <path d="M12 8.3v3.8M10.1 10.2H14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  ) : (
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <circle cx="9" cy="19" r="1.5" fill="none" stroke="currentColor" strokeWidth="1.7" />
       <circle cx="17" cy="19" r="1.5" fill="none" stroke="currentColor" strokeWidth="1.7" />
