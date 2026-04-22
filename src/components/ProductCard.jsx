@@ -1,9 +1,25 @@
 import PriceBlock from './PriceBlock'
 import { createPlaceholderImage } from '../lib/imagePlaceholders'
 
+function getCategoryTheme(category) {
+  if (category === 'basket') {
+    return 'theme-gold'
+  }
+
+  if (category === 'potted') {
+    return 'theme-green'
+  }
+
+  if (category === 'sympathy') {
+    return 'theme-lavender'
+  }
+
+  return 'theme-rose'
+}
+
 function ProductCard({ product, isMember, onAddToCart, onViewDetail, actionLabel = '查看詳情' }) {
   return (
-    <article className="product-card">
+    <article className={`product-card ${getCategoryTheme(product.category)}`}>
       <div className="product-image-wrap">
         <img
           src={product.image}

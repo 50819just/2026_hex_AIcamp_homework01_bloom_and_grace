@@ -1,6 +1,30 @@
+import FloralLogo from '../components/FloralLogo'
+import { memberVisuals } from '../data/memberAssets'
 import { navigateTo } from '../hooks/useRouter'
 
-function ProfilePage({ isMember, cartCount, onOpenMemberModal }) {
+function formatDate(value) {
+  if (!value) {
+    return '—'
+  }
+
+  return value.replaceAll('-', ' / ')
+}
+
+function formatCurrency(value) {
+  return `NT$ ${Number(value || 0).toLocaleString('zh-TW')}`
+}
+
+function ProfilePage({ isMember, memberProfile, cartCount, onOpenMemberModal }) {
+  const addresses = memberProfile?.addresses || []
+  const orders = memberProfile?.orders || []
+  const favoriteCategories = memberProfile?.favoriteCategories || []
+  const profileStats = {
+    cartCount,
+    savedRecipients: memberProfile?.stats?.savedRecipients || addresses.length,
+    yearlyOrders: memberProfile?.stats?.yearlyOrders || orders.length,
+    memberDiscountLabel: memberProfile?.stats?.memberDiscountLabel || '95 折示意',
+  }
+
   if (!isMember) {
     return (
       <div className="page-stack">
@@ -9,14 +33,28 @@ function ProfilePage({ isMember, cartCount, onOpenMemberModal }) {
             <div>
               <p className="section-kicker">Member</p>
               <h1 className="page-title">會員中心</h1>
-              <p className="page-description">登入後可以查看會員價、常用資料與目前購物狀態。</p>
+              <p className="page-description">登入後可以查看會員價、常用資料、訂單紀錄與收件資料。</p>
             </div>
           </div>
 
-          <div className="profile-guest-card">
-            <h2>你目前還不是登入狀態</h2>
-            <p>登入後可享會員價、快速結帳體驗，以及後續更完整的會員功能擴充。</p>
-            <div className="hero-actions">
+          <div className="profile-brand-panel profile-guest-panel">
+            <div className="profile-brand-grid">
+              <div className="profile-brand-badge">
+                <span className="profile-brand-mark">
+                  <FloralLogo />
+                </span>
+                <div>
+                  <p className="section-kicker">Bloom & Grace Member</p>
+                  <h2>把祝福、感謝與思念，交給一份溫柔有質感的花禮</h2>
+                  <p className="profile-brand-copy">登入後即可啟用會員價、快速帶入收件資料，未來也能延伸成完整會員與訂單系統。</p>
+                </div>
+              </div>
+              <div className="profile-visual-card">
+                <img src={memberVisuals.welcome} alt="會員花禮體驗" className="profile-visual-image" />
+              </div>
+            </div>
+
+            <div className="profile-brand-actions">
               <button type="button" className="primary-button" onClick={onOpenMemberModal}>
                 立即登入 / 註冊
               </button>
@@ -37,64 +75,168 @@ function ProfilePage({ isMember, cartCount, onOpenMemberModal }) {
           <div>
             <p className="section-kicker">Member Profile</p>
             <h1 className="page-title">會員中心</h1>
-            <p className="page-description">這裡先用 mock profile 示意會員資料與購物資訊，方便未來擴充成完整會員系統。</p>
+            <p className="page-description">這裡已整理成比較完整的會員資料頁面，之後要接真實登入、訂單與地址 API 也比較順。</p>
           </div>
         </div>
 
-        <div className="profile-layout">
-          <article className="profile-card profile-main-card">
+        <div className="profile-brand-panel">
+          <div className="profile-brand-grid">
+            <div className="profile-brand-badge">
+              <span className="profile-brand-mark">
+                <FloralLogo />
+              </span>
+              <div>
+                <p className="section-kicker">Bloom Select</p>
+                <h2>{memberProfile?.name || 'Grace Lin'}</h2>
+                <p className="profile-brand-copy">{memberProfile?.email || 'member@bloomandgrace.tw'} ・ 會員價啟用中 ・ 送禮體驗已準備好</p>
+              </div>
+            </div>
+            <div className="profile-visual-card">
+              <img src={memberVisuals.profile} alt="Bloom 會員中心" className="profile-visual-image" />
+            </div>
+          </div>
+
+          <div className="profile-chip-list">
+            <span>會員等級｜{memberProfile?.level || 'Bloom Select'}</span>
+            <span>加入日期｜{formatDate(memberProfile?.joinedAt)}</span>
+            <span>偏好品項｜{favoriteCategories.join('、') || '蝴蝶蘭、花籃'}</span>
+          </div>
+        </div>
+
+        <div className="profile-stats-grid">
+          <article className="profile-stat-card">
+            <span>購物車商品數</span>
+            <strong>{profileStats.cartCount}</strong>
+          </article>
+          <article className="profile-stat-card">
+            <span>常用收件資料</span>
+            <strong>{profileStats.savedRecipients}</strong>
+          </article>
+          <article className="profile-stat-card">
+            <span>年度訂單筆數</span>
+            <strong>{profileStats.yearlyOrders}</strong>
+          </article>
+          <article className="profile-stat-card">
+            <span>會員優惠</span>
+            <strong>{profileStats.memberDiscountLabel}</strong>
+          </article>
+        </div>
+
+        <div className="profile-layout profile-layout-expanded">
+          <article className="profile-card profile-main-card profile-main-card-expanded">
             <div className="profile-avatar">BG</div>
             <div className="profile-main-content">
-              <p className="section-kicker">Bloom Member</p>
-              <h2>Grace Lin</h2>
-              <p>member@bloomandgrace.tw</p>
-              <div className="profile-chip-list">
-                <span>會員等級｜Bloom Select</span>
-                <span>會員價啟用中</span>
-                <span>偏好品項｜蝴蝶蘭、花籃</span>
-              </div>
+              <p className="section-kicker">Account Overview</p>
+              <h2>{memberProfile?.name || 'Grace Lin'}</h2>
+              <p>這份資料目前支援前端示意與本地 mock API，後續可以直接接會員後端。</p>
             </div>
           </article>
 
-          <article className="profile-card">
-            <h3>常用收件資料</h3>
-            <ul className="profile-info-list">
-              <li>
-                <strong>收件人</strong>
-                <span>林小姐</span>
-              </li>
-              <li>
-                <strong>聯絡電話</strong>
-                <span>0912-345-678</span>
-              </li>
-              <li>
-                <strong>常用地址</strong>
-                <span>台北市大安區信義路四段 100 號</span>
-              </li>
-            </ul>
-          </article>
-
-          <article className="profile-card">
-            <h3>會員購物概覽</h3>
-            <div className="profile-stat-list">
-              <div>
-                <span>購物車商品數</span>
-                <strong>{cartCount}</strong>
-              </div>
-              <div>
-                <span>本月會員優惠</span>
-                <strong>95 折示意</strong>
-              </div>
-              <div>
-                <span>推薦情境</span>
-                <strong>開幕誌慶</strong>
-              </div>
+          <article className="profile-card profile-table-card">
+            <div className="profile-card-heading">
+              <h3>會員基本資料</h3>
+              <span>可延伸成真實 editable profile</span>
+            </div>
+            <div className="profile-table-wrap">
+              <table className="profile-table">
+                <tbody>
+                  <tr>
+                    <th>會員姓名</th>
+                    <td>{memberProfile?.name || 'Grace Lin'}</td>
+                  </tr>
+                  <tr>
+                    <th>Email</th>
+                    <td>{memberProfile?.email || 'member@bloomandgrace.tw'}</td>
+                  </tr>
+                  <tr>
+                    <th>手機</th>
+                    <td>{memberProfile?.phone || '0912-345-678'}</td>
+                  </tr>
+                  <tr>
+                    <th>生日</th>
+                    <td>{formatDate(memberProfile?.birthday)}</td>
+                  </tr>
+                  <tr>
+                    <th>會員等級</th>
+                    <td>{memberProfile?.level || 'Bloom Select'}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </article>
 
-          <article className="profile-card">
-            <h3>最近關注</h3>
-            <p>月映白金蝴蝶蘭、盛放祝賀花籃、靜心追思花禮</p>
+          <article className="profile-card profile-table-card">
+            <div className="profile-card-heading">
+              <h3>常用收件資料</h3>
+              <span>下單時可快速帶入</span>
+            </div>
+            <div className="profile-inline-visual">
+              <img src={memberVisuals.addressBook} alt="常用收件資料示意" className="profile-inline-visual-image" />
+            </div>
+            <div className="profile-table-wrap">
+              <table className="profile-table profile-table-list">
+                <thead>
+                  <tr>
+                    <th>標籤</th>
+                    <th>收件人</th>
+                    <th>聯絡電話</th>
+                    <th>地址</th>
+                    <th>備註</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {addresses.map((address) => (
+                    <tr key={address.id}>
+                      <td>{address.label}</td>
+                      <td>{address.recipient}</td>
+                      <td>{address.phone}</td>
+                      <td>{address.address}</td>
+                      <td>{address.note}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article className="profile-card profile-table-card profile-table-card-full">
+            <div className="profile-card-heading">
+              <h3>近期訂單紀錄</h3>
+              <span>可直接延伸成真實會員訂單 API</span>
+            </div>
+            <div className="profile-table-wrap">
+              <table className="profile-table profile-table-list">
+                <thead>
+                  <tr>
+                    <th>訂單編號</th>
+                    <th>日期</th>
+                    <th>商品</th>
+                    <th>金額</th>
+                    <th>狀態</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr key={order.id}>
+                      <td>{order.id}</td>
+                      <td>{formatDate(order.date)}</td>
+                      <td>{order.item}</td>
+                      <td>{formatCurrency(order.amount)}</td>
+                      <td>
+                        <span className="profile-status-pill">{order.status}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article className="profile-card profile-table-card profile-table-card-full">
+            <div className="profile-card-heading">
+              <h3>會員捷徑</h3>
+              <span>把常用操作放在一起會更順手</span>
+            </div>
             <div className="hero-actions">
               <button type="button" className="secondary-button" onClick={() => navigateTo('/shop')}>
                 繼續逛逛

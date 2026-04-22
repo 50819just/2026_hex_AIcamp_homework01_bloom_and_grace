@@ -1,0 +1,129 @@
+[
+  {
+    "id": "member-bloom-001",
+    "name": "Grace Lin",
+    "email": "member@bloomandgrace.tw",
+    "phone": "0912-345-678",
+    "level": "Bloom Select",
+    "joinedAt": "2026-03-08",
+    "birthday": "1996-05-20",
+    "favoriteCategories": ["蝴蝶蘭", "花籃", "追思花禮"],
+    "stats": {
+      "cartCount": 2,
+      "savedRecipients": 2,
+      "yearlyOrders": 6,
+      "memberDiscountLabel": "95 折示意"
+    },
+    "addresses": [
+      {
+        "id": "addr-1",
+        "label": "主要送禮地址",
+        "recipient": "林小姐",
+        "phone": "0912-345-678",
+        "address": "台北市大安區信義路四段 100 號",
+        "note": "白天可收件，管理室代收"
+      },
+      {
+        "id": "addr-2",
+        "label": "公司祝賀配送",
+        "recipient": "晨曦設計股份有限公司",
+        "phone": "02-2778-9000",
+        "address": "台北市松山區復興北路 88 號 12 樓",
+        "note": "開幕花禮常用地址"
+      }
+    ],
+    "orders": [
+      {
+        "id": "BG2026040801",
+        "date": "2026-04-08",
+        "item": "晨光金采開幕花籃",
+        "amount": 3680,
+        "status": "已完成"
+      },
+      {
+        "id": "BG2026032203",
+        "date": "2026-03-22",
+        "item": "月映白金蝴蝶蘭",
+        "amount": 5280,
+        "status": "已送達"
+      }
+    ]
+  },
+  {
+    "id": "member-bloom-002",
+    "name": "Ariel Wang",
+    "email": "ariel.wang@example.com",
+    "phone": "0988-123-456",
+    "level": "Bloom Member",
+    "joinedAt": "2026-02-18",
+    "birthday": "1994-11-03",
+    "favoriteCategories": ["花籃", "盆花"],
+    "stats": {
+      "cartCount": 1,
+      "savedRecipients": 1,
+      "yearlyOrders": 3,
+      "memberDiscountLabel": "生日月 92 折"
+    },
+    "addresses": [
+      {
+        "id": "addr-3",
+        "label": "住家地址",
+        "recipient": "王小姐",
+        "phone": "0988-123-456",
+        "address": "新北市板橋區文化路一段 200 號 8 樓",
+        "note": "平日晚間較方便收件"
+      }
+    ],
+    "orders": [
+      {
+        "id": "BG2026040105",
+        "date": "2026-04-01",
+        "item": "暖陽典雅花籃",
+        "amount": 4520,
+        "status": "處理中"
+      }
+    ]
+  },
+  {
+    "id": "member-bloom-003",
+    "name": "Daniel Chen",
+    "email": "daniel.chen@example.com",
+    "phone": "0977-555-321",
+    "level": "Bloom Select",
+    "joinedAt": "2025-12-12",
+    "birthday": "1990-08-17",
+    "favoriteCategories": ["蝴蝶蘭"],
+    "stats": {
+      "cartCount": 0,
+      "savedRecipients": 3,
+      "yearlyOrders": 8,
+      "memberDiscountLabel": "常客回饋 9 折"
+    },
+    "addresses": [
+      {
+        "id": "addr-4",
+        "label": "公司前台",
+        "recipient": "陳先生",
+        "phone": "0977-555-321",
+        "address": "台中市西屯區台灣大道三段 99 號",
+        "note": "可請前台代收"
+      }
+    ],
+    "orders": [
+      {
+        "id": "BG2026031009",
+        "date": "2026-03-10",
+        "item": "香檳金雙梗蝴蝶蘭",
+        "amount": 5480,
+        "status": "已完成"
+      },
+      {
+        "id": "BG2026012207",
+        "date": "2026-01-22",
+        "item": "晨曦粉霧蝴蝶蘭",
+        "amount": 5180,
+        "status": "已完成"
+      }
+    ]
+  }
+]

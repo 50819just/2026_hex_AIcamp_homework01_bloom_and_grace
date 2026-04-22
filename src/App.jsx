@@ -5,6 +5,7 @@ import MemberModal from './components/MemberModal'
 import Navbar from './components/Navbar'
 import Toast from './components/Toast'
 import AdminPage from './pages/AdminPage'
+import AdminLoginPage from './pages/AdminLoginPage'
 import AboutPage from './pages/AboutPage'
 import CartPage from './pages/CartPage'
 import CheckoutPage from './pages/CheckoutPage'
@@ -14,7 +15,7 @@ import ProfilePage from './pages/ProfilePage'
 import ShopPage from './pages/ShopPage'
 import { getCategoryLabel, getProductById, products } from './data/products'
 import { navigateTo, useRouter } from './hooks/useRouter'
-import { fetchProducts } from './lib/api'
+import { fetchMemberProfile, fetchProducts } from './lib/api'
 
 function enrichProduct(product) {
   return {
@@ -26,28 +27,38 @@ function enrichProduct(product) {
 function App() {
   const { path } = useRouter()
   const [isMember, setIsMember] = useState(false)
+  const [memberProfile, setMemberProfile] = useState({
+    name: 'Grace Lin',
+    email: 'member@bloomandgrace.tw',
+    phone: '0912-345-678',
+    level: 'Bloom Select',
+    joinedAt: '2026-03-08',
+    birthday: '1996-05-20',
+    favoriteCategories: ['蝴蝶蘭', '花籃'],
+    stats: {
+      cartCount: 0,
+      savedRecipients: 2,
+      yearlyOrders: 6,
+      memberDiscountLabel: '95 折示意',
+    },
+    addresses: [],
+    orders: [],
+  })
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false)
   const [isMemberModalOpen, setIsMemberModalOpen] = useState(false)
   const [currentCategory, setCurrentCategory] = useState('all')
   const [searchText, setSearchText] = useState('')
   const [cartItems, setCartItems] = useState([])
   const [selectedQuantity, setSelectedQuantity] = useState(1)
-  const [feedbackMessage, setFeedbackMessage] = useState('登入會員後可享會員價，加入購物車時會看到更清楚的價格差異。')
   const [toastMessage, setToastMessage] = useState('')
   const [productListState, setProductListState] = useState([])
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const loadedProducts = await fetchProducts()
-        setProductListState(loadedProducts.map(enrichProduct))
-      } catch {
-        setProductListState(products.map(enrichProduct))
-        setFeedbackMessage('目前使用前端內建商品資料，若要啟用上架後台請一起啟動本地 server。')
-      }
-    }
-
-    loadProducts()
-  }, [])
+  const marqueeMessages = [
+    'Bloom & Grace｜以花傳遞祝福、感謝與思念',
+    '蝴蝶蘭、花籃、盆花與追思花禮，陪你度過每個重要時刻',
+    '登入會員即可查看會員價，享受更完整的花店選品體驗',
+    '現在可從購物車前往結帳，並串接綠界付款流程',
+  ]
 
   const showToast = (message) => {
     setToastMessage('')
@@ -61,6 +72,19 @@ function App() {
     }, 10)
   }
 
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const loadedProducts = await fetchProducts()
+        setProductListState(loadedProducts.map(enrichProduct))
+      } catch {
+        setProductListState(products.map(enrichProduct))
+        showToast('目前使用前端內建商品資料，若要啟用上架後台請一起啟動本地 server')
+      }
+    }
+
+    loadProducts()
+  }, [])
   const productList = useMemo(
     () => (productListState.length > 0 ? productListState : products.map(enrichProduct)),
     [productListState],
@@ -123,7 +147,6 @@ function App() {
       return [...previousItems, { ...product, quantity }]
     })
 
-    setFeedbackMessage(`${product.name} 已加入購物車，${isMember ? '會員價已套用顯示。' : '登入後可享會員價。'}`)
     showToast(`${product.name} 已加入購物車`)
     setSelectedQuantity(1)
   }
@@ -149,20 +172,39 @@ function App() {
   const handleRemoveCartItem = (productId) => {
     const removedItem = cartItems.find((item) => item.id === productId)
     setCartItems((previousItems) => previousItems.filter((item) => item.id !== productId))
-    setFeedbackMessage('商品已從購物車移除。')
     if (removedItem) {
       showToast(`${removedItem.name} 已從購物車移除`)
     }
   }
 
-  const toggleMember = () => {
-    setIsMember((previous) => !previous)
+  const handleMemberLogin = async (profile) => {
+    const fallbackProfile = {
+      ...memberProfile,
+      name: profile.name,
+      email: profile.email,
+    }
+
+    setIsMember(true)
+    setMemberProfile(fallbackProfile)
     setIsMemberModalOpen(false)
-    setFeedbackMessage(
-      isMember
-        ? '目前已切換為訪客狀態，商品仍可瀏覽，但會員價僅作為示意。'
-        : '已模擬登入會員，購物車與商品頁將以會員價為主要優惠顯示。',
-    )
+
+    try {
+      const remoteProfile = await fetchMemberProfile(profile.email)
+      setMemberProfile({
+        ...remoteProfile,
+        name: profile.name || remoteProfile.name,
+        email: profile.email || remoteProfile.email,
+      })
+    } catch {
+      showToast('會員資料先以前端示意顯示，稍後可再接真實會員 API')
+    }
+  }
+
+
+  const handleMemberLogout = () => {
+    setIsMember(false)
+    setIsMemberModalOpen(false)
+    showToast('已登出會員，目前以訪客身份瀏覽')
   }
 
   let pageContent = null
@@ -185,6 +227,7 @@ function App() {
     pageContent = (
       <ProfilePage
         isMember={isMember}
+        memberProfile={memberProfile}
         cartCount={cartCount}
         onOpenMemberModal={() => setIsMemberModalOpen(true)}
       />
@@ -199,7 +242,7 @@ function App() {
         onDecreaseQuantity={handleDecreaseCartItem}
         onRemoveItem={handleRemoveCartItem}
         onCheckout={() => {
-          setFeedbackMessage('請依序確認商品、送貨資訊與付款方式。')
+          showToast('請依序確認商品、送貨資訊與付款方式')
           navigateTo('/checkout')
         }}
       />
@@ -210,15 +253,20 @@ function App() {
         cartItems={cartItems}
         isMember={isMember}
         totals={cartSummary}
-        onNotify={setFeedbackMessage}
+        onNotify={showToast}
         onCheckoutSuccess={() => showToast('訂單已建立，正在導向綠界付款頁')}
       />
     )
   } else if (path === '/admin') {
-    pageContent = (
+    pageContent = isAdminAuthenticated ? (
       <AdminPage
         onProductsUpdate={(nextProducts) => setProductListState(nextProducts.map(enrichProduct))}
-        onNotify={setFeedbackMessage}
+        onNotify={showToast}
+      />
+    ) : (
+      <AdminLoginPage
+        onAdminLogin={() => setIsAdminAuthenticated(true)}
+        onNotify={showToast}
       />
     )
   } else if (path.startsWith('/products/')) {
@@ -251,7 +299,15 @@ function App() {
         onToggleMemberModal={() => setIsMemberModalOpen(true)}
       />
 
-      <div className="announcement-bar">{feedbackMessage}</div>
+      <div className="announcement-bar">
+        <div className="announcement-marquee">
+          <div className="announcement-marquee-track">
+            {[...marqueeMessages, ...marqueeMessages].map((message, index) => (
+              <span key={`${message}-${index}`}>{message}</span>
+            ))}
+          </div>
+        </div>
+      </div>
       <Toast message={toastMessage} isVisible={Boolean(toastMessage)} />
 
       <main className="main-content">{pageContent}</main>
@@ -262,7 +318,9 @@ function App() {
         isOpen={isMemberModalOpen}
         isMember={isMember}
         onClose={() => setIsMemberModalOpen(false)}
-        onToggleMember={toggleMember}
+        onMemberLogin={handleMemberLogin}
+        onMemberLogout={handleMemberLogout}
+        onNotify={showToast}
       />
     </div>
   )

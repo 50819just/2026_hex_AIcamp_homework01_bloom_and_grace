@@ -4,6 +4,7 @@ import { appConfig } from './config.js'
 import { createCheckoutPayload, queryTradeInfo } from './ecpay.js'
 import { normalizeProductPayload, validateProductPayload } from './productHelpers.js'
 import { readProducts, writeProducts } from './productStore.js'
+import { readMembers } from './memberStore.js'
 
 const orderResultStore = new Map()
 
@@ -98,6 +99,40 @@ const server = http.createServer(async (request, response) => {
 
     if (request.method === 'GET' && isApiRoute(pathname, '/api/admin/products')) {
       sendJson(response, 200, { success: true, data: readProducts() })
+      return
+    }
+
+    if (request.method === 'GET' && isApiRoute(pathname, '/api/member/profile')) {
+      const email = requestUrl.searchParams.get('email') || 'member@bloomandgrace.tw'
+      const members = readMembers()
+      const member = members.find((item) => item.email === email) || members[0]
+
+      sendJson(response, 200, {
+        success: true,
+        data: member,
+      })
+      return
+    }
+
+    if (request.method === 'GET' && isApiRoute(pathname, '/api/admin/members')) {
+      const search = (requestUrl.searchParams.get('search') || '').trim().toLowerCase()
+      const members = readMembers().filter((member) => {
+        if (!search) {
+          return true
+        }
+
+        return (
+          member.name.toLowerCase().includes(search) ||
+          member.email.toLowerCase().includes(search) ||
+          member.phone.toLowerCase().includes(search) ||
+          member.level.toLowerCase().includes(search)
+        )
+      })
+
+      sendJson(response, 200, {
+        success: true,
+        data: members,
+      })
       return
     }
 
