@@ -1,11 +1,20 @@
-function Toast({ message, isVisible }) {
+const toastIconMap = {
+  success: '✓',
+  error: '×',
+  info: 'i',
+  remove: '×',
+}
+
+function Toast({ message, isVisible, tone = 'success' }) {
   if (!message) {
     return null
   }
 
+  const safeTone = toastIconMap[tone] ? tone : 'success'
+
   return (
-    <div className={isVisible ? 'toast toast-visible' : 'toast'} role="status" aria-live="polite">
-      <span className="toast-icon">✓</span>
+    <div className={`toast toast-${safeTone}${isVisible ? ' toast-visible' : ''}`} role="status" aria-live="polite">
+      <span className="toast-icon" aria-hidden="true">{toastIconMap[safeTone]}</span>
       <span>{message}</span>
     </div>
   )

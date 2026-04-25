@@ -179,28 +179,49 @@ function MemberModal({ isOpen, isMember, onClose, onMemberLogin, onMemberLogout,
               <div>
                 <p className="section-kicker">Bloom & Grace Member</p>
                 <h2>{titleMap[mode]}</h2>
-                <p className="member-modal-slogan">把祝福、感謝與思念，交給一份溫柔有質感的花禮</p>
+                <p className="member-modal-slogan">把送花這件事，整理成更溫柔、順手也更有質感的會員體驗</p>
                 <p className="member-modal-description">{descriptionMap[mode]}</p>
               </div>
             </div>
             <div className="member-modal-hero-panel">
-              <div className="member-modal-hero-image-wrap">
-                <img
-                  className="member-modal-hero-image"
-                  src={mode === 'forgot' ? memberVisuals.addressBook : memberVisuals.welcome}
-                  alt="Bloom & Grace 會員體驗示意"
-                />
-              </div>
-              <div className="member-modal-highlight-card">
-                <strong>{mode === 'login' ? '會員快速登入' : mode === 'register' ? '建立品牌會員帳號' : '安全重設密碼'}</strong>
-                <p>
-                  {mode === 'login'
-                    ? '登入後即可同步會員價、常用收件資訊與購物流程。'
-                    : mode === 'register'
-                      ? '完成註冊後會自動登入，之後結帳體驗會更完整。'
-                      : '先驗證 Email，再更新新密碼，流程更接近正式會員站。'}
-                </p>
-              </div>
+              {mode === 'register' ? (
+                <div className="member-modal-register-card">
+                  <div className="member-modal-hero-image-wrap member-modal-register-image-wrap">
+                    <img
+                      className="member-modal-hero-image member-modal-register-image"
+                      src={memberVisuals.welcome}
+                      alt="Bloom & Grace 註冊體驗示意"
+                    />
+                  </div>
+                  <div className="member-modal-register-copy">
+                    <strong>註冊後即可開啟更完整的會員流程</strong>
+                    <p>建立帳號後會自動登入，後續查看會員價、帶入常用收件資料與整理送花資訊時，都會更直覺也更順手。</p>
+                    <div className="member-modal-benefit-list" aria-label="註冊會員好處">
+                      <span>查看會員專屬價格</span>
+                      <span>快速帶入收件資料</span>
+                      <span>保留常用送花資訊</span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="member-modal-hero-image-wrap">
+                    <img
+                      className="member-modal-hero-image"
+                      src={mode === 'forgot' ? memberVisuals.addressBook : memberVisuals.welcome}
+                      alt="Bloom & Grace 會員體驗示意"
+                    />
+                  </div>
+                  <div className="member-modal-highlight-card">
+                    <strong>{mode === 'login' ? '會員快速登入' : '安全重設密碼'}</strong>
+                    <p>
+                      {mode === 'login'
+                        ? '登入後即可同步會員價、常用收件資訊與購物流程。'
+                        : '先驗證 Email，再更新新密碼，流程更接近正式會員站。'}
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <button type="button" className="icon-button" onClick={onClose} aria-label="關閉視窗">
@@ -313,26 +334,24 @@ function MemberModal({ isOpen, isMember, onClose, onMemberLogin, onMemberLogout,
               </div>
 
               {mode === 'register' || (mode === 'forgot' && forgotStep === 'verify') ? (
-                <>
-                  <div className="password-strength-card">
-                    <div className="password-strength-header">
-                      <strong>密碼強度</strong>
-                      <span className={`password-strength-pill tone-${passwordStrength.tone}`}>
-                        {passwordStrength.label}
-                      </span>
-                    </div>
-                    <div className="password-strength-bar">
-                      <span style={{ width: `${(passwordStrength.score / 3) * 100}%` }} />
-                    </div>
-                    <div className="password-rule-list">
-                      {passwordRules.map((rule) => (
-                        <span key={rule.key} className={rule.test(formValue.password) ? 'is-pass' : ''}>
-                          {rule.label}
-                        </span>
-                      ))}
-                    </div>
+                <div className={mode === 'register' ? 'password-strength-card is-register' : 'password-strength-card'}>
+                  <div className="password-strength-header">
+                    <strong>{mode === 'register' ? '建立安全密碼' : '新密碼強度'}</strong>
+                    <span className={`password-strength-pill tone-${passwordStrength.tone}`}>
+                      {passwordStrength.label}
+                    </span>
                   </div>
-                </>
+                  <div className="password-strength-bar">
+                    <span style={{ width: `${(passwordStrength.score / 3) * 100}%` }} />
+                  </div>
+                  <div className="password-rule-list">
+                    {passwordRules.map((rule) => (
+                      <span key={rule.key} className={rule.test(formValue.password) ? 'is-pass' : ''}>
+                        {rule.test(formValue.password) ? '✓' : '·'} {rule.label}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               ) : null}
 
               {mode === 'login' ? (

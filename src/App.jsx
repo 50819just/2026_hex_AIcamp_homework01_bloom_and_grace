@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import './App.css'
 import Footer from './components/Footer'
 import MemberModal from './components/MemberModal'
@@ -22,6 +22,26 @@ function enrichProduct(product) {
     ...product,
     categoryLabel: getCategoryLabel(product.category),
   }
+}
+
+function getToastTone(message, preferredTone) {
+  if (preferredTone) {
+    return preferredTone
+  }
+
+  if (/失敗|錯誤|不一致|無法|請先|請輸入|至少|未完成/.test(message)) {
+    return 'error'
+  }
+
+  if (/移除|刪除/.test(message)) {
+    return 'remove'
+  }
+
+  if (/正在|目前|示意/.test(message)) {
+    return 'info'
+  }
+
+  return 'success'
 }
 
 function App() {
@@ -50,7 +70,7 @@ function App() {
   const [searchText, setSearchText] = useState('')
   const [cartItems, setCartItems] = useState([])
   const [selectedQuantity, setSelectedQuantity] = useState(1)
-  const [toastMessage, setToastMessage] = useState('')
+  const [toast, setToast] = useState({ message: '', tone: 'success' })
   const [productListState, setProductListState] = useState([])
 
   const marqueeMessages = [
@@ -60,17 +80,17 @@ function App() {
     '現在可從購物車前往結帳，並串接綠界付款流程',
   ]
 
-  const showToast = (message) => {
-    setToastMessage('')
+  const showToast = useCallback((message, tone) => {
+    setToast({ message: '', tone: getToastTone(message, tone) })
 
     window.setTimeout(() => {
-      setToastMessage(message)
+      setToast({ message, tone: getToastTone(message, tone) })
 
       window.setTimeout(() => {
-        setToastMessage('')
-      }, 2200)
+        setToast((currentToast) => ({ ...currentToast, message: '' }))
+      }, 2400)
     }, 10)
-  }
+  }, [])
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -79,12 +99,12 @@ function App() {
         setProductListState(loadedProducts.map(enrichProduct))
       } catch {
         setProductListState(products.map(enrichProduct))
-        showToast('目前使用前端內建商品資料，若要啟用上架後台請一起啟動本地 server')
+        showToast('目前使用前端內建商品資料，若要啟用上架後台請一起啟動本地 server', 'info')
       }
     }
 
     loadProducts()
-  }, [])
+  }, [showToast])
   const productList = useMemo(
     () => (productListState.length > 0 ? productListState : products.map(enrichProduct)),
     [productListState],
@@ -147,7 +167,7 @@ function App() {
       return [...previousItems, { ...product, quantity }]
     })
 
-    showToast(`${product.name} 已加入購物車`)
+    showToast(`${product.name} 已加入購物車`, 'success')
     setSelectedQuantity(1)
   }
 
@@ -173,7 +193,7 @@ function App() {
     const removedItem = cartItems.find((item) => item.id === productId)
     setCartItems((previousItems) => previousItems.filter((item) => item.id !== productId))
     if (removedItem) {
-      showToast(`${removedItem.name} 已從購物車移除`)
+      showToast(`${removedItem.name} 已從購物車移除`, 'remove')
     }
   }
 
@@ -196,7 +216,7 @@ function App() {
         email: profile.email || remoteProfile.email,
       })
     } catch {
-      showToast('會員資料先以前端示意顯示，稍後可再接真實會員 API')
+      showToast('會員資料先以前端示意顯示，稍後可再接真實會員 API', 'info')
     }
   }
 
@@ -204,7 +224,7 @@ function App() {
   const handleMemberLogout = () => {
     setIsMember(false)
     setIsMemberModalOpen(false)
-    showToast('已登出會員，目前以訪客身份瀏覽')
+    showToast('已登出會員，目前以訪客身份瀏覽', 'info')
   }
 
   let pageContent = null
@@ -242,7 +262,7 @@ function App() {
         onDecreaseQuantity={handleDecreaseCartItem}
         onRemoveItem={handleRemoveCartItem}
         onCheckout={() => {
-          showToast('請依序確認商品、送貨資訊與付款方式')
+          showToast('請依序確認商品、送貨資訊與付款方式', 'info')
           navigateTo('/checkout')
         }}
       />
@@ -254,7 +274,7 @@ function App() {
         isMember={isMember}
         totals={cartSummary}
         onNotify={showToast}
-        onCheckoutSuccess={() => showToast('訂單已建立，正在導向綠界付款頁')}
+        onCheckoutSuccess={() => showToast('訂單已建立，正在導向綠界付款頁', 'info')}
       />
     )
   } else if (path === '/admin') {
@@ -308,7 +328,7 @@ function App() {
           </div>
         </div>
       </div>
-      <Toast message={toastMessage} isVisible={Boolean(toastMessage)} />
+      <Toast message={toast.message} tone={toast.tone} isVisible={Boolean(toast.message)} />
 
       <main className="main-content">{pageContent}</main>
 
