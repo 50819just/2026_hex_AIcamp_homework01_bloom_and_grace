@@ -50,7 +50,6 @@ function HeroSection() {
     }
   }, [])
 
-  const activeSlide = heroSlides[activeIndex]
 
   return (
     <section className="hero-section">
@@ -91,6 +90,7 @@ function HeroSection() {
                     <strong>{slide.title}</strong>
                     <p>{slide.description}</p>
                     <small>{slide.accent}</small>
+                    <span className="hero-slide-link">查看這款花禮</span>
                   </div>
                 </button>
               </article>
@@ -98,40 +98,28 @@ function HeroSection() {
           </div>
         </div>
 
-        <div className="hero-carousel-arrow-group">
-          <button type="button" className="hero-arrow-button" onClick={handlePrevSlide} aria-label="上一張">
-            ←
-          </button>
-          <button type="button" className="hero-arrow-button" onClick={handleNextSlide} aria-label="下一張">
-            →
-          </button>
-        </div>
-
         <div className="hero-carousel-controls">
-          {heroSlides.map((slide, index) => (
-            <button
-              key={slide.title}
-              type="button"
-              className={index === activeIndex ? 'hero-dot active' : 'hero-dot'}
-              onClick={() => setActiveIndex(index)}
-              aria-label={`切換到 ${slide.title}`}
-            />
-          ))}
-        </div>
+          <div className="hero-carousel-nav">
+            {heroSlides.map((slide, index) => (
+              <button
+                key={slide.title}
+                type="button"
+                className={index === activeIndex ? 'hero-dot active' : 'hero-dot'}
+                onClick={() => setActiveIndex(index)}
+                aria-label={`切換到 ${slide.title}`}
+              />
+            ))}
+          </div>
 
-        <div className="hero-highlight-card">
-          <span>{activeSlide.eyebrow}</span>
-          <strong>{activeSlide.title}</strong>
-          <p>{activeSlide.description}</p>
-          <button
-            type="button"
-            className="text-button hero-inline-link"
-            onClick={() => activeSlide.productId && navigateTo(`/products/${activeSlide.productId}`)}
-          >
-            查看這款花禮
-          </button>
+          <div className="hero-carousel-arrow-group">
+            <button type="button" className="hero-arrow-button" onClick={handlePrevSlide} aria-label="上一張">
+              ←
+            </button>
+            <button type="button" className="hero-arrow-button" onClick={handleNextSlide} aria-label="下一張">
+              →
+            </button>
+          </div>
         </div>
-
         <div className="hero-ambient-shape shape-one"></div>
         <div className="hero-ambient-shape shape-two"></div>
       </div>
