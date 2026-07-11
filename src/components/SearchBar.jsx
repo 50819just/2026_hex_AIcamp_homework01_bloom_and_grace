@@ -1,7 +1,7 @@
 function SearchBar({ value, onChange }) {
   return (
-    <label className="search-bar">
-      <span>搜尋商品</span>
+    <label className="search-bar search-bar-editorial">
+      <span>搜尋花禮</span>
       <input
         type="search"
         value={value}

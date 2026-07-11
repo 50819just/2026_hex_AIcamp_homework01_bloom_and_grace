@@ -15,15 +15,26 @@ function ShopPage({
 }) {
   return (
     <div className="page-stack">
-      <section className="content-section">
-        <div className="section-heading">
+      <section className="content-section shop-page-shell">
+        <div className="section-heading shop-page-heading">
           <div>
-            <p className="section-kicker">Shop</p>
-            <h1 className="page-title">花店選品</h1>
+            <p className="section-kicker">選品花藝店</p>
+            <h1 className="page-title">為不同情境挑一份剛剛好的花禮</h1>
             <p className="page-description">
-              依照送禮情境、花禮風格與會員價格，輕鬆挑選適合的花店品項。
+              從開幕誌慶、節慶送禮到安靜溫柔的日常祝福，這一頁會把花禮整理得更像精品選品，而不是只是商品清單。
             </p>
           </div>
+        </div>
+
+        <div className="shop-editorial-banner">
+          <div>
+            <span className="cart-banner-label">花禮系列總覽</span>
+            <strong>{products.length} 款花禮正在展開中</strong>
+            <p>{isMember ? '你目前已登入會員，頁面上的價格會直接以會員價為主。' : '先慢慢挑選，登入會員後就能直接套用會員價格。'}</p>
+          </div>
+          <button type="button" className="secondary-button" onClick={() => navigateTo('/about')}>
+            了解品牌故事
+          </button>
         </div>
 
         <ShopToolbar
@@ -35,7 +46,7 @@ function ShopPage({
         />
 
         {products.length > 0 ? (
-          <div className="product-grid">
+          <div className="product-grid product-grid-editorial">
             {products.map((product) => (
               <ProductCard
                 key={product.id}

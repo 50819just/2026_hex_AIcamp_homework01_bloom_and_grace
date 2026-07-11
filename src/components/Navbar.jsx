@@ -1,18 +1,12 @@
 import { navigateTo } from '../hooks/useRouter'
-import FloralLogo from './FloralLogo'
+import BrandLogo from './BrandLogo'
 import NavIcon from './NavIcon'
 
 function Navbar({ cartCount, isMember, onToggleMemberModal }) {
   return (
     <header className="site-header">
       <div className="brand-block" onClick={() => navigateTo('/')} role="button" tabIndex={0}>
-        <span className="brand-mark">
-          <FloralLogo />
-        </span>
-        <div>
-          <p className="brand-name">Bloom & Grace</p>
-          <p className="brand-subtitle">flower shop demo</p>
-        </div>
+        <BrandLogo variant="primary" size="lg" className="site-brand-logo" />
       </div>
 
       <nav className="main-nav" aria-label="主要導覽">
@@ -20,13 +14,13 @@ function Navbar({ cartCount, isMember, onToggleMemberModal }) {
           <span className="nav-button-icon nav-button-icon-about">
             <NavIcon type="about" />
           </span>
-          品牌介紹
+          品牌故事
         </button>
         <button type="button" onClick={() => navigateTo('/shop')}>
           <span className="nav-button-icon nav-button-icon-shop">
             <NavIcon type="shop" />
           </span>
-          商品列表
+          線上選品
         </button>
         <button type="button" onClick={() => navigateTo('/cart')}>
           <span
@@ -38,7 +32,7 @@ function Navbar({ cartCount, isMember, onToggleMemberModal }) {
           >
             <NavIcon type="cart" isActive={cartCount > 0} />
           </span>
-          購物車 {cartCount > 0 ? <span className="nav-badge">{cartCount}</span> : null}
+          購物袋 {cartCount > 0 ? <span className="nav-badge">{cartCount}</span> : null}
         </button>
         <button
           type="button"
@@ -54,7 +48,7 @@ function Navbar({ cartCount, isMember, onToggleMemberModal }) {
           <span className="nav-button-icon nav-button-icon-member">
             <NavIcon type="member" />
           </span>
-          {isMember ? '會員中心' : '會員登入'}
+          {isMember ? '會員帳戶' : '登入 / 註冊'}
         </button>
       </nav>
     </header>

@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
 :root {
   font-family:
+    'Manrope',
     'Noto Sans TC',
     'PingFang TC',
     'Microsoft JhengHei',
@@ -8,24 +11,24 @@
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light;
-  color: #2c2a28;
-  background: #fbf8f4;
+  color: #211b12;
+  background: #fff8f3;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --background: #fbf8f4;
+  --background: #fff8f3;
   --surface: #ffffff;
-  --surface-soft: #fff1ec;
-  --text-strong: #2c2a28;
-  --text-soft: #6b6560;
-  --text-muted: #9a948e;
-  --accent: #c4727f;
-  --accent-strong: #a85b67;
-  --accent-soft: #fdeae4;
-  --sage: #7ea584;
-  --border: rgba(196, 114, 127, 0.14);
-  --shadow-soft: 0 10px 28px rgba(80, 58, 62, 0.08);
+  --surface-soft: #f9ecdd;
+  --text-strong: #211b12;
+  --text-soft: #556252;
+  --text-muted: #727975;
+  --accent: #203a32;
+  --accent-strong: #09241d;
+  --accent-soft: #d8e7d2;
+  --sage: #7f8d7b;
+  --border: rgba(114, 121, 117, 0.22);
+  --shadow-soft: 0 20px 40px rgba(32, 58, 50, 0.06);
 }
 
 * {

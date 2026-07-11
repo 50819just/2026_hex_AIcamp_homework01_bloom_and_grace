@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import './App.css'
+import './rebuild.css'
 import EmptyState from './components/EmptyState'
 import Footer from './components/Footer'
-import MemberModal from './components/MemberModal'
 import Navbar from './components/Navbar'
 import Toast from './components/Toast'
 import AdminPage from './pages/AdminPage'
@@ -15,6 +15,7 @@ import PaymentResultPage from './pages/PaymentResultPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import ProfilePage from './pages/ProfilePage'
 import ShopPage from './pages/ShopPage'
+import SignInPage from './pages/SignInPage'
 import { getCategoryLabel, getProductById, products } from './data/products'
 import { navigateTo, useRouter } from './hooks/useRouter'
 import { fetchMemberProfile, fetchProducts } from './lib/api'
@@ -67,7 +68,6 @@ function App() {
     orders: [],
   })
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false)
-  const [isMemberModalOpen, setIsMemberModalOpen] = useState(false)
   const [postLoginPath, setPostLoginPath] = useState('')
   const [currentCategory, setCurrentCategory] = useState('all')
   const [searchText, setSearchText] = useState('')
@@ -77,10 +77,10 @@ function App() {
   const [productListState, setProductListState] = useState([])
 
   const marqueeMessages = [
-    'Bloom & Grace｜花店作業版網站，重點驗收購物、會員與綠界付款流程',
-    '蝴蝶蘭與花籃為必備品項，可先加入購物車，再登入會員前往結帳',
-    '完成綠界測試付款後，會回到本站並透過本地 server 查單確認結果',
-    'Admin 頁提供測試帳號密碼，方便老師直接驗收後台入口',
+    'Bloom & Grace｜自然奢雅 × 編輯感極簡的花藝電商體驗',
+    'Orchid 與 Flower Basket 為核心品項，會員登入後可接續購物袋與結帳流程',
+    '結帳送出後將導向綠界測試付款，回站後再透過本地 server 查單確認結果',
+    '品牌介面已依照 Stitch 專案方向重構，保留高級花藝網站的留白與秩序感',
   ]
 
   const showToast = useCallback((message, tone) => {
@@ -156,9 +156,9 @@ function App() {
     discount: totals.originalTotal - totals.memberTotal,
   }
 
-  const openMemberModalForPath = (nextPath = '') => {
+  const openMemberEntryForPath = (nextPath = '') => {
     setPostLoginPath(nextPath)
-    setIsMemberModalOpen(true)
+    navigateTo('/sign-in')
   }
 
   const handleAddToCart = (product, quantity) => {
@@ -215,12 +215,10 @@ function App() {
 
     setIsMember(true)
     setMemberProfile(fallbackProfile)
-    setIsMemberModalOpen(false)
 
-    if (postLoginPath) {
-      navigateTo(postLoginPath)
-      setPostLoginPath('')
-    }
+    const nextPath = postLoginPath || '/profile'
+    navigateTo(nextPath)
+    setPostLoginPath('')
 
     try {
       const remoteProfile = await fetchMemberProfile(profile.email)
@@ -236,9 +234,9 @@ function App() {
 
   const handleMemberLogout = () => {
     setIsMember(false)
-    setIsMemberModalOpen(false)
     setPostLoginPath('')
     showToast('已登出會員，目前以訪客身份瀏覽', 'info')
+    navigateTo('/')
   }
 
   let pageContent = null
@@ -257,13 +255,22 @@ function App() {
     )
   } else if (path === '/about') {
     pageContent = <AboutPage />
+  } else if (path === '/sign-in') {
+    pageContent = (
+      <SignInPage
+        isMember={isMember}
+        onMemberLogin={handleMemberLogin}
+        onMemberLogout={handleMemberLogout}
+        onNotify={showToast}
+      />
+    )
   } else if (path === '/profile') {
     pageContent = (
       <ProfilePage
         isMember={isMember}
         memberProfile={memberProfile}
         cartCount={cartCount}
-        onOpenMemberModal={() => openMemberModalForPath('/profile')}
+        onOpenMemberModal={() => openMemberEntryForPath('/profile')}
       />
     )
   } else if (path === '/cart') {
@@ -278,7 +285,7 @@ function App() {
         onCheckout={() => {
           if (!isMember) {
             showToast('請先登入會員，才能進入結帳流程', 'error')
-            openMemberModalForPath('/checkout')
+            openMemberEntryForPath('/checkout')
             return
           }
 
@@ -292,9 +299,9 @@ function App() {
       pageContent = (
         <EmptyState
           title="登入會員後才能結帳"
-          description="老師驗收時可先加入商品到購物車，再使用會員登入，登入成功後就會回到結帳流程。"
-          actionLabel="立即登入會員"
-          onAction={() => openMemberModalForPath('/checkout')}
+          description="你可以先保留購物袋內容，登入成功後就會自動帶回結帳流程。"
+          actionLabel="前往會員登入"
+          onAction={() => openMemberEntryForPath('/checkout')}
         />
       )
     } else {
@@ -339,17 +346,17 @@ function App() {
       <HomePage
         isMember={isMember}
         onAddToCart={handleAddToCart}
-        onOpenMemberModal={() => openMemberModalForPath('')}
+        onOpenMemberModal={() => openMemberEntryForPath('/sign-in')}
       />
     )
   }
 
   return (
-    <div className="app-shell">
+    <div className="app-shell app-shell-rebuild">
       <Navbar
         cartCount={cartCount}
         isMember={isMember}
-        onToggleMemberModal={() => openMemberModalForPath('/profile')}
+        onToggleMemberModal={() => openMemberEntryForPath('/profile')}
       />
 
       <div className="announcement-bar">
@@ -366,15 +373,6 @@ function App() {
       <main className="main-content">{pageContent}</main>
 
       <Footer />
-
-      <MemberModal
-        isOpen={isMemberModalOpen}
-        isMember={isMember}
-        onClose={() => setIsMemberModalOpen(false)}
-        onMemberLogin={handleMemberLogin}
-        onMemberLogout={handleMemberLogout}
-        onNotify={showToast}
-      />
     </div>
   )
 }

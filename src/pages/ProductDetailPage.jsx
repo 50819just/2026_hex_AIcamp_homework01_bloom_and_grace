@@ -27,8 +27,8 @@ function ProductDetailPage({
 
   return (
     <div className="page-stack">
-      <section className="product-detail-layout">
-        <div className="product-detail-image-panel">
+      <section className="product-detail-layout product-detail-layout-editorial">
+        <div className="product-detail-image-panel product-detail-image-panel-editorial">
           <img
             src={product.image}
             alt={product.name}
@@ -49,10 +49,12 @@ function ProductDetailPage({
           />
         </div>
 
-        <div className="product-detail-info">
-          <p className="section-kicker">{product.categoryLabel}</p>
-          <h1 className="page-title">{product.name}</h1>
-          <p className="page-description">{product.description}</p>
+        <div className="product-detail-info product-detail-info-editorial">
+          <div className="product-detail-heading-block">
+            <p className="section-kicker">{product.categoryLabel}</p>
+            <h1 className="page-title">{product.name}</h1>
+            <p className="page-description">{product.description}</p>
+          </div>
 
           <PriceBlock
             originalPrice={product.originalPrice}
@@ -60,36 +62,46 @@ function ProductDetailPage({
             isMember={isMember}
           />
 
-          <div className="detail-meta">
+          <div className="detail-meta detail-meta-editorial">
             <span className="detail-tag">{product.tag}</span>
             <span>適合開幕誌慶、節慶致禮與溫柔送心意</span>
           </div>
 
-          <div className="detail-actions">
-            <div>
-              <p className="field-label">選擇數量</p>
-              <QuantitySelector
-                value={quantity}
-                onDecrease={onDecreaseQuantity}
-                onIncrease={onIncreaseQuantity}
-              />
+          <div className="product-detail-note-card">
+            <strong>花藝包裝說明</strong>
+            <p>這款花禮會以 Bloom & Grace 的品牌包裝方式整理，保留乾淨留白、細緻卡片與更穩定的送禮質感。</p>
+          </div>
+
+          <div className="detail-actions detail-actions-editorial">
+            <div className="detail-actions-topline">
+              <div>
+                <p className="field-label">選擇數量</p>
+                <QuantitySelector
+                  value={quantity}
+                  onDecrease={onDecreaseQuantity}
+                  onIncrease={onIncreaseQuantity}
+                />
+              </div>
+              <button type="button" className="secondary-button" onClick={() => navigateTo('/shop')}>
+                回到選品頁
+              </button>
             </div>
             <button type="button" className="primary-button full-width" onClick={() => onAddToCart(product, quantity)}>
-              加入購物車
+              加入購物袋
             </button>
           </div>
         </div>
       </section>
 
-      <section className="content-section">
+      <section className="content-section related-products-shell">
         <div className="section-heading">
           <div>
-            <p className="section-kicker">你可能也會喜歡</p>
-            <h2>相似風格花禮推薦</h2>
+            <p className="section-kicker">延伸推薦</p>
+            <h2>相似調性的花禮推薦</h2>
           </div>
         </div>
 
-        <div className="product-grid">
+        <div className="product-grid product-grid-editorial">
           {relatedProducts.map((relatedProduct) => (
             <ProductCard
               key={relatedProduct.id}

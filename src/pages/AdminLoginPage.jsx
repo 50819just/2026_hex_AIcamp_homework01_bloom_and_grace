@@ -35,20 +35,20 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
 
   return (
     <div className="page-stack">
-      <section className="content-section">
+      <section className="content-section admin-login-shell">
         <div className="section-heading">
           <div>
-            <p className="section-kicker">Admin Access</p>
-            <h1 className="page-title">後台登入</h1>
-            <p className="page-description">這裡保留給老師驗收使用，可直接使用下方測試帳號密碼登入後台。</p>
+            <p className="section-kicker">後台管理入口</p>
+            <h1 className="page-title">後台登入入口</h1>
+            <p className="page-description">這裡保留給驗收使用，直接使用下方測試帳號密碼即可快速進入後台。</p>
           </div>
         </div>
 
-        <div className="admin-login-helper-card">
+        <div className="admin-login-helper-card admin-login-helper-card-editorial">
           <div>
-            <p className="section-kicker">Teacher Review</p>
+            <p className="section-kicker">驗收測試資訊</p>
             <h2>測試帳號密碼放置區</h2>
-            <p>若老師要快速驗收，直接複製下面帳密即可，不需要另外註冊或申請權限。</p>
+            <p>如果要快速驗收商品上架與管理頁，直接使用下面這組帳密就好，不需要另外註冊或申請權限。</p>
           </div>
 
           <div className="admin-login-credentials">
@@ -63,7 +63,7 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
           </div>
         </div>
 
-        <div className="admin-login-card">
+        <div className="admin-login-card admin-login-card-editorial">
           <form className="member-modal-body" onSubmit={handleSubmit}>
             <label>
               管理員 Email
@@ -89,7 +89,7 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
             </label>
             <div className="member-modal-actions">
               <button type="submit" className="primary-button full-width">
-                登入後台
+                進入後台管理頁
               </button>
             </div>
           </form>

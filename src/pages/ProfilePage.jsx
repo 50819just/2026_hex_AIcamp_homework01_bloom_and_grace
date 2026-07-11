@@ -28,12 +28,12 @@ function ProfilePage({ isMember, memberProfile, cartCount, onOpenMemberModal }) 
   if (!isMember) {
     return (
       <div className="page-stack">
-        <section className="content-section">
+        <section className="content-section profile-page-shell">
           <div className="section-heading">
             <div>
-              <p className="section-kicker">Member</p>
-              <h1 className="page-title">會員中心</h1>
-              <p className="page-description">登入後可以查看會員價、常用資料、訂單紀錄與收件資料。</p>
+              <p className="section-kicker">會員中心</p>
+              <h1 className="page-title">登入後開啟你的 Bloom & Grace 會員頁</h1>
+              <p className="page-description">會員中心會整理常用收件資料、訂單紀錄與會員價格體驗，讓下次送禮更順手。</p>
             </div>
           </div>
 
@@ -44,7 +44,7 @@ function ProfilePage({ isMember, memberProfile, cartCount, onOpenMemberModal }) 
                   <FloralLogo />
                 </span>
                 <div>
-                  <p className="section-kicker">Bloom & Grace Member</p>
+                  <p className="section-kicker">Bloom & Grace 會員禮遇</p>
                   <h2>把祝福、感謝與思念，交給一份溫柔有質感的花禮</h2>
                   <p className="profile-brand-copy">登入後即可啟用會員價、快速帶入收件資料，未來也能延伸成完整會員與訂單系統。</p>
                 </div>
@@ -56,10 +56,10 @@ function ProfilePage({ isMember, memberProfile, cartCount, onOpenMemberModal }) 
 
             <div className="profile-brand-actions">
               <button type="button" className="primary-button" onClick={onOpenMemberModal}>
-                立即登入 / 註冊
+                會員登入 / 註冊
               </button>
               <button type="button" className="secondary-button" onClick={() => navigateTo('/shop')}>
-                先去選花
+                瀏覽花禮選品
               </button>
             </div>
           </div>
@@ -70,16 +70,16 @@ function ProfilePage({ isMember, memberProfile, cartCount, onOpenMemberModal }) 
 
   return (
     <div className="page-stack">
-      <section className="content-section">
+      <section className="content-section profile-page-shell">
         <div className="section-heading">
           <div>
-            <p className="section-kicker">Member Profile</p>
-            <h1 className="page-title">會員中心</h1>
-            <p className="page-description">這裡已整理成比較完整的會員資料頁面，之後要接真實登入、訂單與地址 API 也比較順。</p>
+            <p className="section-kicker">會員資料總覽</p>
+            <h1 className="page-title">你的會員資料、收件資訊與訂單紀錄</h1>
+            <p className="page-description">這裡已經整理成比較完整的會員頁骨架，之後要接真實登入、訂單與地址 API 也會更順。</p>
           </div>
         </div>
 
-        <div className="profile-brand-panel">
+        <div className="profile-brand-panel profile-brand-panel-editorial">
           <div className="profile-brand-grid">
             <div className="profile-brand-badge">
               <span className="profile-brand-mark">
@@ -103,9 +103,9 @@ function ProfilePage({ isMember, memberProfile, cartCount, onOpenMemberModal }) 
           </div>
         </div>
 
-        <div className="profile-stats-grid">
+        <div className="profile-stats-grid profile-stats-grid-editorial">
           <article className="profile-stat-card">
-            <span>購物車商品數</span>
+            <span>購物袋商品數</span>
             <strong>{profileStats.cartCount}</strong>
           </article>
           <article className="profile-stat-card">
@@ -126,7 +126,7 @@ function ProfilePage({ isMember, memberProfile, cartCount, onOpenMemberModal }) 
           <article className="profile-card profile-main-card profile-main-card-expanded">
             <div className="profile-avatar">BG</div>
             <div className="profile-main-content">
-              <p className="section-kicker">Account Overview</p>
+              <p className="section-kicker">帳戶總覽</p>
               <h2>{memberProfile?.name || 'Grace Lin'}</h2>
               <p>這份資料目前支援前端示意與本地 mock API，後續可以直接接會員後端。</p>
             </div>
@@ -135,7 +135,7 @@ function ProfilePage({ isMember, memberProfile, cartCount, onOpenMemberModal }) 
           <article className="profile-card profile-table-card">
             <div className="profile-card-heading">
               <h3>會員基本資料</h3>
-              <span>可延伸成真實 editable profile</span>
+              <span>後續可直接延伸成可編輯會員資料</span>
             </div>
             <div className="profile-table-wrap">
               <table className="profile-table">
@@ -239,10 +239,10 @@ function ProfilePage({ isMember, memberProfile, cartCount, onOpenMemberModal }) 
             </div>
             <div className="hero-actions">
               <button type="button" className="secondary-button" onClick={() => navigateTo('/shop')}>
-                繼續逛逛
+                繼續挑選花禮
               </button>
               <button type="button" className="primary-button" onClick={() => navigateTo('/cart')}>
-                查看購物車
+                打開購物袋
               </button>
             </div>
           </article>

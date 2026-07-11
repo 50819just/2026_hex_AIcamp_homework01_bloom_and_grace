@@ -3,7 +3,7 @@ import SearchBar from './SearchBar'
 
 function ShopToolbar({ categories, currentCategory, searchText, onCategoryChange, onSearchChange }) {
   return (
-    <div className="shop-toolbar">
+    <div className="shop-toolbar shop-toolbar-editorial">
       <CategoryTabs
         categories={categories}
         currentCategory={currentCategory}

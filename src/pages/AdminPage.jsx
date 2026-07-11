@@ -302,7 +302,7 @@ function AdminPage({ onProductsUpdate, onNotify }) {
                   <div className="admin-member-detail">
                     <div className="admin-member-detail-header">
                       <div>
-                        <p className="section-kicker">Member Profile</p>
+                        <p className="section-kicker">會員資料</p>
                         <h3>{selectedMember.name}</h3>
                         <p>{selectedMember.email} ・ {selectedMember.phone}</p>
                       </div>

@@ -5,23 +5,23 @@ function HeroSection() {
   return (
     <section className="hero-section hero-section-reference">
       <div className="hero-copy">
-        <p className="section-kicker">Bloom & Grace</p>
-        <h1 className="hero-title">讓花裝點生活每一刻</h1>
+        <p className="section-kicker">L'Atelier Botanique</p>
+        <h1 className="hero-title">讓每一份花禮，都像一頁被細心編排的祝福</h1>
         <p className="hero-description">
-          精選蝴蝶蘭、花籃與盆花，由花藝師整理成更適合送禮與居家擺設的作業版花店購物體驗。
+          Bloom & Grace 以編輯感留白、深森林綠與高質感花藝攝影，整理出更安靜、優雅也更完整的送禮購物體驗。
         </p>
         <div className="hero-actions">
           <button type="button" className="primary-button" onClick={() => navigateTo('/shop')}>
-            立即選購
+            進入選品頁
           </button>
-          <button type="button" className="secondary-button" onClick={() => navigateTo('/cart')}>
-            查看購物車
+          <button type="button" className="secondary-button" onClick={() => navigateTo('/about')}>
+            查看品牌故事
           </button>
         </div>
       </div>
 
       <div className="hero-visual hero-visual-reference">
-        <img src={referenceImages.heroBanner} alt="花店主視覺" className="hero-reference-image" />
+        <img src={referenceImages.heroBanner} alt="Bloom & Grace 首頁花藝主視覺" className="hero-reference-image" />
       </div>
     </section>
   )

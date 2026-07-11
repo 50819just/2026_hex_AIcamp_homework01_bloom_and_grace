@@ -1,7 +1,7 @@
-import { referenceImages } from './referenceImages'
+import heroImage from '../assets/hero.png'
 
 export const memberVisuals = {
-  welcome: referenceImages.memberWelcome,
-  profile: referenceImages.memberProfile,
-  addressBook: referenceImages.addressBook,
+  welcome: heroImage,
+  profile: heroImage,
+  addressBook: heroImage,
 }

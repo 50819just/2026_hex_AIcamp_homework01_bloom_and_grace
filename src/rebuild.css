@@ -1,0 +1,1172 @@
+:root {
+  --bg-ivory: #fff8f3;
+  --bg-paper: #ffffff;
+  --bg-warm: #f9ecdd;
+  --bg-soft: #f3e6d7;
+  --ink-strong: #09241d;
+  --ink-body: #211b12;
+  --ink-soft: #424845;
+  --ink-muted: #727975;
+  --brand-green: #203a32;
+  --brand-sage: #556252;
+  --brand-gold: #b79a63;
+  --line-warm: #e5ddd1;
+  --line-soft: #ede1d2;
+  --shadow-soft: 0 24px 48px rgba(32, 58, 50, 0.06);
+  --shadow-hover: 0 28px 60px rgba(32, 58, 50, 0.1);
+  --radius-card: 28px;
+  --radius-panel: 24px;
+  --radius-pill: 999px;
+  --space-section: 32px;
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 24%),
+    linear-gradient(180deg, #fff8f3 0%, #fff8f3 55%, #f7ecde 100%);
+  color: var(--ink-body);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell.app-shell-rebuild {
+  min-height: 100vh;
+  background: transparent;
+}
+
+.app-shell-rebuild .site-header,
+.app-shell-rebuild .announcement-bar,
+.app-shell-rebuild .main-content,
+.app-shell-rebuild .site-footer {
+  width: min(1320px, calc(100% - 48px));
+}
+
+.app-shell-rebuild .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 0 16px;
+  margin: 0 auto;
+  background: rgba(255, 248, 243, 0.82);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(229, 221, 209, 0.72);
+}
+
+.app-shell-rebuild .site-brand-logo {
+  filter: drop-shadow(0 10px 24px rgba(32, 58, 50, 0.08));
+}
+
+.app-shell-rebuild .main-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.app-shell-rebuild .main-nav button {
+  min-height: 46px;
+  padding: 12px 18px;
+  border: 1px solid rgba(193, 200, 196, 0.75);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--ink-strong);
+  box-shadow: 0 10px 22px rgba(32, 58, 50, 0.04);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.app-shell-rebuild .main-nav button:hover,
+.app-shell-rebuild .main-nav button:focus-visible {
+  background: rgba(255, 255, 255, 0.98);
+  transform: translateY(-1px);
+  box-shadow: 0 16px 28px rgba(32, 58, 50, 0.08);
+}
+
+.app-shell-rebuild .announcement-bar {
+  margin-top: 14px;
+  margin-bottom: 28px;
+  border-radius: var(--radius-panel);
+  border: 1px solid rgba(229, 221, 209, 0.9);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(249, 236, 221, 0.92));
+  box-shadow: 0 14px 34px rgba(32, 58, 50, 0.05);
+}
+
+.app-shell-rebuild .announcement-marquee-track span {
+  color: var(--brand-sage);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.app-shell-rebuild .main-content {
+  display: grid;
+  gap: 28px;
+  margin: 0 auto;
+}
+
+.app-shell-rebuild .page-stack {
+  display: grid;
+  gap: 28px;
+}
+
+.app-shell-rebuild .hero-section,
+.app-shell-rebuild .content-section,
+.app-shell-rebuild .member-promo,
+.app-shell-rebuild .empty-state,
+.app-shell-rebuild .product-detail-layout,
+.app-shell-rebuild .cart-summary,
+.app-shell-rebuild .cart-item,
+.app-shell-rebuild .checkout-step-card,
+.app-shell-rebuild .checkout-summary-card,
+.app-shell-rebuild .checkout-process-banner,
+.app-shell-rebuild .payment-result-card,
+.app-shell-rebuild .profile-card,
+.app-shell-rebuild .profile-brand-panel,
+.app-shell-rebuild .about-card,
+.app-shell-rebuild .about-hero-copy,
+.app-shell-rebuild .about-quote-card,
+.app-shell-rebuild .admin-login-card,
+.app-shell-rebuild .admin-login-helper-card,
+.app-shell-rebuild .feature-card,
+.app-shell-rebuild .member-modal-page {
+  border: 1px solid var(--line-warm);
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,248,243,0.92));
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: none;
+}
+
+.app-shell-rebuild .hero-section,
+.app-shell-rebuild .content-section,
+.app-shell-rebuild .member-promo,
+.app-shell-rebuild .empty-state,
+.app-shell-rebuild .product-detail-layout,
+.app-shell-rebuild .cart-summary,
+.app-shell-rebuild .cart-item,
+.app-shell-rebuild .checkout-step-card,
+.app-shell-rebuild .checkout-summary-card,
+.app-shell-rebuild .checkout-process-banner,
+.app-shell-rebuild .payment-result-card,
+.app-shell-rebuild .profile-card,
+.app-shell-rebuild .profile-brand-panel,
+.app-shell-rebuild .about-card,
+.app-shell-rebuild .about-hero-copy,
+.app-shell-rebuild .about-quote-card,
+.app-shell-rebuild .admin-login-card,
+.app-shell-rebuild .admin-login-helper-card,
+.app-shell-rebuild .feature-card,
+.app-shell-rebuild .member-modal-page,
+.app-shell-rebuild .product-card,
+.app-shell-rebuild .shop-editorial-banner,
+.app-shell-rebuild .cart-editorial-banner,
+.app-shell-rebuild .payment-result-hero-card,
+.app-shell-rebuild .product-detail-note-card {
+  border-radius: var(--radius-card);
+}
+
+.app-shell-rebuild .hero-section:hover,
+.app-shell-rebuild .content-section:hover,
+.app-shell-rebuild .member-promo:hover,
+.app-shell-rebuild .product-detail-layout:hover,
+.app-shell-rebuild .cart-summary:hover,
+.app-shell-rebuild .cart-item:hover,
+.app-shell-rebuild .checkout-step-card:hover,
+.app-shell-rebuild .checkout-summary-card:hover,
+.app-shell-rebuild .payment-result-card:hover,
+.app-shell-rebuild .feature-card:hover,
+.app-shell-rebuild .product-card:hover,
+.app-shell-rebuild .about-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.app-shell-rebuild .content-section,
+.app-shell-rebuild .hero-section,
+.app-shell-rebuild .member-promo,
+.app-shell-rebuild .auth-page-shell,
+.app-shell-rebuild .shop-page-shell,
+.app-shell-rebuild .cart-page-shell,
+.app-shell-rebuild .checkout-page-shell,
+.app-shell-rebuild .payment-result-shell-editorial,
+.app-shell-rebuild .related-products-shell {
+  padding: 40px;
+}
+
+.app-shell-rebuild .section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+}
+
+.app-shell-rebuild .section-kicker {
+  margin: 0 0 14px;
+  color: var(--brand-sage);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.app-shell-rebuild .hero-title,
+.app-shell-rebuild .page-title,
+.app-shell-rebuild .section-heading h2,
+.app-shell-rebuild .member-promo h2,
+.app-shell-rebuild .feature-card h3,
+.app-shell-rebuild .product-card h3,
+.app-shell-rebuild .cart-summary h2,
+.app-shell-rebuild .checkout-step-card h2,
+.app-shell-rebuild .checkout-summary-card h2,
+.app-shell-rebuild .payment-result-card h2,
+.app-shell-rebuild .about-card h2,
+.app-shell-rebuild .about-hero-copy h2,
+.app-shell-rebuild .about-quote-card strong,
+.app-shell-rebuild .member-modal h2,
+.app-shell-rebuild .product-detail-note-card strong,
+.app-shell-rebuild .cart-editorial-banner strong,
+.app-shell-rebuild .shop-editorial-banner strong,
+.app-shell-rebuild .payment-result-hero-card strong {
+  font-family: 'EB Garamond', serif;
+  color: var(--ink-strong);
+  letter-spacing: -0.02em;
+}
+
+.app-shell-rebuild .hero-title {
+  font-size: clamp(3rem, 5vw, 4.75rem);
+  line-height: 0.96;
+  max-width: 11ch;
+}
+
+.app-shell-rebuild .page-title {
+  margin: 0;
+  font-size: clamp(2.4rem, 4vw, 3.8rem);
+  line-height: 1.02;
+}
+
+.app-shell-rebuild .page-description,
+.app-shell-rebuild .hero-description,
+.app-shell-rebuild .product-description,
+.app-shell-rebuild .cart-item-description,
+.app-shell-rebuild .shop-editorial-banner p,
+.app-shell-rebuild .cart-editorial-banner p,
+.app-shell-rebuild .payment-result-hero-card p,
+.app-shell-rebuild .about-card p,
+.app-shell-rebuild .about-hero-copy p,
+.app-shell-rebuild .member-promo p,
+.app-shell-rebuild .feature-card p,
+.app-shell-rebuild .empty-state p,
+.app-shell-rebuild .product-detail-note-card p,
+.app-shell-rebuild .checkout-process-copy p,
+.app-shell-rebuild .member-modal-description {
+  color: var(--ink-soft);
+  line-height: 1.75;
+}
+
+.app-shell-rebuild .hero-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(420px, 0.98fr);
+  gap: 32px;
+  min-height: 640px;
+}
+
+.app-shell-rebuild .hero-reference-image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 24px;
+  object-fit: cover;
+}
+
+.app-shell-rebuild .feature-grid-section,
+.app-shell-rebuild .product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.app-shell-rebuild .feature-card {
+  padding: 30px;
+}
+
+.app-shell-rebuild .shop-editorial-banner,
+.app-shell-rebuild .cart-editorial-banner,
+.app-shell-rebuild .payment-result-hero-card,
+.app-shell-rebuild .checkout-process-banner-editorial {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+  padding: 26px 30px;
+  border: 1px solid var(--line-warm);
+  background: linear-gradient(135deg, rgba(249,236,221,0.82), rgba(255,255,255,0.96));
+}
+
+.app-shell-rebuild .cart-banner-label {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--brand-sage);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.app-shell-rebuild .shop-toolbar,
+.app-shell-rebuild .shop-toolbar-editorial {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  gap: 18px;
+  align-items: end;
+}
+
+.app-shell-rebuild .category-tabs-wrap,
+.app-shell-rebuild .search-bar {
+  display: grid;
+  gap: 12px;
+}
+
+.app-shell-rebuild .category-tabs-label,
+.app-shell-rebuild .search-bar span {
+  color: var(--brand-sage);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.app-shell-rebuild .category-tabs {
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line-warm);
+  background: rgba(255,255,255,0.9);
+  overflow-x: auto;
+}
+
+.app-shell-rebuild .tab-button {
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.app-shell-rebuild .tab-button.active {
+  background: var(--bg-paper);
+  border-color: rgba(193, 200, 196, 0.9);
+  box-shadow: 0 8px 18px rgba(32,58,50,0.06);
+}
+
+.app-shell-rebuild .search-bar input,
+.app-shell-rebuild .checkout-form-grid input,
+.app-shell-rebuild .checkout-form-grid select,
+.app-shell-rebuild .checkout-form-grid textarea,
+.app-shell-rebuild .checkout-inline-grid input,
+.app-shell-rebuild .checkout-inline-grid select,
+.app-shell-rebuild .member-modal-body input,
+.app-shell-rebuild .member-modal-body select,
+.app-shell-rebuild .admin-login-card input {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid #c1c8c4;
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.95);
+  color: var(--ink-body);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.95);
+}
+
+.app-shell-rebuild .search-bar input:focus,
+.app-shell-rebuild .checkout-form-grid input:focus,
+.app-shell-rebuild .checkout-form-grid select:focus,
+.app-shell-rebuild .checkout-form-grid textarea:focus,
+.app-shell-rebuild .checkout-inline-grid input:focus,
+.app-shell-rebuild .checkout-inline-grid select:focus,
+.app-shell-rebuild .member-modal-body input:focus,
+.app-shell-rebuild .member-modal-body select:focus,
+.app-shell-rebuild .admin-login-card input:focus {
+  outline: none;
+  border-color: var(--brand-green);
+  box-shadow: 0 0 0 4px rgba(32,58,50,0.08);
+}
+
+.app-shell-rebuild .product-card {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--line-warm);
+  background: rgba(255,255,255,0.92);
+}
+
+.app-shell-rebuild .product-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 5px;
+  z-index: 1;
+}
+
+.app-shell-rebuild .product-card.theme-rose::before { background: linear-gradient(90deg, #d4a0b6, #f6dde8); }
+.app-shell-rebuild .product-card.theme-gold::before { background: linear-gradient(90deg, #c8a164, #f5e6c2); }
+.app-shell-rebuild .product-card.theme-green::before { background: linear-gradient(90deg, #7b9770, #d8e7d2); }
+.app-shell-rebuild .product-card.theme-lavender::before { background: linear-gradient(90deg, #8d82ab, #e3dbf2); }
+
+.app-shell-rebuild .product-image-wrap {
+  position: relative;
+  background: var(--bg-ivory);
+}
+
+.app-shell-rebuild .product-image {
+  width: 100%;
+  aspect-ratio: 4 / 4.8;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.app-shell-rebuild .product-card:hover .product-image {
+  transform: scale(1.03);
+}
+
+.app-shell-rebuild .product-card-topline {
+  position: absolute;
+  inset: 18px 18px auto 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.app-shell-rebuild .product-tag,
+.app-shell-rebuild .product-card-index,
+.app-shell-rebuild .detail-tag,
+.app-shell-rebuild .profile-status-pill,
+.app-shell-rebuild .cart-summary-service-list span,
+.app-shell-rebuild .checkout-security-badges span {
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(255,248,243,0.94);
+  border: 1px solid rgba(229,221,209,0.88);
+  color: var(--ink-strong);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-shell-rebuild .product-card-body {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+}
+
+.app-shell-rebuild .product-card h3 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.06;
+}
+
+.app-shell-rebuild .product-card-actions,
+.app-shell-rebuild .hero-actions,
+.app-shell-rebuild .member-modal-actions,
+.app-shell-rebuild .payment-result-actions,
+.app-shell-rebuild .checkout-submit-row,
+.app-shell-rebuild .detail-actions-topline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.app-shell-rebuild .primary-button,
+.app-shell-rebuild .secondary-button {
+  min-height: 48px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.app-shell-rebuild .primary-button {
+  border: none;
+  background: var(--ink-strong);
+  color: white;
+  box-shadow: none;
+}
+
+.app-shell-rebuild .primary-button:hover {
+  background: var(--brand-green);
+}
+
+.app-shell-rebuild .secondary-button {
+  border: 1px solid var(--brand-green);
+  background: transparent;
+  color: var(--ink-strong);
+}
+
+.app-shell-rebuild .secondary-button:hover {
+  background: rgba(216,231,210,0.28);
+}
+
+.app-shell-rebuild .text-button {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--ink-strong);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.app-shell-rebuild .price-block { display: grid; gap: 8px; }
+.app-shell-rebuild .price-line { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; }
+.app-shell-rebuild .original-price,
+.app-shell-rebuild .line-through-price { color: var(--ink-muted); text-decoration: line-through; }
+.app-shell-rebuild .member-price { color: var(--ink-strong); font-size: 24px; font-weight: 800; }
+.app-shell-rebuild .price-caption { margin: 0; color: var(--brand-sage); font-size: 13px; font-weight: 700; }
+
+.app-shell-rebuild .product-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(420px, 0.95fr) minmax(0, 1.05fr);
+  gap: 28px;
+  padding: 28px;
+}
+
+.app-shell-rebuild .product-detail-image-panel,
+.app-shell-rebuild .product-detail-image-panel-editorial {
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--bg-paper);
+}
+
+.app-shell-rebuild .product-detail-image {
+  width: 100%;
+  min-height: 640px;
+  object-fit: cover;
+}
+
+.app-shell-rebuild .product-detail-info { display: grid; gap: 18px; align-content: space-between; }
+.app-shell-rebuild .detail-meta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 16px 0; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
+.app-shell-rebuild .product-detail-note-card { padding: 22px; border: 1px solid var(--line-warm); background: rgba(249,236,221,0.56); }
+.app-shell-rebuild .field-label { margin: 0 0 10px; color: var(--brand-sage); font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+.app-shell-rebuild .quantity-selector { display: inline-flex; align-items: center; gap: 16px; padding: 8px 14px; border-radius: 999px; border: 1px solid #c1c8c4; background: rgba(255,255,255,0.95); }
+.app-shell-rebuild .quantity-selector button { width: 36px; height: 36px; border: none; border-radius: 999px; background: rgba(32,58,50,0.06); cursor: pointer; }
+
+.app-shell-rebuild .cart-layout-editorial,
+.app-shell-rebuild .checkout-editorial-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr); gap: 24px; align-items: start; }
+.app-shell-rebuild .cart-list,
+.app-shell-rebuild .checkout-steps { display: grid; gap: 20px; }
+.app-shell-rebuild .cart-item-editorial { display: grid; grid-template-columns: auto 180px 1fr; gap: 20px; padding: 24px; }
+.app-shell-rebuild .cart-item-order,
+.app-shell-rebuild .checkout-step-number { width: 44px; height: 44px; display: inline-grid; place-items: center; border-radius: 999px; background: var(--bg-soft); color: var(--ink-strong); font-size: 12px; font-weight: 800; letter-spacing: 0.16em; }
+.app-shell-rebuild .cart-item-image { width: 100%; height: 180px; border-radius: 20px; object-fit: cover; }
+.app-shell-rebuild .cart-item-content { display: grid; gap: 16px; }
+.app-shell-rebuild .cart-item-main { display: flex; justify-content: space-between; gap: 16px; align-items: start; }
+.app-shell-rebuild .cart-item-category,
+.app-shell-rebuild .product-category { color: var(--brand-sage); font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
+.app-shell-rebuild .cart-item-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--line-soft); }
+.app-shell-rebuild .cart-prices { display: grid; gap: 4px; justify-items: end; }
+.app-shell-rebuild .cart-summary,
+.app-shell-rebuild .checkout-summary-card { position: sticky; top: 104px; display: grid; gap: 18px; padding: 28px; }
+.app-shell-rebuild .cart-summary dl,
+.app-shell-rebuild .checkout-summary-card dl,
+.app-shell-rebuild .payment-result-card dl { display: grid; gap: 14px; margin: 0; }
+.app-shell-rebuild .cart-summary dl div,
+.app-shell-rebuild .checkout-summary-card dl div,
+.app-shell-rebuild .payment-result-card dl div { display: flex; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px dashed rgba(114,121,117,0.22); }
+.app-shell-rebuild .cart-summary-note,
+.app-shell-rebuild .checkout-trust-box,
+.app-shell-rebuild .payment-result-status { padding: 16px 18px; border-radius: 20px; border: 1px solid var(--line-warm); background: rgba(255,255,255,0.78); }
+.app-shell-rebuild .checkout-trust-box ul,
+.app-shell-rebuild .payment-result-list { margin: 0; padding-left: 18px; display: grid; gap: 8px; color: var(--ink-soft); }
+
+.app-shell-rebuild .checkout-steps-bar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.app-shell-rebuild .checkout-step-pill { display: flex; gap: 14px; align-items: center; padding: 18px; border-radius: 22px; border: 1px solid var(--line-warm); background: rgba(255,255,255,0.9); }
+.app-shell-rebuild .checkout-step-pill span { width: 36px; height: 36px; display: inline-grid; place-items: center; border-radius: 999px; background: var(--bg-soft); font-size: 12px; font-weight: 800; }
+.app-shell-rebuild .checkout-step-pill strong { display: block; margin-bottom: 4px; font-size: 14px; }
+.app-shell-rebuild .checkout-step-pill p { margin: 0; color: var(--ink-muted); font-size: 13px; }
+.app-shell-rebuild .checkout-form-layout,
+.app-shell-rebuild .checkout-step-card { display: grid; gap: 18px; }
+.app-shell-rebuild .checkout-form-grid,
+.app-shell-rebuild .checkout-inline-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.app-shell-rebuild .checkout-form-grid label,
+.app-shell-rebuild .checkout-inline-grid label,
+.app-shell-rebuild .member-modal-body label { display: grid; gap: 8px; color: var(--ink-body); font-size: 13px; font-weight: 700; }
+.app-shell-rebuild .payment-option-list { display: grid; gap: 14px; }
+.app-shell-rebuild .payment-option-card { display: flex; align-items: start; gap: 14px; padding: 18px; border: 1px solid var(--line-warm); border-radius: 22px; background: rgba(255,255,255,0.9); }
+.app-shell-rebuild .payment-option-card.selected { border-color: var(--brand-green); box-shadow: 0 12px 26px rgba(32,58,50,0.06); }
+.app-shell-rebuild .checkout-agreement { display: flex; gap: 10px; align-items: start; color: var(--ink-soft); }
+.app-shell-rebuild .checkout-form-error,
+.app-shell-rebuild .member-form-error { padding: 12px 14px; border-radius: 14px; background: rgba(186,26,26,0.08); border: 1px solid rgba(186,26,26,0.14); color: #8f2020; }
+
+.app-shell-rebuild .payment-result-shell { display: grid; gap: 24px; }
+.app-shell-rebuild .payment-result-success { background: rgba(227,244,233,0.92); border-color: rgba(79,138,92,0.22); color: #315f3d; }
+.app-shell-rebuild .payment-result-pending { background: rgba(255,248,234,0.94); border-color: rgba(181,111,47,0.22); color: #7b5329; }
+.app-shell-rebuild .payment-result-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.app-shell-rebuild .payment-result-code { margin: 0; padding: 18px; border-radius: 18px; overflow-x: auto; background: #1f2e28; color: #f6f1ec; font-size: 13px; line-height: 1.6; }
+
+.app-shell-rebuild .member-modal-page {
+  width: 100%;
+  max-height: none;
+  overflow: visible;
+  padding: 30px;
+}
+.app-shell-rebuild .member-modal-page::before { display: none; }
+.app-shell-rebuild .member-modal-shell { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(360px, 0.82fr); gap: 20px; align-items: start; }
+.app-shell-rebuild .member-modal-panel { display: grid; gap: 14px; }
+.app-shell-rebuild .member-modal-brand-mark { width: 64px; height: 64px; display: inline-grid; place-items: center; border-radius: 24px; background: rgba(255,255,255,0.9); border: 1px solid var(--line-warm); }
+.app-shell-rebuild .member-tab-group { display: flex; gap: 10px; padding: 6px; border-radius: 999px; border: 1px solid var(--line-warm); background: rgba(255,255,255,0.82); }
+.app-shell-rebuild .member-tab { flex: 1 1 0; min-height: 42px; border: 1px solid transparent; border-radius: 999px; background: transparent; font-weight: 800; }
+.app-shell-rebuild .member-tab.active { background: rgba(255,255,255,0.95); border-color: rgba(193,200,196,0.85); box-shadow: 0 8px 18px rgba(32,58,50,0.06); }
+.app-shell-rebuild .member-process-strip { display: flex; gap: 10px; flex-wrap: wrap; }
+.app-shell-rebuild .member-process-strip span { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line-warm); background: rgba(255,255,255,0.82); color: var(--ink-muted); font-size: 12px; font-weight: 700; }
+.app-shell-rebuild .member-process-strip .active,
+.app-shell-rebuild .member-process-strip .is-complete { color: var(--ink-strong); }
+.app-shell-rebuild .member-modal-actions.member-page-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+.app-shell-rebuild .site-footer {
+  margin: 12px auto 0;
+  padding: 34px 0 40px;
+  border-radius: 30px 30px 0 0;
+  background: linear-gradient(180deg, #203a32, #09241d);
+}
+
+.app-shell-rebuild .footer-content {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr auto;
+  gap: 24px;
+  align-items: start;
+}
+
+.app-shell-rebuild .footer-brand-copy,
+.app-shell-rebuild .site-footer p,
+.app-shell-rebuild .footer-links span {
+  color: rgba(255,248,243,0.84);
+}
+
+@media (max-width: 1080px) {
+  .app-shell-rebuild .product-grid,
+  .app-shell-rebuild .feature-grid-section {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .app-shell-rebuild .product-detail-layout,
+  .app-shell-rebuild .cart-layout-editorial,
+  .app-shell-rebuild .checkout-editorial-layout,
+  .app-shell-rebuild .payment-result-grid,
+  .app-shell-rebuild .hero-section,
+  .app-shell-rebuild .shop-toolbar,
+  .app-shell-rebuild .shop-toolbar-editorial,
+  .app-shell-rebuild .member-modal-shell,
+  .app-shell-rebuild .footer-content,
+  .app-shell-rebuild .shop-editorial-banner,
+  .app-shell-rebuild .cart-editorial-banner,
+  .app-shell-rebuild .payment-result-hero-card,
+  .app-shell-rebuild .checkout-process-banner-editorial {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell-rebuild .cart-summary,
+  .app-shell-rebuild .checkout-summary-card {
+    position: static;
+    top: auto;
+  }
+
+  .app-shell-rebuild .checkout-steps-bar {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell-rebuild .site-header,
+  .app-shell-rebuild .announcement-bar,
+  .app-shell-rebuild .main-content,
+  .app-shell-rebuild .site-footer {
+    width: min(100%, calc(100% - 24px));
+  }
+
+  .app-shell-rebuild .main-nav {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .app-shell-rebuild .main-nav button {
+    flex: 1 1 calc(50% - 12px);
+    justify-content: center;
+  }
+
+  .app-shell-rebuild .content-section,
+  .app-shell-rebuild .hero-section,
+  .app-shell-rebuild .member-promo,
+  .app-shell-rebuild .auth-page-shell,
+  .app-shell-rebuild .shop-page-shell,
+  .app-shell-rebuild .cart-page-shell,
+  .app-shell-rebuild .checkout-page-shell,
+  .app-shell-rebuild .payment-result-shell-editorial,
+  .app-shell-rebuild .related-products-shell,
+  .app-shell-rebuild .member-modal-page {
+    padding: 24px 20px;
+  }
+
+  .app-shell-rebuild .product-grid,
+  .app-shell-rebuild .feature-grid-section,
+  .app-shell-rebuild .payment-result-grid,
+  .app-shell-rebuild .checkout-form-grid,
+  .app-shell-rebuild .checkout-inline-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell-rebuild .cart-item-editorial {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell-rebuild .cart-item-image,
+  .app-shell-rebuild .product-detail-image {
+    height: auto;
+    min-height: 320px;
+  }
+
+  .app-shell-rebuild .member-modal-actions.member-page-actions,
+  .app-shell-rebuild .checkout-submit-row {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell-rebuild .hero-title { font-size: 40px; }
+  .app-shell-rebuild .page-title,
+  .app-shell-rebuild .section-heading h2 { font-size: 32px; }
+}
+
+
+.app-shell-rebuild .home-featured-shell,
+.app-shell-rebuild .profile-page-shell,
+.app-shell-rebuild .admin-login-shell {
+  padding: 40px;
+}
+
+.app-shell-rebuild .home-featured-banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+  padding: 26px 30px;
+  border-radius: 24px;
+  border: 1px solid var(--line-warm);
+  background: linear-gradient(135deg, rgba(249,236,221,0.82), rgba(255,255,255,0.96));
+}
+
+.app-shell-rebuild .home-featured-banner strong {
+  display: block;
+  margin-bottom: 8px;
+  font-family: 'EB Garamond', serif;
+  font-size: 32px;
+  color: var(--ink-strong);
+}
+
+.app-shell-rebuild .home-featured-banner p,
+.app-shell-rebuild .profile-brand-copy,
+.app-shell-rebuild .admin-login-helper-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.75;
+}
+
+.app-shell-rebuild .profile-brand-panel-editorial,
+.app-shell-rebuild .admin-login-helper-card-editorial,
+.app-shell-rebuild .admin-login-card-editorial {
+  border: 1px solid var(--line-warm);
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,248,243,0.92));
+  box-shadow: var(--shadow-soft);
+}
+
+.app-shell-rebuild .profile-brand-grid,
+.app-shell-rebuild .admin-login-credentials,
+.app-shell-rebuild .profile-stats-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.app-shell-rebuild .profile-brand-grid {
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  align-items: stretch;
+}
+
+.app-shell-rebuild .profile-brand-badge,
+.app-shell-rebuild .profile-visual-card,
+.app-shell-rebuild .profile-stat-card,
+.app-shell-rebuild .admin-login-credentials article {
+  border: 1px solid var(--line-warm);
+  background: rgba(255,255,255,0.9);
+  border-radius: 24px;
+  box-shadow: 0 18px 34px rgba(32,58,50,0.05);
+}
+
+.app-shell-rebuild .profile-brand-badge,
+.app-shell-rebuild .profile-visual-card,
+.app-shell-rebuild .admin-login-credentials article,
+.app-shell-rebuild .profile-stat-card {
+  padding: 22px;
+}
+
+.app-shell-rebuild .profile-brand-badge {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.app-shell-rebuild .profile-brand-mark {
+  width: 64px;
+  height: 64px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 24px;
+  border: 1px solid var(--line-warm);
+  background: rgba(255,255,255,0.95);
+}
+
+.app-shell-rebuild .profile-visual-image,
+.app-shell-rebuild .profile-inline-visual-image {
+  width: 100%;
+  display: block;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.app-shell-rebuild .profile-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.app-shell-rebuild .profile-chip-list span {
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(255,248,243,0.94);
+  border: 1px solid var(--line-warm);
+  color: var(--ink-strong);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.app-shell-rebuild .profile-stats-grid-editorial {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.app-shell-rebuild .profile-stat-card span {
+  color: var(--brand-sage);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.app-shell-rebuild .profile-stat-card strong {
+  display: block;
+  margin-top: 14px;
+  font-family: 'EB Garamond', serif;
+  font-size: 40px;
+  color: var(--ink-strong);
+}
+
+.app-shell-rebuild .profile-layout-expanded {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.app-shell-rebuild .profile-table-card-full,
+.app-shell-rebuild .profile-main-card-expanded {
+  grid-column: 1 / -1;
+}
+
+.app-shell-rebuild .profile-main-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.app-shell-rebuild .profile-avatar {
+  width: 72px;
+  height: 72px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  color: var(--ink-strong);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.app-shell-rebuild .profile-card-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.app-shell-rebuild .profile-card-heading span,
+.app-shell-rebuild .profile-main-content p,
+.app-shell-rebuild .admin-login-credentials span {
+  color: var(--ink-muted);
+}
+
+.app-shell-rebuild .profile-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.app-shell-rebuild .profile-table th,
+.app-shell-rebuild .profile-table td {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-soft);
+  text-align: left;
+}
+
+.app-shell-rebuild .profile-table th {
+  color: var(--brand-sage);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.app-shell-rebuild .admin-login-helper-card-editorial,
+.app-shell-rebuild .admin-login-card-editorial {
+  padding: 28px;
+}
+
+.app-shell-rebuild .admin-login-credentials {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 18px;
+}
+
+.app-shell-rebuild .admin-login-credentials strong {
+  display: block;
+  margin-top: 10px;
+  color: var(--ink-strong);
+  font-size: 18px;
+}
+
+@media (max-width: 1080px) {
+  .app-shell-rebuild .profile-brand-grid,
+  .app-shell-rebuild .profile-layout-expanded,
+  .app-shell-rebuild .profile-stats-grid-editorial,
+  .app-shell-rebuild .admin-login-credentials,
+  .app-shell-rebuild .home-featured-banner {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.app-shell-rebuild .footer-content-rebuild {
+  display: grid;
+  grid-template-columns: minmax(280px, 1.2fr) minmax(220px, 0.9fr) minmax(180px, auto);
+  gap: 28px;
+  align-items: start;
+}
+
+.app-shell-rebuild .footer-brand-rebuild {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.app-shell-rebuild .footer-links-rebuild {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+  align-content: start;
+  min-width: 0;
+}
+
+.app-shell-rebuild .footer-links-rebuild span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 248, 243, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  white-space: normal;
+}
+
+.app-shell-rebuild .footer-admin-entry-rebuild {
+  display: grid;
+  gap: 12px;
+  justify-items: end;
+  align-content: start;
+  min-width: 0;
+}
+
+.app-shell-rebuild .footer-admin-button-rebuild {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,248,243,0.38);
+  background: rgba(255,255,255,0.08);
+  color: #fff8f3;
+  text-decoration: none;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.app-shell-rebuild .site-footer {
+  overflow: hidden;
+}
+
+.app-shell-rebuild .footer-brand-logo {
+  max-width: min(100%, 220px);
+}
+
+.app-shell-rebuild .sign-page-shell-rebuild {
+  padding: 32px 40px;
+}
+
+.app-shell-rebuild .sign-page-panel-rebuild {
+  padding: 28px;
+}
+
+.app-shell-rebuild .sign-page-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(360px, 0.98fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.app-shell-rebuild .sign-page-visual-column,
+.app-shell-rebuild .sign-page-form-column {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.app-shell-rebuild .sign-page-brand-card,
+.app-shell-rebuild .sign-page-hero-card,
+.app-shell-rebuild .sign-page-benefit-grid article,
+.app-shell-rebuild .sign-page-form-shell {
+  border: 1px solid var(--line-warm);
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 18px 34px rgba(32,58,50,0.05);
+}
+
+.app-shell-rebuild .sign-page-brand-card,
+.app-shell-rebuild .sign-page-hero-card,
+.app-shell-rebuild .sign-page-benefit-grid article,
+.app-shell-rebuild .sign-page-form-shell {
+  border-radius: 24px;
+}
+
+.app-shell-rebuild .sign-page-brand-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  padding: 22px;
+  align-items: start;
+}
+
+.app-shell-rebuild .sign-page-brand-mark {
+  width: 60px;
+  height: 60px;
+}
+
+.app-shell-rebuild .sign-page-hero-card {
+  overflow: hidden;
+}
+
+.app-shell-rebuild .sign-page-hero-image {
+  width: 100%;
+  height: 320px;
+  display: block;
+  object-fit: cover;
+}
+
+.app-shell-rebuild .sign-page-hero-copy {
+  display: grid;
+  gap: 10px;
+  padding: 22px;
+}
+
+.app-shell-rebuild .sign-page-benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.app-shell-rebuild .sign-page-benefit-grid article {
+  display: grid;
+  gap: 10px;
+  padding: 20px;
+}
+
+.app-shell-rebuild .sign-page-benefit-grid span {
+  color: var(--brand-gold);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.app-shell-rebuild .sign-page-benefit-grid strong {
+  font-family: 'EB Garamond', serif;
+  font-size: 28px;
+  color: var(--ink-strong);
+}
+
+.app-shell-rebuild .sign-page-benefit-grid p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.app-shell-rebuild .sign-page-tab-group {
+  min-height: 52px;
+}
+
+.app-shell-rebuild .sign-page-form-shell {
+  padding: 22px;
+}
+
+.app-shell-rebuild .sign-page-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 1080px) {
+  .app-shell-rebuild .sign-page-layout,
+  .app-shell-rebuild .footer-content-rebuild,
+  .app-shell-rebuild .sign-page-benefit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell-rebuild .footer-admin-entry-rebuild {
+    justify-items: start;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell-rebuild .sign-page-shell-rebuild,
+  .app-shell-rebuild .sign-page-panel-rebuild {
+    padding: 20px;
+  }
+
+  .app-shell-rebuild .sign-page-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell-rebuild .sign-page-hero-image {
+    height: 220px;
+  }
+}

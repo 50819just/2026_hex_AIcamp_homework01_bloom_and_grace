@@ -1,19 +1,38 @@
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
+const defaultApiBaseUrl = typeof window === 'undefined'
+  ? 'http://localhost:3000'
+  : `${window.location.protocol}//${window.location.hostname}:3000`
+
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || defaultApiBaseUrl
 
 function buildApiUrl(path) {
   return `${apiBaseUrl}${path}`
 }
 
-export async function requestJson(url, options = {}) {
-  const response = await fetch(buildApiUrl(url), {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {}),
-    },
-    ...options,
-  })
+function getNetworkErrorMessage(url) {
+  if (url.includes('/api/ecpay/')) {
+    return '本地付款服務目前連不上，請先啟動 server（可用 npm run server 或 npm run dev:all）後再試一次。'
+  }
 
-  const data = await response.json()
+  return '本地資料服務目前連不上，請先確認 server 是否已啟動。'
+}
+
+export async function requestJson(url, options = {}) {
+  let response
+
+  try {
+    response = await fetch(buildApiUrl(url), {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options.headers || {}),
+      },
+      ...options,
+    })
+  } catch (error) {
+    const networkMessage = getNetworkErrorMessage(url)
+    throw new Error(error instanceof Error && error.message ? networkMessage : '連線失敗')
+  }
+
+  const data = await response.json().catch(() => ({}))
 
   if (!response.ok || data.success === false) {
     throw new Error(data.message || '請求失敗')

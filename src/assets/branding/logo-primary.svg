@@ -1,0 +1,10 @@
+<svg width="520" height="120" viewBox="0 0 520 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="520" height="120" rx="24" fill="transparent"/>
+  <g transform="translate(12 0)">
+    <rect x="0" y="12" width="96" height="96" rx="28" fill="#203A32"/>
+    <path d="M48 33C38 41.6 34.4 51.2 34.4 61.3C34.4 73.6 43.6 83.4 55.5 83.4C64.4 83.4 71.2 77.4 71.2 68.8C71.2 61.8 66.1 56.9 59.5 56.9C54.1 56.9 50.2 60.9 50.2 65.6C50.2 69.5 52.9 72.5 57 72.5C59.4 72.5 61.7 71.4 63.2 69.3C62.6 75.9 57.9 79.6 52 79.6C43.7 79.6 37.6 72.9 37.6 63.2C37.6 52.3 42.8 43.3 54.7 34.7L48 33Z" fill="#FFF8F3"/>
+    <path d="M35 79.3C39.6 76.2 44.4 74.6 49.2 74.6C55.1 74.6 59.8 76.7 64.1 80.9" stroke="#B79A63" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <text x="128" y="50" fill="#09241D" font-family="'EB Garamond', serif" font-size="38" font-weight="600" letter-spacing="0.03em">Bloom &amp; Grace</text>
+  <text x="130" y="79" fill="#556252" font-family="Manrope, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="0.34em">FLORAL ATELIER</text>
+</svg>

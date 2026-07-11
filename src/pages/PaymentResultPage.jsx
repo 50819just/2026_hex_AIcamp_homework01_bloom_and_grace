@@ -17,24 +17,30 @@ function getStatusContent(record) {
 
   if (isSuccess) {
     return {
-      label: '付款成功',
-      description: '系統已重新查單，這筆測試訂單目前顯示為付款成功。',
+      label: '訂單確認完成',
+      title: '花禮訂單已確認，付款也順利完成',
+      description: '系統已重新查單，這筆測試訂單目前顯示為付款成功，可以把它視為 Stitch 裡的完成頁版本。',
       toneClass: 'payment-result-success',
+      isSuccess: true,
     }
   }
 
   if (record?.queryResult || record?.browserReturnResult || record?.returnNotifyResult) {
     return {
-      label: '付款尚未完成',
-      description: '目前已收到部分付款資訊，但綠界尚未回覆完成付款。',
+      label: '付款確認中',
+      title: '付款資訊已回站，但綠界尚未回覆完成',
+      description: '目前已收到部分付款資訊，姊姊先把狀態整理在這裡，你可以稍後再重新查詢一次。',
       toneClass: 'payment-result-pending',
+      isSuccess: false,
     }
   }
 
   return {
-    label: '等待查詢',
+    label: '等待付款確認',
+    title: '正在等待更完整的付款確認',
     description: '目前還沒有查到完整付款資訊，可稍後再重新查詢一次。',
     toneClass: 'payment-result-pending',
+    isSuccess: false,
   }
 }
 
@@ -82,12 +88,12 @@ function PaymentResultPage({ onNotify }) {
   if (isLoading) {
     return (
       <div className="page-stack">
-        <section className="content-section payment-result-shell">
+        <section className="content-section payment-result-shell payment-result-shell-editorial">
           <div className="section-heading">
             <div>
-              <p className="section-kicker">Payment Result</p>
-              <h1 className="page-title">付款結果查詢中</h1>
-              <p className="page-description">正在透過本地 server 向綠界查單，請稍等一下。</p>
+              <p className="section-kicker">訂單確認中</p>
+              <h1 className="page-title">正在向綠界重新確認這筆花禮訂單</h1>
+              <p className="page-description">付款回站後，系統會再透過本地 server 查單一次，讓完成頁不只停在畫面示意。</p>
             </div>
           </div>
         </section>
@@ -98,10 +104,10 @@ function PaymentResultPage({ onNotify }) {
   if (errorMessage) {
     return (
       <div className="page-stack">
-        <section className="content-section payment-result-shell">
+        <section className="content-section payment-result-shell payment-result-shell-editorial">
           <div className="section-heading">
             <div>
-              <p className="section-kicker">Payment Result</p>
+              <p className="section-kicker">付款結果查詢</p>
               <h1 className="page-title">付款結果查詢失敗</h1>
               <p className="page-description">{errorMessage}</p>
             </div>
@@ -112,7 +118,7 @@ function PaymentResultPage({ onNotify }) {
               重新查詢
             </button>
             <button type="button" className="primary-button" onClick={() => navigateTo('/cart')}>
-              回到購物車
+              回到購物袋
             </button>
           </div>
         </section>
@@ -128,22 +134,35 @@ function PaymentResultPage({ onNotify }) {
 
   return (
     <div className="page-stack">
-      <section className="content-section payment-result-shell">
-        <div className="section-heading">
+      <section className="content-section payment-result-shell payment-result-shell-editorial">
+        <div className="section-heading payment-result-heading-editorial">
           <div>
-            <p className="section-kicker">Payment Result</p>
-            <h1 className="page-title">付款結果</h1>
-            <p className="page-description">這個頁面會在綠界付款完成後回站，並再次透過本地 server 查單確認結果。</p>
+            <p className="section-kicker">{statusContent.label}</p>
+            <h1 className="page-title">{statusContent.title}</h1>
+            <p className="page-description">{statusContent.description}</p>
           </div>
         </div>
 
-        <div className={`payment-result-status ${statusContent.toneClass}`}>
-          <strong>{statusContent.label}</strong>
-          <p>{statusContent.description}</p>
+        <div className={`payment-result-status payment-result-status-editorial ${statusContent.toneClass}`}>
+          <strong>{statusContent.isSuccess ? 'Thank you. Your floral order is now complete.' : '目前系統已收到回站資訊，下一步是確認最終付款狀態。'}</strong>
+          <p>{statusContent.isSuccess ? '這裡保留了完成頁該有的確認感，同時也把真實查單資訊整理在下方。' : '你可以稍後重新查詢，或先回到選品頁與購物袋繼續整理。'}</p>
         </div>
 
-        <div className="payment-result-grid">
-          <article className="payment-result-card">
+        <div className="payment-result-hero-card">
+          <div className="payment-result-hero-copy">
+            <span className="cart-banner-label">訂單旅程</span>
+            <strong>{statusContent.isSuccess ? '付款成功後，回站查單也已經完成' : '付款流程已進入回站查詢階段'}</strong>
+            <p>這一頁現在同時扮演 Stitch 裡的 Order Confirmed 畫面，以及驗證綠界付款結果的實際頁面。</p>
+          </div>
+          <div className="checkout-security-badges">
+            <span>訂單編號已建立</span>
+            <span>前端回站已檢查</span>
+            <span>伺服器查單已檢查</span>
+          </div>
+        </div>
+
+        <div className="payment-result-grid payment-result-grid-editorial">
+          <article className="payment-result-card payment-result-card-priority">
             <h2>訂單資訊</h2>
             <dl>
               <div>
@@ -188,8 +207,8 @@ function PaymentResultPage({ onNotify }) {
           <button type="button" className="secondary-button" onClick={() => window.location.reload()}>
             重新查詢
           </button>
-          <button type="button" className="primary-button" onClick={() => navigateTo('/shop')}>
-            繼續選購
+            <button type="button" className="primary-button" onClick={() => navigateTo('/shop')}>
+            繼續挑選花禮
           </button>
         </div>
       </section>
