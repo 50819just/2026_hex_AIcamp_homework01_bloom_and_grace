@@ -11,30 +11,17 @@ function ShopPage({
   searchText,
   onCategoryChange,
   onSearchChange,
-  onAddToCart,
+  onQuickAdd,
 }) {
   return (
     <div className="page-stack">
-      <section className="content-section shop-page-shell">
-        <div className="section-heading shop-page-heading">
-          <div>
-            <p className="section-kicker">選品花藝店</p>
-            <h1 className="page-title">為不同情境挑一份剛剛好的花禮</h1>
-            <p className="page-description">
-              從開幕誌慶、節慶送禮到安靜溫柔的日常祝福，這一頁會把花禮整理得更像精品選品，而不是只是商品清單。
-            </p>
-          </div>
-        </div>
-
-        <div className="shop-editorial-banner">
-          <div>
-            <span className="cart-banner-label">花禮系列總覽</span>
-            <strong>{products.length} 款花禮正在展開中</strong>
-            <p>{isMember ? '你目前已登入會員，頁面上的價格會直接以會員價為主。' : '先慢慢挑選，登入會員後就能直接套用會員價格。'}</p>
-          </div>
-          <button type="button" className="secondary-button" onClick={() => navigateTo('/about')}>
-            了解品牌故事
-          </button>
+      <section className="page-container shop-page">
+        <div className="shop-intro">
+          <p className="section-kicker">精選花藝</p>
+          <h1 className="page-title">花藝選集</h1>
+          <p className="page-description">
+            這裡整理了招牌花束、植栽與送禮花禮，每一款都保留安靜、俐落又有層次的編輯感。
+          </p>
         </div>
 
         <ShopToolbar
@@ -46,28 +33,35 @@ function ShopPage({
         />
 
         {products.length > 0 ? (
-          <div className="product-grid product-grid-editorial">
+          <div className="product-grid product-grid-shop">
             {products.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
                 isMember={isMember}
-                onAddToCart={onAddToCart}
                 onViewDetail={(productId) => navigateTo(`/products/${productId}`)}
+                onQuickAdd={onQuickAdd}
+                showDescription
               />
             ))}
           </div>
         ) : (
           <EmptyState
-            title="目前沒有符合條件的花禮"
-            description="可以試著更換分類或搜尋關鍵字，看看其他溫柔花禮喔。"
-            actionLabel="清除搜尋條件"
+            title="沒有找到符合的花禮"
+            description="可以試試其他分類，或換個關鍵字再找找看。"
+            actionLabel="清除篩選"
             onAction={() => {
               onCategoryChange('all')
               onSearchChange('')
             }}
           />
         )}
+
+        <div className="shop-footer-cta">
+          <button type="button" className="secondary-button" onClick={() => navigateTo('/shop')}>
+            查看更多花禮
+          </button>
+        </div>
       </section>
     </div>
   )

@@ -10,7 +10,7 @@ const variantMap = {
   dark: logoDark,
 }
 
-function BrandLogo({ variant = 'primary', size = 'md', className = '', alt = 'Bloom & Grace logo' }) {
+function BrandLogo({ variant = 'primary', size = 'md', className = '', alt = '花店品牌標誌' }) {
   const src = variantMap[variant] || logoPrimary
   const classes = ['brand-logo-image', `brand-logo-image-${size}`, className].filter(Boolean).join(' ')
 

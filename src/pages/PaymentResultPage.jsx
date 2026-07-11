@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import EmptyState from '../components/EmptyState'
 import { navigateTo } from '../hooks/useRouter'
 import { queryEcpayOrder } from '../lib/api'
+import { formatPrice } from '../lib/formatters'
 
 function getQueryValue(key) {
   const searchParams = new URLSearchParams(window.location.search)
@@ -44,11 +45,68 @@ function getStatusContent(record) {
   }
 }
 
+function getPaymentTypeLabel(paymentType) {
+  const paymentTypeMap = {
+    Credit: '信用卡',
+    WebATM: '網路 ATM',
+    ATM: 'ATM 轉帳',
+    CVS: '超商代碼',
+    BARCODE: '超商條碼',
+    TWQR: 'TWQR 行動支付',
+    DigitalPayment_IPASS: '一卡通 iPASS',
+    ApplePay: 'Apple Pay',
+  }
+
+  return paymentTypeMap[paymentType] || paymentType || '綠界付款'
+}
+
+function getDisplayAmount(tradeInfo, record) {
+  const rawAmount =
+    tradeInfo?.tradeAmt ||
+    record?.browserReturnResult?.TradeAmt ||
+    record?.returnNotifyResult?.TradeAmt ||
+    ''
+
+  const amount = Number(rawAmount)
+  return Number.isFinite(amount) && amount > 0 ? formatPrice(amount) : '尚未回傳'
+}
+
+function getResultSummary(record) {
+  const tradeInfo = record?.queryResult || {}
+  const parsed = tradeInfo?.parsed || {}
+  const tradeStatus = String(tradeInfo.tradeStatus || '')
+
+  if (tradeStatus === '1') {
+    return `付款成功｜${parsed.ItemName || '商品'}｜${getPaymentTypeLabel(tradeInfo.paymentType)}｜${getDisplayAmount(tradeInfo, record)}`
+  }
+
+  if (record?.queryResult || record?.browserReturnResult || record?.returnNotifyResult) {
+    return `付款確認中｜${parsed.ItemName || '商品'}｜請稍後重新查詢`
+  }
+
+  return '等待付款確認中'
+}
+
+function getStatusBadgeLabel(record) {
+  const tradeStatus = String(record?.queryResult?.tradeStatus || '')
+
+  if (tradeStatus === '1') {
+    return '付款成功'
+  }
+
+  if (record?.queryResult || record?.browserReturnResult || record?.returnNotifyResult) {
+    return '確認中'
+  }
+
+  return '等待中'
+}
+
 function PaymentResultPage({ onNotify }) {
   const merchantTradeNo = useMemo(() => getQueryValue('merchantTradeNo'), [])
   const [orderRecord, setOrderRecord] = useState(null)
   const [isLoading, setIsLoading] = useState(Boolean(merchantTradeNo))
-  const [errorMessage, setErrorMessage] = useState(merchantTradeNo ? '' : '缺少 MerchantTradeNo，無法查詢付款結果。')
+  const [errorMessage, setErrorMessage] = useState(merchantTradeNo ? '' : '缺少綠界交易編號，無法查詢付款結果。')
+  const [copiedField, setCopiedField] = useState('')
 
   useEffect(() => {
     if (!merchantTradeNo) {
@@ -128,9 +186,36 @@ function PaymentResultPage({ onNotify }) {
 
   const statusContent = getStatusContent(orderRecord)
   const tradeInfo = orderRecord?.queryResult || {}
-  const paymentType = tradeInfo.paymentType || orderRecord?.browserReturnResult?.PaymentType || '綠界測試付款'
+  const parsedTradeInfo = tradeInfo.parsed || {}
+  const paymentType = getPaymentTypeLabel(
+    tradeInfo.paymentType || orderRecord?.browserReturnResult?.PaymentType || '綠界測試付款',
+  )
   const paymentDate = tradeInfo.paymentDate || orderRecord?.browserReturnResult?.PaymentDate || '尚未回傳'
   const tradeStatus = tradeInfo.tradeStatus || orderRecord?.paymentStatus || '未提供'
+  const tradeAmt = getDisplayAmount(tradeInfo, orderRecord)
+  const itemName = parsedTradeInfo.ItemName || orderRecord?.browserReturnResult?.ItemName || '尚未回傳'
+  const customerName = parsedTradeInfo.CustomField1 || orderRecord?.checkoutFields?.CustomField1 || '尚未回傳'
+  const ecpayTradeNo = tradeInfo.tradeNo || parsedTradeInfo.TradeNo || '尚未回傳'
+  const resultSummary = getResultSummary(orderRecord)
+  const statusBadgeLabel = getStatusBadgeLabel(orderRecord)
+
+  const handleCopy = async (value, fieldKey) => {
+    if (!value || value === '尚未回傳') {
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(String(value))
+      setCopiedField(fieldKey)
+      onNotify('已複製到剪貼簿')
+
+      window.setTimeout(() => {
+        setCopiedField((currentValue) => (currentValue === fieldKey ? '' : currentValue))
+      }, 1800)
+    } catch {
+      onNotify('目前無法自動複製，請手動選取文字', 'info')
+    }
+  }
 
   return (
     <div className="page-stack">
@@ -144,7 +229,10 @@ function PaymentResultPage({ onNotify }) {
         </div>
 
         <div className={`payment-result-status payment-result-status-editorial ${statusContent.toneClass}`}>
-          <strong>{statusContent.isSuccess ? 'Thank you. Your floral order is now complete.' : '目前系統已收到回站資訊，下一步是確認最終付款狀態。'}</strong>
+          <span className={`payment-result-badge ${statusContent.isSuccess ? 'is-success' : 'is-pending'}`}>
+            {statusBadgeLabel}
+          </span>
+          <strong>{statusContent.isSuccess ? '謝謝你，這筆花禮訂單已完成。' : '目前系統已收到回站資訊，下一步是確認最終付款狀態。'}</strong>
           <p>{statusContent.isSuccess ? '這裡保留了完成頁該有的確認感，同時也把真實查單資訊整理在下方。' : '你可以稍後重新查詢，或先回到選品頁與購物袋繼續整理。'}</p>
         </div>
 
@@ -152,7 +240,8 @@ function PaymentResultPage({ onNotify }) {
           <div className="payment-result-hero-copy">
             <span className="cart-banner-label">訂單旅程</span>
             <strong>{statusContent.isSuccess ? '付款成功後，回站查單也已經完成' : '付款流程已進入回站查詢階段'}</strong>
-            <p>這一頁現在同時扮演 Stitch 裡的 Order Confirmed 畫面，以及驗證綠界付款結果的實際頁面。</p>
+            <p>這一頁現在同時扮演設計稿中的完成頁，以及驗證綠界付款結果的實際頁面。</p>
+            <p><strong>前台回傳：</strong>{resultSummary}</p>
           </div>
           <div className="checkout-security-badges">
             <span>訂單編號已建立</span>
@@ -165,17 +254,43 @@ function PaymentResultPage({ onNotify }) {
           <article className="payment-result-card payment-result-card-priority">
             <h2>訂單資訊</h2>
             <dl>
-              <div>
-                <dt>MerchantTradeNo</dt>
-                <dd>{merchantTradeNo}</dd>
+              <div className="payment-result-row-copy">
+                <dt>綠界交易編號</dt>
+                <dd>
+                  <span>{merchantTradeNo}</span>
+                  <button type="button" className="payment-result-copy-button" onClick={() => handleCopy(merchantTradeNo, 'merchantTradeNo')}>
+                    {copiedField === 'merchantTradeNo' ? '已複製' : '複製'}
+                  </button>
+                </dd>
+              </div>
+              <div className="payment-result-row-copy">
+                <dt>綠界付款流水號</dt>
+                <dd>
+                  <span>{ecpayTradeNo}</span>
+                  <button type="button" className="payment-result-copy-button" onClick={() => handleCopy(ecpayTradeNo, 'ecpayTradeNo')}>
+                    {copiedField === 'ecpayTradeNo' ? '已複製' : '複製'}
+                  </button>
+                </dd>
               </div>
               <div>
                 <dt>付款方式</dt>
                 <dd>{paymentType}</dd>
               </div>
               <div>
+                <dt>付款金額</dt>
+                <dd>{tradeAmt}</dd>
+              </div>
+              <div>
                 <dt>付款時間</dt>
                 <dd>{paymentDate}</dd>
+              </div>
+              <div>
+                <dt>訂購人</dt>
+                <dd>{customerName}</dd>
+              </div>
+              <div>
+                <dt>商品內容</dt>
+                <dd>{itemName}</dd>
               </div>
               <div>
                 <dt>查單狀態</dt>
@@ -183,7 +298,7 @@ function PaymentResultPage({ onNotify }) {
               </div>
               <div>
                 <dt>付款狀態</dt>
-                <dd>{orderRecord?.paymentStatus || 'created'}</dd>
+                <dd>{orderRecord?.paymentStatus || '建立中'}</dd>
               </div>
             </dl>
           </article>
@@ -191,16 +306,26 @@ function PaymentResultPage({ onNotify }) {
           <article className="payment-result-card">
             <h2>安全驗證</h2>
             <ul className="payment-result-list">
-              <li>OrderResultURL 驗證：{orderRecord?.browserCallbackVerified ? '已通過' : '尚未收到或未通過'}</li>
-              <li>ReturnURL 驗證：{orderRecord?.returnCallbackVerified ? '已通過' : '本地測試通常收不到'}</li>
-              <li>查單依據：PaymentResult 頁會主動呼叫本地 server 查詢綠界結果。</li>
+              <li>訂單回傳驗證：{orderRecord?.browserCallbackVerified ? '已通過' : '尚未收到或未通過'}</li>
+              <li>伺服器回傳驗證：{orderRecord?.returnCallbackVerified ? '已通過' : '本地測試通常收不到'}</li>
+              <li>查單依據：付款結果頁會主動呼叫本地伺服器查詢綠界結果。</li>
             </ul>
           </article>
         </div>
 
         <article className="payment-result-card payment-result-card-full">
-          <h2>查單摘要</h2>
-          <pre className="payment-result-code">{JSON.stringify(tradeInfo, null, 2)}</pre>
+          <h2>前台回傳字串 / 查單摘要</h2>
+          <div className="payment-result-summary-wrap">
+            <pre className="payment-result-code payment-result-code-summary">{resultSummary}</pre>
+            <button type="button" className="payment-result-copy-button payment-result-copy-button-inline" onClick={() => handleCopy(resultSummary, 'resultSummary')}>
+              {copiedField === 'resultSummary' ? '已複製摘要' : '複製摘要'}
+            </button>
+          </div>
+
+          <details className="payment-result-details">
+            <summary>展開原始查單 JSON</summary>
+            <pre className="payment-result-code">{JSON.stringify(tradeInfo, null, 2)}</pre>
+          </details>
         </article>
 
         <div className="payment-result-actions">

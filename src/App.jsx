@@ -262,16 +262,17 @@ function App() {
   let pageContent = null
 
   if (path === '/shop') {
-    pageContent = (
-      <ShopPage
-        products={filteredProducts}
-        isMember={isMember}
-        currentCategory={currentCategory}
-        searchText={searchText}
-        onCategoryChange={setCurrentCategory}
-        onSearchChange={setSearchText}
-      />
-    )
+      pageContent = (
+        <ShopPage
+          products={filteredProducts}
+          isMember={isMember}
+          currentCategory={currentCategory}
+          searchText={searchText}
+          onCategoryChange={setCurrentCategory}
+          onSearchChange={setSearchText}
+          onQuickAdd={(product) => handleAddToCart(product, 1)}
+        />
+      )
   } else if (path === '/about') {
     pageContent = <AboutPage />
   } else if (path === '/sign-in') {
@@ -362,12 +363,13 @@ function App() {
       />
     )
   } else {
-    pageContent = (
+      pageContent = (
       <HomePage
         isMember={isMember}
         onOpenMemberModal={() => openMemberEntryForPath('/sign-in')}
+        onQuickAdd={(product) => handleAddToCart(product, 1)}
       />
-    )
+      )
   }
 
   return (

@@ -8,7 +8,7 @@
 - Callback CheckMacValue 驗證
 - 台灣時區的 MerchantTradeDate
 - 查單結果整理
-- 訂單資料改為 SQLite 持久化保存
+- 訂單資料改為 JSON 檔持久化保存
 - 付款結果頁可看到驗證狀態
 
 ## 已完成的強化項目
@@ -23,8 +23,8 @@
 - 避免日後部署在 UTC 主機時時間錯誤
 
 ### 3. 訂單持久化
-- 新增 `ecpay_orders` table
-- 取代原本記憶體 `Map`
+- 新增 `server/data/ecpay-orders.json`
+- 取代原本記憶體 `Map` 與 SQLite 依賴
 - server 重啟後仍能保留查單資料
 
 ### 4. 查單結果整理
@@ -53,6 +53,7 @@
 - 本地端通常收不到真正可公開的 `ReturnURL`
 - 仍使用綠界測試環境，不是真正商業收款
 - 未實作正式出貨、退款、發票與通知流程
+- JSON 檔案儲存適合課程 / MVP 驗收，不適合正式多人高併發交易站
 
 ## 建議下一步
 1. 使用 ngrok 或正式 HTTPS 網址測試 `ReturnURL`

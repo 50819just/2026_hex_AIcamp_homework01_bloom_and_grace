@@ -45,11 +45,11 @@ export function createPlaceholderImage(title, tone = 'rose') {
       <path d="M250 360 C240 285 308 248 352 281 C395 219 484 231 514 300 C552 301 581 336 571 384 C560 433 514 464 445 464 C362 464 273 438 250 360 Z"
         fill="${current.accent}" opacity="0.85" />
       <text x="400" y="212" text-anchor="middle" fill="${current.accent}"
-        font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Bloom &amp; Grace</text>
+        font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">花店品牌</text>
       <text x="400" y="262" text-anchor="middle" fill="#6F6677"
         font-family="Segoe UI, Arial, sans-serif" font-size="36" font-weight="700">${safeTitle}</text>
       <text x="400" y="515" text-anchor="middle" fill="#8D7F95"
-        font-family="Segoe UI, Arial, sans-serif" font-size="22">premium florist collection</text>
+        font-family="Segoe UI, Arial, sans-serif" font-size="22">精品花藝系列</text>
     </svg>
   `.trim()
 

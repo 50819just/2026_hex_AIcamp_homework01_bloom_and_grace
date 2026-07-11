@@ -90,7 +90,14 @@ const server = http.createServer(async (request, response) => {
 
   try {
     if (request.method === 'GET' && isApiRoute(pathname, '/api/health')) {
-      sendJson(response, 200, { success: true, message: 'server running' })
+      sendJson(response, 200, {
+        success: true,
+        message: 'server running',
+        storage: {
+          mode: 'json-file',
+          location: 'server/data/*.json',
+        },
+      })
       return
     }
 
@@ -118,7 +125,7 @@ const server = http.createServer(async (request, response) => {
     }
 
     if (request.method === 'GET' && isApiRoute(pathname, '/api/member/profile')) {
-      const email = requestUrl.searchParams.get('email') || 'member@bloomandgrace.tw'
+      const email = requestUrl.searchParams.get('email') || 'member@flower.tw'
       const members = readMembers()
       const member = members.find((item) => item.email === email) || members[0]
 

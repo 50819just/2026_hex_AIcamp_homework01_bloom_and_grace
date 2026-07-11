@@ -26,19 +26,19 @@ const memberHighlights = {
       title: '會員快速登入',
       body: '登入後即可同步會員價、常用收件資訊與購物流程。',
       image: memberVisuals.welcome,
-      badge: 'Now Showing',
+      badge: '現正顯示',
     },
     {
       title: '最新消息｜母親節花禮開放預訂',
       body: '熱門花籃與蝴蝶蘭檔期已開跑，會員可更快查看專屬價格與備註需求。',
       image: memberVisuals.profile,
-      badge: 'Latest News',
+      badge: '最新消息',
     },
     {
       title: '送花流程更順手',
       body: '常用收件資料與送禮偏好可快速帶入，下一次下單不用重新填一輪。',
       image: memberVisuals.addressBook,
-      badge: 'Member Flow',
+      badge: '會員流程',
     },
   ],
   register: [
@@ -46,33 +46,33 @@ const memberHighlights = {
       title: '註冊後即可開啟更完整的會員流程',
       body: '建立帳號後會自動登入，後續查看會員價、帶入常用收件資料與整理送花資訊時，都會更直覺也更順手。',
       image: memberVisuals.welcome,
-      badge: 'Welcome Reel',
+      badge: '歡迎畫面',
     },
     {
       title: '最新消息｜會員專屬價格同步展示',
       body: '註冊完成後，蝴蝶蘭、花籃與節慶花禮都能直接看到會員價差異。',
       image: memberVisuals.profile,
-      badge: 'Latest News',
+      badge: '最新消息',
     },
     {
       title: '常用資訊一次整理好',
       body: '收件人資料、卡片稱謂與常見送禮情境都能慢慢補齊，之後會更省時間。',
       image: memberVisuals.addressBook,
-      badge: 'Member Setup',
+      badge: '會員建立',
     },
   ],
   forgot: [
     {
       title: '安全重設密碼',
-      body: '先驗證 Email，再更新新密碼，流程更接近正式會員站。',
+      body: '先驗證電子郵件，再更新新密碼，流程更接近正式會員站。',
       image: memberVisuals.addressBook,
-      badge: 'Security',
+      badge: '安全',
     },
     {
       title: '最新消息｜登入保護持續升級',
       body: '之後可再接裝置驗證、登入通知與異常提醒，現在先把前端流程整理完整。',
       image: memberVisuals.profile,
-      badge: 'Latest News',
+      badge: '最新消息',
     },
   ],
 }
@@ -164,8 +164,8 @@ function MemberModal({ isOpen, isMember, onClose, onMemberLogin, onMemberLogout,
 
     if (mode === 'forgot') {
       if (forgotStep === 'request') {
-        if (!formValue.email) {
-          setFormError('請先輸入你的會員 Email。')
+      if (!formValue.email) {
+          setFormError('請先輸入你的會員電子郵件。')
           return
         }
 
@@ -207,8 +207,8 @@ function MemberModal({ isOpen, isMember, onClose, onMemberLogin, onMemberLogout,
       }
 
       onMemberLogin({
-        name: formValue.name || 'Grace Lin',
-        email: formValue.email || 'member@bloomandgrace.tw',
+        name: formValue.name || '會員姓名',
+        email: formValue.email || 'member@flower.tw',
       })
       onNotify('註冊成功，已自動登入會員')
       resetForm()
@@ -216,13 +216,13 @@ function MemberModal({ isOpen, isMember, onClose, onMemberLogin, onMemberLogout,
     }
 
     if (!formValue.email || !formValue.password) {
-      setFormError('請輸入 Email 與密碼。')
+      setFormError('請輸入電子郵件與密碼。')
       return
     }
 
     onMemberLogin({
-      name: 'Grace Lin',
-      email: formValue.email || 'member@bloomandgrace.tw',
+      name: '會員姓名',
+      email: formValue.email || 'member@flower.tw',
     })
     onNotify('會員登入成功，已套用會員價')
     resetForm()
@@ -238,7 +238,7 @@ function MemberModal({ isOpen, isMember, onClose, onMemberLogin, onMemberLogout,
     login: '登入後即可查看會員價、帶入收件資料，並享有更完整的結帳體驗。',
     register: '建立帳號後可啟用會員價、保存送禮資料與後續訂單紀錄。',
     forgot: forgotStep === 'request'
-      ? '先確認會員 Email，我們會寄出 6 碼驗證碼（示意）給你。'
+      ? '先確認會員電子郵件，我們會寄出 6 碼驗證碼（示意）給你。'
       : '請輸入驗證碼並設定新密碼，流程會更像正式電商會員頁。',
   }
 
@@ -256,7 +256,7 @@ function MemberModal({ isOpen, isMember, onClose, onMemberLogin, onMemberLogout,
                 <FloralLogo />
               </span>
               <div>
-                <p className="section-kicker">Bloom & Grace Member</p>
+                <p className="section-kicker">會員入口</p>
                 <h2>{titleMap[mode]}</h2>
                 <p className="member-modal-slogan">把送花這件事，整理成更溫柔、順手也更有質感的會員體驗</p>
                 <p className="member-modal-description">{descriptionMap[mode]}</p>
@@ -267,7 +267,7 @@ function MemberModal({ isOpen, isMember, onClose, onMemberLogin, onMemberLogout,
               <div className="member-modal-hero-panel">
                 <div className="member-modal-carousel-card">
                   <div className="member-modal-carousel-meta">
-                    <span className="member-modal-carousel-kicker">Bloom & Grace 放映室</span>
+                    <span className="member-modal-carousel-kicker">會員放映室</span>
                     <span className="member-modal-carousel-badge">{activeHighlight.badge}</span>
                   </div>
 
@@ -326,7 +326,7 @@ function MemberModal({ isOpen, isMember, onClose, onMemberLogin, onMemberLogout,
 
               {mode === 'forgot' ? (
                 <div className="member-process-strip">
-                  <span className={forgotStep === 'request' ? 'active' : 'is-complete'}>1. 驗證 Email</span>
+                  <span className={forgotStep === 'request' ? 'active' : 'is-complete'}>1. 驗證電子郵件</span>
                   <span className={forgotStep === 'verify' ? 'active' : ''}>2. 設定新密碼</span>
                 </div>
               ) : null}
@@ -347,13 +347,13 @@ function MemberModal({ isOpen, isMember, onClose, onMemberLogin, onMemberLogout,
                   ) : null}
 
                   <label>
-                    Email
+                    電子郵件
                     <input
                       name="email"
                       type="email"
                       value={formValue.email}
                       onChange={handleInputChange}
-                      placeholder="member@bloomandgrace.tw"
+                      placeholder="請輸入電子郵件"
                       required
                     />
                   </label>

@@ -1,11 +1,11 @@
 function QuantitySelector({ value, onDecrease, onIncrease }) {
   return (
-    <div className="quantity-selector">
-      <button type="button" onClick={onDecrease} aria-label="減少數量">
+    <div className="quantity-selector" aria-label="Quantity selector">
+      <button type="button" onClick={onDecrease} aria-label="Decrease quantity">
         −
       </button>
-      <span>{value}</span>
-      <button type="button" onClick={onIncrease} aria-label="增加數量">
+      <span aria-live="polite">{value}</span>
+      <button type="button" onClick={onIncrease} aria-label="Increase quantity">
         +
       </button>
     </div>

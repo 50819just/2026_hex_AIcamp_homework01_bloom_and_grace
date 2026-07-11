@@ -1,21 +1,24 @@
 const features = [
   {
-    title: '編輯感花禮瀏覽',
-    description: '用更清楚的版面節奏整理蝴蝶蘭、花籃與盆花，讓挑選體驗更像精品選品而不是雜亂商品牆。',
+    title: '細膩設計',
+    description:
+      '以留白、對比與層次整理整體畫面，讓選購過程安靜、清楚又不擁擠。',
   },
   {
-    title: '會員優先的結帳流程',
-    description: '保留登入會員後才能結帳的驗收需求，同時把登入、購物袋、結帳與完成頁串成一條完整購物路徑。',
+    title: '精選花材',
+    description:
+      '每一份花禮都以編輯感呈現，讓花材、容器與包裝彼此協調。',
   },
   {
-    title: '綠界付款結果驗證',
-    description: '付款完成回站後，前端會再次透過本地 server 查單，讓示意頁也保有接近正式站的驗證感。',
+    title: '安心配送',
+    description:
+      '保留實際可操作的購物流程，讓美感和功能可以同時成立。',
   },
 ]
 
 function FeatureGrid() {
   return (
-    <section className="feature-grid-section">
+    <section className="page-container feature-strip">
       {features.map((feature, index) => (
         <article key={feature.title} className="feature-card">
           <span className="feature-index">0{index + 1}</span>

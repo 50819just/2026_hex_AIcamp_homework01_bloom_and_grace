@@ -152,7 +152,7 @@ function AdminPage({ onProductsUpdate, onNotify }) {
       <section className="content-section">
         <div className="section-heading">
           <div>
-            <p className="section-kicker">Admin</p>
+            <p className="section-kicker">後台管理</p>
             <h1 className="page-title">花店後台管理</h1>
             <p className="page-description">
               這裡現在除了商品上架，也能查看會員資料、常用地址與近期訂單，整體更像簡單資料庫後台。
@@ -262,7 +262,7 @@ function AdminPage({ onProductsUpdate, onNotify }) {
                 <input
                   value={memberSearch}
                   onChange={(event) => setMemberSearch(event.target.value)}
-                  placeholder="輸入姓名、Email、電話或等級"
+                  placeholder="輸入姓名、電子郵件、電話或等級"
                 />
               </label>
               <div className="admin-member-summary-cards">
@@ -292,7 +292,7 @@ function AdminPage({ onProductsUpdate, onNotify }) {
                       onClick={() => setSelectedMemberId(member.id)}
                     >
                       <strong>{member.name}</strong>
-                      <span>{member.email}</span>
+                      <span>電子郵件已綁定</span>
                       <em>{member.level}</em>
                     </button>
                   ))}
@@ -304,7 +304,7 @@ function AdminPage({ onProductsUpdate, onNotify }) {
                       <div>
                         <p className="section-kicker">會員資料</p>
                         <h3>{selectedMember.name}</h3>
-                        <p>{selectedMember.email} ・ {selectedMember.phone}</p>
+                        <p>電子郵件已綁定 ・ {selectedMember.phone}</p>
                       </div>
                       <div className="admin-member-badges">
                         <span>{selectedMember.level}</span>

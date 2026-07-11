@@ -1,4 +1,19 @@
 function NavIcon({ type, isActive = false }) {
+  if (type === 'search') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="5.4" fill="none" stroke="currentColor" strokeWidth="1.7" />
+        <path
+          d="m15.2 15.2 3.4 3.4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+        />
+      </svg>
+    )
+  }
+
   if (type === 'member') {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true">

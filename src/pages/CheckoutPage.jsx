@@ -3,6 +3,7 @@ import { createEcpayOrder } from '../lib/api'
 import { submitEcpayCheckoutForm } from '../lib/ecpay'
 import { formatPrice } from '../lib/formatters'
 import EmptyState from '../components/EmptyState'
+import OrderSummary from '../components/OrderSummary'
 import { memberVisuals } from '../data/memberAssets'
 import { navigateTo } from '../hooks/useRouter'
 
@@ -171,13 +172,18 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
 
         <div className="checkout-process-banner checkout-process-banner-editorial">
           <div className="checkout-process-copy">
-            <span className="cart-banner-label">品牌版結帳頁</span>
-            <strong>你現在看到的是品牌版結帳流程，但付款核心仍維持原本可運作的綠界邏輯</strong>
-            <p>送出後會依舊由本地端建立訂單，再導向綠界測試站完成付款，回站後也會照舊查單確認結果。</p>
+            <div className="checkout-banner-head">
+              <span className="cart-banner-label">結帳提醒</span>
+              <span className="checkout-test-card-note">
+                測試用的：信用卡 4311-9522-2222-2222／到期年月任意未來日期／安全碼任意 3 碼／3D 驗證碼 1234
+              </span>
+            </div>
+            <strong>付款仍會走綠界測試流程，先確認收件與發票資料會更順。</strong>
+            <p>送出後會由本地端建立訂單，再導向綠界測試站完成付款，回站後也會照舊查單確認結果。</p>
             <div className="checkout-security-badges">
               <span>SSL 安全傳輸</span>
               <span>綠界測試環境</span>
-              <span>{isMember ? '已套用會員價格' : '目前為訪客價格'}</span>
+              <span>{isMember ? '會員價已套用' : '訪客價格'}</span>
             </div>
           </div>
           <div className="checkout-process-visual">
@@ -210,9 +216,15 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
               <article className="checkout-step-card checkout-step-card-editorial">
                 <span className="checkout-step-number">02</span>
                 <h2>收件人與配送資訊</h2>
+                <p className="checkout-section-note">
+                  <strong>必填：</strong>收件人姓名、聯絡電話、電子郵件、送貨方式。
+                  {formValue.deliveryMethod === 'home' ? ' 宅配到府時，縣市、區域與詳細地址也都需要填寫。' : ' 門市自取時，宅配地址可保留為選填。'}
+                  <br />
+                  <strong>選填：</strong>卡片 / 配送備註。
+                </p>
                 <div className="checkout-form-grid">
                   <label>
-                    簽收人姓名
+                    簽收人姓名（必填）
                     <input
                       name="recipientName"
                       value={formValue.recipientName}
@@ -222,7 +234,7 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
                     />
                   </label>
                   <label>
-                    聯絡電話
+                    聯絡電話（必填）
                     <input
                       name="recipientPhone"
                       value={formValue.recipientPhone}
@@ -232,18 +244,18 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
                     />
                   </label>
                   <label>
-                    Email
+                    電子郵件（必填）
                     <input
                       name="recipientEmail"
                       type="email"
                       value={formValue.recipientEmail}
                       onChange={handleInputChange}
-                      placeholder="請輸入 Email"
+                      placeholder="請輸入電子郵件"
                       required
                     />
                   </label>
                   <label>
-                    送貨方式
+                    送貨方式（必填）
                     <select name="deliveryMethod" value={formValue.deliveryMethod} onChange={handleInputChange}>
                       {deliveryOptions.map((option) => (
                         <option key={option.key} value={option.key}>
@@ -253,7 +265,7 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
                     </select>
                   </label>
                   <label>
-                    縣市
+                    縣市{formValue.deliveryMethod === 'home' ? '（宅配必填）' : '（選填）'}
                     <input
                       name="city"
                       value={formValue.city}
@@ -263,7 +275,7 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
                     />
                   </label>
                   <label>
-                    區域
+                    區域{formValue.deliveryMethod === 'home' ? '（宅配必填）' : '（選填）'}
                     <input
                       name="district"
                       value={formValue.district}
@@ -273,7 +285,7 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
                     />
                   </label>
                   <label className="full-span">
-                    詳細地址
+                    詳細地址{formValue.deliveryMethod === 'home' ? '（宅配必填）' : '（選填）'}
                     <input
                       name="address"
                       value={formValue.address}
@@ -283,7 +295,7 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
                     />
                   </label>
                   <label className="full-span">
-                    卡片 / 配送備註
+                    卡片 / 配送備註（選填）
                     <textarea
                       name="note"
                       rows="3"
@@ -373,6 +385,10 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
                     {deliveryOptions.map((option) => (
                       <li key={option.key}>{option.label}：{option.description}</li>
                     ))}
+                    <li>測試信用卡卡號：4311-9522-2222-2222</li>
+                    <li>到期年月：任意未來日期</li>
+                    <li>安全碼：任意 3 碼</li>
+                    <li>3D 驗證碼：1234</li>
                   </ul>
                 </div>
 
@@ -400,29 +416,20 @@ function CheckoutPage({ cartItems, isMember, totals, onNotify, onCheckoutSuccess
             </form>
           </div>
 
-          <aside className="checkout-summary-card checkout-summary-card-editorial">
-            <p className="section-kicker">付款前摘要</p>
-            <h2>付款前最後確認</h2>
-            <dl>
-              <div>
-                <dt>原價合計</dt>
-                <dd>{formatPrice(totals.originalTotal)}</dd>
-              </div>
-              <div>
-                <dt>{isMember ? '會員合計' : '目前合計'}</dt>
-                <dd>{formatPrice(totals.currentTotal)}</dd>
-              </div>
-              <div>
-                <dt>會員差額</dt>
-                <dd>{formatPrice(totals.discount)}</dd>
-              </div>
-            </dl>
-            <div className="cart-summary-service-list">
-              <span>新鮮花禮配送整理</span>
-              <span>祝福卡片留言</span>
-              <span>付款回站查詢</span>
-            </div>
-          </aside>
+          <OrderSummary
+            kicker="付款前摘要"
+            title="付款前最後確認"
+            rows={[
+              { label: '原價合計', value: formatPrice(totals.originalTotal) },
+              { label: isMember ? '會員合計' : '目前合計', value: formatPrice(totals.currentTotal) },
+              { label: '會員差額', value: formatPrice(totals.discount) },
+            ]}
+            totalLabel="合計"
+            totalValue={formatPrice(totals.currentTotal)}
+            serviceItems={['新鮮花禮配送整理', '祝福卡片留言', '付款回站查詢']}
+            note="送出後會照舊由本地端建立綠界訂單，再前往測試付款頁。"
+            className="checkout-summary-card-editorial"
+          />
         </div>
       </section>
     </div>

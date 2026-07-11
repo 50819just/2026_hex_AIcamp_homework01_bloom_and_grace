@@ -1,10 +1,10 @@
 [
   {
     "id": "member-bloom-001",
-    "name": "Grace Lin",
-    "email": "member@bloomandgrace.tw",
+    "name": "林芷柔",
+    "email": "member@flower.tw",
     "phone": "0912-345-678",
-    "level": "Bloom Select",
+    "level": "花選會員",
     "joinedAt": "2026-03-08",
     "birthday": "1996-05-20",
     "favoriteCategories": ["蝴蝶蘭", "花籃", "追思花禮"],
@@ -12,7 +12,7 @@
       "cartCount": 2,
       "savedRecipients": 2,
       "yearlyOrders": 6,
-      "memberDiscountLabel": "95 折示意"
+    "memberDiscountLabel": "95 折示意"
     },
     "addresses": [
       {
@@ -51,10 +51,10 @@
   },
   {
     "id": "member-bloom-002",
-    "name": "Ariel Wang",
+    "name": "王語柔",
     "email": "ariel.wang@example.com",
     "phone": "0988-123-456",
-    "level": "Bloom Member",
+    "level": "花店會員",
     "joinedAt": "2026-02-18",
     "birthday": "1994-11-03",
     "favoriteCategories": ["花籃", "盆花"],
@@ -86,10 +86,10 @@
   },
   {
     "id": "member-bloom-003",
-    "name": "Daniel Chen",
+    "name": "陳景安",
     "email": "daniel.chen@example.com",
     "phone": "0977-555-321",
-    "level": "Bloom Select",
+    "level": "花選會員",
     "joinedAt": "2025-12-12",
     "birthday": "1990-08-17",
     "favoriteCategories": ["蝴蝶蘭"],

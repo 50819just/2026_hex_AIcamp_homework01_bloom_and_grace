@@ -7,17 +7,6 @@ const adminCredentials = {
   password: import.meta.env.VITE_ADMIN_PASSWORD || '12345678',
 }
 
-const adminNotes = [
-  {
-    title: '商品與會員資料',
-    body: '登入後可直接進入後台驗收頁，先處理商品與會員內容。',
-  },
-  {
-    title: '內部驗收流程',
-    body: '這個入口只保留給門市與品牌團隊使用，不另外串接客戶登入 API。',
-  },
-]
-
 function AdminLoginPage({ onAdminLogin, onNotify }) {
   const [formValue, setFormValue] = useState({
     email: '',
@@ -59,17 +48,9 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
       <section className="page-container admin-hub-shell">
         <div className="admin-hub-grid">
           <aside className="admin-hub-visual-card">
-            <div className="admin-hub-visual-copy">
-              <p className="section-kicker">花藝後台入口</p>
-              <h1 className="admin-hub-title">後台登入</h1>
-              <p className="admin-hub-lead">
-                這裡保留給內部驗收使用，登入後可進入商品與會員資料管理頁。若不是測試環境，請使用前台入口。
-              </p>
-            </div>
-
             <figure className="admin-hub-figure">
               <img
-                src="/images/products/baskets/opening-bouquet-01.jpg"
+                src="/images/products/orchids/white-orchid-03.jpg"
                 alt="花店後台登入示意"
                 className="admin-hub-image"
                 loading="eager"
@@ -80,13 +61,12 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
               </figcaption>
             </figure>
 
-            <div className="admin-hub-note-grid">
-              {adminNotes.map((note) => (
-                <article key={note.title} className="admin-hub-note-card">
-                  <h2>{note.title}</h2>
-                  <p>{note.body}</p>
-                </article>
-              ))}
+            <div className="admin-hub-visual-copy">
+              <p className="section-kicker">花藝後台入口</p>
+              <h1 className="admin-hub-title">後台登入</h1>
+              <p className="admin-hub-lead">
+                這裡保留給內部驗收使用，登入後可進入商品與會員資料管理頁。若不是測試環境，請使用前台入口。
+              </p>
             </div>
           </aside>
 
@@ -103,10 +83,10 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
               這裡保留給內部驗收使用，登入後可進入商品與會員資料管理頁。若不是測試環境，請勿使用這個入口。
             </p>
 
-            <div className="admin-login-notice">
+            <p className="admin-login-side-note">
               <span className="section-kicker">內部限定</span>
-              <p>此頁只連結目前既有的後台驗證流程，不另外接客戶登入 API。</p>
-            </div>
+              這一頁只連結目前既有的後台驗證流程，不另外接客戶登入 API。
+            </p>
 
             <form className="admin-hub-form" onSubmit={handleSubmit}>
               <label className="admin-hub-field">
@@ -163,6 +143,11 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
                 </button>
               </div>
             </form>
+
+            <p className="admin-login-side-note">
+              <span className="section-kicker">內部限定</span>
+              這一頁只連結目前既有的後台驗證流程，不另外接客戶登入 API。
+            </p>
           </section>
         </div>
 

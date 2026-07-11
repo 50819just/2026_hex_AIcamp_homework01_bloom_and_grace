@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import EmptyState from '../components/EmptyState'
 import PriceBlock from '../components/PriceBlock'
 import ProductCard from '../components/ProductCard'
@@ -14,105 +15,187 @@ function ProductDetailPage({
   onDecreaseQuantity,
   onAddToCart,
 }) {
+  const gallery = useMemo(() => product?.gallery || [product?.image].filter(Boolean), [product])
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+
   if (!product) {
     return (
       <EmptyState
-        title="找不到這個商品"
-        description="這個花禮可能已下架，或你可以回到選品頁重新看看。"
-        actionLabel="回到商品列表"
+        title="找不到這項花禮"
+        description="這個品項可能已經下架了，先回到花藝選集看看其他款式吧。"
+        actionLabel="回到選購頁"
         onAction={() => navigateTo('/shop')}
       />
     )
   }
 
+  const selectedImage = gallery[selectedImageIndex] || product.image
+
   return (
     <div className="page-stack">
-      <section className="product-detail-layout product-detail-layout-editorial">
-        <div className="product-detail-image-panel product-detail-image-panel-editorial">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="product-detail-image"
-            onError={(event) => {
-              event.currentTarget.onerror = null
-              event.currentTarget.src = createPlaceholderImage(
-                product.name,
-                product.category === 'basket'
-                  ? 'gold'
-                  : product.category === 'potted'
-                    ? 'green'
-                    : product.category === 'sympathy'
-                      ? 'lavender'
-                      : 'rose',
-              )
-            }}
-          />
+      <section className="page-container product-detail-page">
+        <div className="product-detail-breadcrumbs">
+          <button type="button" onClick={() => navigateTo('/')}>
+            首頁
+          </button>
+          <span>›</span>
+          <button type="button" onClick={() => navigateTo('/shop')}>
+            花藝選集
+          </button>
+          <span>›</span>
+          <span>{product.categoryLabel}</span>
         </div>
 
-        <div className="product-detail-info product-detail-info-editorial">
-          <div className="product-detail-heading-block">
+        <div className="product-detail-layout">
+          <div className="product-gallery">
+            <div className="product-gallery-main">
+              <img
+                src={selectedImage}
+                alt={product.name}
+                className="product-detail-image"
+                onError={(event) => {
+                  event.currentTarget.onerror = null
+                  event.currentTarget.src = createPlaceholderImage(
+                    product.name,
+                    product.category === 'basket'
+                      ? 'gold'
+                      : product.category === 'potted'
+                        ? 'green'
+                        : product.category === 'sympathy'
+                          ? 'lavender'
+                          : 'rose',
+                  )
+                }}
+              />
+            </div>
+
+            <div className="product-gallery-thumbs" aria-label="商品圖庫縮圖">
+              {gallery.map((image, index) => (
+                <button
+                  key={`${image}-${index}`}
+                  type="button"
+                  className={selectedImageIndex === index ? 'product-gallery-thumb is-active' : 'product-gallery-thumb'}
+                  onClick={() => setSelectedImageIndex(index)}
+                  aria-label={`查看第 ${index + 1} 張圖片`}
+                >
+                  <img
+                    src={image}
+                    alt={`${product.name} thumbnail ${index + 1}`}
+                    onError={(event) => {
+                      event.currentTarget.onerror = null
+                      event.currentTarget.src = createPlaceholderImage(
+                        product.name,
+                        product.category === 'basket'
+                          ? 'gold'
+                          : product.category === 'potted'
+                            ? 'green'
+                            : product.category === 'sympathy'
+                              ? 'lavender'
+                              : 'rose',
+                      )
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="product-detail-info">
             <p className="section-kicker">{product.categoryLabel}</p>
             <h1 className="page-title">{product.name}</h1>
             <p className="page-description">{product.description}</p>
-          </div>
 
-          <PriceBlock
-            originalPrice={product.originalPrice}
-            memberPrice={product.memberPrice}
-            isMember={isMember}
-          />
+            <PriceBlock
+              originalPrice={product.originalPrice}
+              memberPrice={product.memberPrice}
+              isMember={isMember}
+            />
 
-          <div className="detail-meta detail-meta-editorial">
-            <span className="detail-tag">{product.tag}</span>
-            <span>適合開幕誌慶、節慶致禮與溫柔送心意</span>
-          </div>
-
-          <div className="product-detail-note-card">
-            <strong>花藝包裝說明</strong>
-            <p>這款花禮會以 Bloom & Grace 的品牌包裝方式整理，保留乾淨留白、細緻卡片與更穩定的送禮質感。</p>
-          </div>
-
-          <div className="detail-actions detail-actions-editorial">
-            <div className="detail-actions-topline">
-              <div>
-                <p className="field-label">選擇數量</p>
-                <QuantitySelector
-                  value={quantity}
-                  onDecrease={onDecreaseQuantity}
-                  onIncrease={onIncreaseQuantity}
-                />
+            {product.swatches ? (
+              <div className="product-swatches">
+                <div className="product-swatches-label">
+                  <span>花器顏色</span>
+                  <strong>{product.variantLabel}</strong>
+                </div>
+                <div className="product-swatches-list" aria-label="花器色票">
+                  {product.swatches.map((swatch, index) => (
+                    <span key={swatch} className={index === 0 ? 'product-swatch is-active' : 'product-swatch'} title={swatch} />
+                  ))}
+                </div>
               </div>
-              <button type="button" className="secondary-button" onClick={() => navigateTo('/shop')}>
-                回到選品頁
+            ) : null}
+
+            <div className="product-purchase-bar">
+              <QuantitySelector
+                value={quantity}
+                onDecrease={onDecreaseQuantity}
+                onIncrease={onIncreaseQuantity}
+              />
+              <button type="button" className="primary-button" onClick={() => onAddToCart(product, quantity)}>
+                加入購物袋
               </button>
             </div>
-            <button type="button" className="primary-button full-width" onClick={() => onAddToCart(product, quantity)}>
-              加入購物袋
-            </button>
+
+            <div className="product-accordion">
+              <details open>
+                <summary>照顧方式</summary>
+                <div className="accordion-body">
+                  <p>蝴蝶蘭適合明亮散光的環境，澆水少量即可，讓根部保持透氣。</p>
+                  <ul>
+                    {(product.careNotes || []).map((note) => (
+                      <li key={note}>{note}</li>
+                    ))}
+                  </ul>
+                </div>
+              </details>
+
+              <details>
+                <summary>配送與退換</summary>
+                <div className="accordion-body">
+                  <p>{product.deliveryCopy}</p>
+                  <p>退換規則會依照目前的門市政策與配送條件處理。</p>
+                </div>
+              </details>
+
+              <details>
+                <summary>花材來源</summary>
+                <div className="accordion-body">
+                  <p>{product.sourcingCopy}</p>
+                  <p>
+                    每一份花禮都以優雅、平衡與安靜的質感完成編排。
+                  </p>
+                </div>
+              </details>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="content-section related-products-shell">
-        <div className="section-heading">
-          <div>
-            <p className="section-kicker">延伸推薦</p>
-            <h2>相似調性的花禮推薦</h2>
-          </div>
-        </div>
+      {relatedProducts.length > 0 ? (
+        <section className="product-related-section">
+          <div className="page-container">
+            <div className="section-heading">
+              <div>
+                <p className="section-kicker">延伸推薦</p>
+                <h2>你可能也會喜歡</h2>
+              </div>
+            </div>
 
-        <div className="product-grid product-grid-editorial">
-          {relatedProducts.map((relatedProduct) => (
-            <ProductCard
-              key={relatedProduct.id}
-              product={relatedProduct}
-              isMember={isMember}
-              onAddToCart={onAddToCart}
-              onViewDetail={(productId) => navigateTo(`/products/${productId}`)}
-            />
-          ))}
-        </div>
-      </section>
+            <div className="product-grid product-grid-related">
+              {relatedProducts.map((relatedProduct) => (
+                <ProductCard
+                  key={relatedProduct.id}
+                  product={relatedProduct}
+                  isMember={isMember}
+                  onViewDetail={(productId) => navigateTo(`/products/${productId}`)}
+                  onQuickAdd={(item) => onAddToCart(item, 1)}
+                  showDescription={false}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
     </div>
   )
 }

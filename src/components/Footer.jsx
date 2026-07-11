@@ -1,34 +1,54 @@
 import BrandLogo from './BrandLogo'
 import { navigateTo } from '../hooks/useRouter'
 
+const footerLinks = [
+  {
+    title: '選購',
+    links: [
+      { label: '全部花禮', path: '/shop' },
+      { label: '蝴蝶蘭', path: '/shop' },
+      { label: '盆栽植栽', path: '/shop' },
+      { label: '弔唁花禮', path: '/shop' },
+    ],
+  },
+  {
+    title: '聯絡與登入',
+    links: [
+      { label: '品牌故事', path: '/about' },
+      { label: '聯絡我們', path: '/about' },
+      { label: '會員中心', path: '/profile' },
+    ],
+  },
+]
+
 function Footer() {
   return (
     <footer className="site-footer">
-      <div className="footer-content footer-content-rebuild">
-        <div className="footer-brand footer-brand-rebuild">
-          <BrandLogo variant="light" size="md" className="footer-brand-logo" />
-          <p className="footer-brand-copy">以溫柔、安靜而有質感的花藝敘事，陪你把祝福、感謝與思念好好送達。</p>
-        </div>
+      <div className="page-container">
+        <div className="footer-inner">
+          <div className="footer-brand-block">
+            <BrandLogo variant="light" size="md" className="footer-brand-logo" />
+            <p>
+              以安靜、俐落又帶有溫度的方式整理花藝與選品，讓每一份送禮都更有節奏。
+            </p>
+          </div>
 
-        <div className="footer-links footer-links-rebuild">
-          <span>蝴蝶蘭系列</span>
-          <span>開幕誌慶花禮</span>
-          <span>植感送禮選品</span>
-          <span>致意追思花禮</span>
-        </div>
-
-        <div className="footer-admin-entry footer-admin-entry-rebuild">
-          <p>品牌營運入口</p>
-          <a
-            href="/admin"
-            className="footer-admin-button footer-admin-button-rebuild"
-            onClick={(event) => {
-              event.preventDefault()
-              navigateTo('/admin')
-            }}
-          >
-            後台上架
-          </a>
+          <div className="footer-links-grid">
+            {footerLinks.map((group) => (
+              <div key={group.title} className="footer-link-group">
+                <p>{group.title}</p>
+                <ul>
+                  {group.links.map((link) => (
+                    <li key={link.label}>
+                      <button type="button" onClick={() => navigateTo(link.path)}>
+                        {link.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
