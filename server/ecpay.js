@@ -25,6 +25,17 @@ function toDotNetUrlEncode(value) {
     .replace(/%29/g, ')')
 }
 
+function timingSafeEqual(leftValue, rightValue) {
+  const leftBuffer = Buffer.from(String(leftValue || ''))
+  const rightBuffer = Buffer.from(String(rightValue || ''))
+
+  if (leftBuffer.length !== rightBuffer.length) {
+    return false
+  }
+
+  return crypto.timingSafeEqual(leftBuffer, rightBuffer)
+}
+
 export function generateCheckMacValue(parameters) {
   const sortedParameters = Object.entries(parameters)
     .filter(([, value]) => value !== undefined && value !== null && value !== '')
@@ -39,6 +50,17 @@ export function generateCheckMacValue(parameters) {
   return crypto.createHash('sha256').update(encodedValue).digest('hex').toUpperCase()
 }
 
+export function verifyCheckMacValue(parameters) {
+  const receivedValue = String(parameters.CheckMacValue || '').toUpperCase()
+
+  if (!receivedValue) {
+    return false
+  }
+
+  const computedValue = generateCheckMacValue(parameters)
+  return timingSafeEqual(computedValue, receivedValue)
+}
+
 export function buildMerchantTradeNo() {
   const timestamp = Date.now().toString().slice(-10)
   const randomPart = crypto.randomBytes(3).toString('hex').toUpperCase()
@@ -47,14 +69,19 @@ export function buildMerchantTradeNo() {
 }
 
 export function formatTradeDate(date = new Date()) {
-  const year = date.getFullYear()
-  const month = `${date.getMonth() + 1}`.padStart(2, '0')
-  const day = `${date.getDate()}`.padStart(2, '0')
-  const hours = `${date.getHours()}`.padStart(2, '0')
-  const minutes = `${date.getMinutes()}`.padStart(2, '0')
-  const seconds = `${date.getSeconds()}`.padStart(2, '0')
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Taipei',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  })
 
-  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
+  const parts = Object.fromEntries(formatter.formatToParts(date).map((part) => [part.type, part.value]))
+  return `${parts.year}/${parts.month}/${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`
 }
 
 export function sanitizeItemText(value, fallbackValue) {
@@ -64,7 +91,7 @@ export function sanitizeItemText(value, fallbackValue) {
 export function createCheckoutPayload(orderInput) {
   const merchantTradeNo = buildMerchantTradeNo()
   const amount = Math.max(1, Number(orderInput.amount) || 1)
-  const itemName = sanitizeItemText(orderInput.itemName, 'AI 開發進化營作業測試商品')
+  const itemName = sanitizeItemText(orderInput.itemName, 'AI 開發進化營作業測試商品').slice(0, 200)
   const customerName = sanitizeItemText(orderInput.customerName, '學員')
   const tradeDescription = sanitizeItemText(orderInput.tradeDescription, 'HexSchoolAIcampDemo')
 
@@ -116,12 +143,19 @@ export async function queryTradeInfo(merchantTradeNo) {
     body: requestBody,
   })
 
-  const text = await response.text()
-  const parsed = Object.fromEntries(new URLSearchParams(text))
+  const raw = await response.text()
+  const parsed = Object.fromEntries(new URLSearchParams(raw))
 
   return {
     ok: response.ok,
-    raw: text,
+    raw,
     parsed,
+    tradeStatus: String(parsed.TradeStatus || ''),
+    paymentType: parsed.PaymentType || '',
+    paymentDate: parsed.PaymentDate || '',
+    tradeNo: parsed.TradeNo || '',
+    tradeAmt: parsed.TradeAmt || '',
+    rtnMsg: parsed.TradeMessage || parsed.RtnMsg || '',
+    merchantTradeNo,
   }
 }

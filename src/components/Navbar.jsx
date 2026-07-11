@@ -11,7 +11,7 @@ function Navbar({ cartCount, isMember, onToggleMemberModal }) {
         </span>
         <div>
           <p className="brand-name">Bloom & Grace</p>
-          <p className="brand-subtitle">premium florist atelier</p>
+          <p className="brand-subtitle">flower shop demo</p>
         </div>
       </div>
 
@@ -20,13 +20,13 @@ function Navbar({ cartCount, isMember, onToggleMemberModal }) {
           <span className="nav-button-icon nav-button-icon-about">
             <NavIcon type="about" />
           </span>
-          企業理念
+          品牌介紹
         </button>
         <button type="button" onClick={() => navigateTo('/shop')}>
           <span className="nav-button-icon nav-button-icon-shop">
             <NavIcon type="shop" />
           </span>
-          商品選購
+          商品列表
         </button>
         <button type="button" onClick={() => navigateTo('/cart')}>
           <span

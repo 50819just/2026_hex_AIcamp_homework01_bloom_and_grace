@@ -1,5 +1,10 @@
 import { useState } from 'react'
 
+const adminCredentials = {
+  email: import.meta.env.VITE_ADMIN_EMAIL || 'admin@hexschool.com',
+  password: import.meta.env.VITE_ADMIN_PASSWORD || '12345678',
+}
+
 function AdminLoginPage({ onAdminLogin, onNotify }) {
   const [formValue, setFormValue] = useState({
     email: '',
@@ -16,10 +21,16 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+
+    if (formValue.email !== adminCredentials.email || formValue.password !== adminCredentials.password) {
+      onNotify('管理員帳號或密碼不正確，請直接使用頁面提供的測試帳密')
+      return
+    }
+
     onAdminLogin({
-      email: formValue.email || 'admin@bloomandgrace.tw',
+      email: formValue.email,
     })
-    onNotify('管理員登入成功，已進入後台上架頁')
+    onNotify('管理員登入成功，已進入後台驗收頁')
   }
 
   return (
@@ -29,7 +40,26 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
           <div>
             <p className="section-kicker">Admin Access</p>
             <h1 className="page-title">後台登入</h1>
-            <p className="page-description">登入管理員帳號後，才能進入花店商品上架與編輯後台。</p>
+            <p className="page-description">這裡保留給老師驗收使用，可直接使用下方測試帳號密碼登入後台。</p>
+          </div>
+        </div>
+
+        <div className="admin-login-helper-card">
+          <div>
+            <p className="section-kicker">Teacher Review</p>
+            <h2>測試帳號密碼放置區</h2>
+            <p>若老師要快速驗收，直接複製下面帳密即可，不需要另外註冊或申請權限。</p>
+          </div>
+
+          <div className="admin-login-credentials">
+            <article>
+              <span>測試帳號</span>
+              <strong>{adminCredentials.email}</strong>
+            </article>
+            <article>
+              <span>測試密碼</span>
+              <strong>{adminCredentials.password}</strong>
+            </article>
           </div>
         </div>
 
@@ -42,7 +72,7 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
                 type="email"
                 value={formValue.email}
                 onChange={handleInputChange}
-                placeholder="admin@bloomandgrace.tw"
+                placeholder={adminCredentials.email}
                 required
               />
             </label>
@@ -53,7 +83,7 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
                 type="password"
                 value={formValue.password}
                 onChange={handleInputChange}
-                placeholder="••••••••"
+                placeholder="請輸入測試密碼"
                 required
               />
             </label>

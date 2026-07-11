@@ -1,12 +1,11 @@
 import http from 'node:http'
 import { URL } from 'node:url'
 import { appConfig } from './config.js'
-import { createCheckoutPayload, queryTradeInfo } from './ecpay.js'
+import { createCheckoutPayload, queryTradeInfo, verifyCheckMacValue } from './ecpay.js'
+import { readEcpayOrder, upsertEcpayOrder } from './ecpayOrderStore.js'
 import { normalizeProductPayload, validateProductPayload } from './productHelpers.js'
 import { readProducts, writeProducts } from './productStore.js'
 import { readMembers } from './memberStore.js'
-
-const orderResultStore = new Map()
 
 function sendJson(response, statusCode, data) {
   response.writeHead(statusCode, {
@@ -57,6 +56,22 @@ function parseRequestBody(body, contentType) {
 
 function isApiRoute(pathname, routePath) {
   return pathname === routePath || pathname === `${routePath}/`
+}
+
+function derivePaymentStatus({ queryResult, browserReturnResult, returnNotifyResult }) {
+  if (String(queryResult?.tradeStatus || '') === '1') {
+    return 'paid'
+  }
+
+  if (String(browserReturnResult?.RtnCode || '') === '1' || String(returnNotifyResult?.RtnCode || '') === '1') {
+    return 'paid'
+  }
+
+  if (queryResult || browserReturnResult || returnNotifyResult) {
+    return 'pending'
+  }
+
+  return 'created'
 }
 
 const server = http.createServer(async (request, response) => {
@@ -215,9 +230,11 @@ const server = http.createServer(async (request, response) => {
       const body = parseRequestBody(rawBody, request.headers['content-type'] || '')
       const payload = createCheckoutPayload(body)
 
-      orderResultStore.set(payload.merchantTradeNo, {
+      upsertEcpayOrder({
         merchantTradeNo: payload.merchantTradeNo,
         orderInput: body,
+        checkoutFields: payload.fields,
+        paymentStatus: 'created',
         createdAt: new Date().toISOString(),
       })
 
@@ -239,14 +256,17 @@ const server = http.createServer(async (request, response) => {
       }
 
       const result = await queryTradeInfo(body.merchantTradeNo)
-      const mergedRecord = {
-        ...(orderResultStore.get(body.merchantTradeNo) || {}),
+      const existingRecord = readEcpayOrder(body.merchantTradeNo)
+      const mergedRecord = upsertEcpayOrder({
         merchantTradeNo: body.merchantTradeNo,
         queryResult: result,
-        updatedAt: new Date().toISOString(),
-      }
-
-      orderResultStore.set(body.merchantTradeNo, mergedRecord)
+        paymentStatus: derivePaymentStatus({
+          queryResult: result,
+          browserReturnResult: existingRecord?.browserReturnResult,
+          returnNotifyResult: existingRecord?.returnNotifyResult,
+        }),
+        lastQueriedAt: new Date().toISOString(),
+      })
 
       sendJson(response, 200, {
         success: true,
@@ -258,7 +278,7 @@ const server = http.createServer(async (request, response) => {
 
     if (request.method === 'GET' && pathname.startsWith('/api/ecpay/orders/')) {
       const merchantTradeNo = pathname.split('/').pop()
-      const data = orderResultStore.get(merchantTradeNo)
+      const data = readEcpayOrder(merchantTradeNo)
 
       if (!data) {
         sendJson(response, 404, { success: false, message: '找不到訂單資料' })
@@ -273,15 +293,24 @@ const server = http.createServer(async (request, response) => {
       const rawBody = await collectBody(request)
       const result = parseRequestBody(rawBody, request.headers['content-type'] || '')
       const merchantTradeNo = result.MerchantTradeNo || 'unknown'
-      const existingRecord = orderResultStore.get(merchantTradeNo) || {}
+      const isVerified = verifyCheckMacValue(result)
+      const existingRecord = readEcpayOrder(merchantTradeNo)
 
-      orderResultStore.set(merchantTradeNo, {
-        ...existingRecord,
-        merchantTradeNo,
-        browserReturnResult: result,
-        browserReturnRawBody: rawBody,
-        browserReturnedAt: new Date().toISOString(),
-      })
+      if (isVerified) {
+        upsertEcpayOrder({
+          merchantTradeNo,
+          browserReturnResult: result,
+          browserCallbackVerified: true,
+          paymentStatus: derivePaymentStatus({
+            queryResult: existingRecord?.queryResult,
+            browserReturnResult: result,
+            returnNotifyResult: existingRecord?.returnNotifyResult,
+          }),
+          browserReturnedAt: new Date().toISOString(),
+        })
+      } else {
+        console.warn('[ECPay OrderResultURL] CheckMacValue 驗證失敗', merchantTradeNo)
+      }
 
       response.writeHead(303, {
         Location: `${appConfig.frontendBaseUrl}/payment-result?merchantTradeNo=${merchantTradeNo}`,
@@ -292,7 +321,27 @@ const server = http.createServer(async (request, response) => {
 
     if (request.method === 'POST' && isApiRoute(pathname, '/api/ecpay/return')) {
       const rawBody = await collectBody(request)
-      console.log('[ECPay ReturnURL]', rawBody)
+      const result = parseRequestBody(rawBody, request.headers['content-type'] || '')
+      const merchantTradeNo = result.MerchantTradeNo || 'unknown'
+      const isVerified = verifyCheckMacValue(result)
+      const existingRecord = readEcpayOrder(merchantTradeNo)
+
+      if (isVerified) {
+        upsertEcpayOrder({
+          merchantTradeNo,
+          returnNotifyResult: result,
+          returnCallbackVerified: true,
+          paymentStatus: derivePaymentStatus({
+            queryResult: existingRecord?.queryResult,
+            browserReturnResult: existingRecord?.browserReturnResult,
+            returnNotifyResult: result,
+          }),
+          returnNotifiedAt: new Date().toISOString(),
+        })
+      } else {
+        console.warn('[ECPay ReturnURL] CheckMacValue 驗證失敗', merchantTradeNo)
+      }
+
       sendText(response, 200, '1|OK')
       return
     }

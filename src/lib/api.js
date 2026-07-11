@@ -62,13 +62,19 @@ export async function createEcpayOrder(payload) {
   })
 }
 
+export async function queryEcpayOrder(merchantTradeNo) {
+  const result = await requestJson('/api/ecpay/query', {
+    method: 'POST',
+    body: JSON.stringify({ merchantTradeNo }),
+  })
+  return result.data
+}
 
 export async function fetchMemberProfile(email) {
   const query = email ? `?email=${encodeURIComponent(email)}` : ''
   const result = await requestJson(`/api/member/profile${query}`)
   return result.data
 }
-
 
 export async function fetchAdminMembers(search = '') {
   const query = search ? `?search=${encodeURIComponent(search)}` : ''

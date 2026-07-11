@@ -44,3 +44,7 @@ When done, summarize:
 - routes created
 - mock data structure
 - known limitations
+## ECPay API Skill
+- 讀取 `.ecpay-skill/AGENTS.md` 作為綠界整合知識庫入口。
+- 常用指南：`.ecpay-skill/guides/01-payment-aio.md`、`13-checkmacvalue.md`、`15-troubleshooting.md`、`16-go-live-checklist.md`。
+- 本專案若有綠界串接、查單、正式環境切換問題，優先參考 `docs/ECPAY_SKILL_USAGE.md` 與 `.ecpay-skill/`。

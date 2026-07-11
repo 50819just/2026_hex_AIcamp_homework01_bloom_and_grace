@@ -73,6 +73,23 @@ db.exec(`
     status TEXT NOT NULL,
     FOREIGN KEY(member_id) REFERENCES members(id) ON DELETE CASCADE
   );
+
+  CREATE TABLE IF NOT EXISTS ecpay_orders (
+    merchant_trade_no TEXT PRIMARY KEY,
+    order_input TEXT,
+    checkout_fields TEXT,
+    browser_return_result TEXT,
+    return_notify_result TEXT,
+    query_result TEXT,
+    payment_status TEXT NOT NULL DEFAULT 'created',
+    browser_callback_verified INTEGER NOT NULL DEFAULT 0,
+    return_callback_verified INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    browser_returned_at TEXT,
+    return_notified_at TEXT,
+    last_queried_at TEXT
+  );
 `)
 
 function readSeedFile(filePath, fallback = []) {
@@ -193,5 +210,34 @@ function seedMembersIfNeeded() {
   }
 }
 
+function ensureOneDollarTestProduct() {
+  db.prepare(`
+    INSERT INTO products (
+      id, name, category, image, original_price, member_price, description, tag, created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(id) DO UPDATE SET
+      name = excluded.name,
+      category = excluded.category,
+      image = excluded.image,
+      original_price = excluded.original_price,
+      member_price = excluded.member_price,
+      description = excluded.description,
+      tag = excluded.tag,
+      updated_at = excluded.updated_at
+  `).run(
+    'test-flower-1-dollar',
+    '人造花用具',
+    'potted',
+    'https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=900&auto=format&fit=crop&q=80',
+    1,
+    1,
+    '人造花材整理與包裝用的小型測試商品，方便快速確認購物與付款流程。',
+    '$1 測試商品',
+    '2026-07-11T00:00:00.000Z',
+    new Date().toISOString(),
+  )
+}
+
 seedProductsIfNeeded()
 seedMembersIfNeeded()
+ensureOneDollarTestProduct()
