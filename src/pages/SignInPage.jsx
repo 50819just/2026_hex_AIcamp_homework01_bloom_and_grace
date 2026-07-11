@@ -1,6 +1,5 @@
-import { useMemo, useState } from 'react'
-import FloralLogo from '../components/FloralLogo'
-import { memberVisuals } from '../data/memberAssets'
+import { useId, useMemo, useState } from 'react'
+import BrandLogo from '../components/BrandLogo'
 import { navigateTo } from '../hooks/useRouter'
 
 const passwordRules = [
@@ -9,8 +8,32 @@ const passwordRules = [
   { key: 'number', label: '包含數字', test: (value) => /\d/.test(value) },
 ]
 
+const memberBenefits = [
+  {
+    label: '會員專屬價格',
+    description: '登入後即可自動顯示會員價，讓花禮選購更直覺。',
+    badge: '現已支援',
+  },
+  {
+    label: '更快訂單查找',
+    description: '目前先保留會員中心與訂單查詢入口，後續可延伸成更完整的查找體驗。',
+    badge: '入口已保留',
+  },
+  {
+    label: '保存送禮資料',
+    description: '常用收件資料可在會員中心中整理，讓下次下單更省時間。',
+    badge: '現已支援',
+  },
+  {
+    label: '節日提醒與送禮管理',
+    description: '這個區塊先作為品牌願景展示，之後可延伸成提醒與偏好管理。',
+    badge: '未來規劃',
+  },
+]
+
 function getPasswordStrength(password) {
   const score = passwordRules.filter((rule) => rule.test(password)).length
+
   if (!password) return { label: '尚未輸入', tone: 'muted', score: 0 }
   if (score <= 1) return { label: '弱', tone: 'danger', score }
   if (score === 2) return { label: '中', tone: 'warning', score }
@@ -19,6 +42,9 @@ function getPasswordStrength(password) {
 
 function SignInPage({ isMember, onMemberLogin, onMemberLogout, onNotify }) {
   const [mode, setMode] = useState('login')
+  const [showPassword, setShowPassword] = useState(false)
+  const [forgotStep, setForgotStep] = useState('request')
+  const [formError, setFormError] = useState('')
   const [formValue, setFormValue] = useState({
     name: '',
     email: '',
@@ -26,20 +52,35 @@ function SignInPage({ isMember, onMemberLogin, onMemberLogout, onNotify }) {
     confirmPassword: '',
     resetCode: '',
   })
-  const [forgotStep, setForgotStep] = useState('request')
-  const [formError, setFormError] = useState('')
+
+  const nameId = useId()
+  const emailId = useId()
+  const passwordId = useId()
+  const confirmId = useId()
+  const resetCodeId = useId()
+  const helperId = useId()
+  const errorId = useId()
+
   const passwordStrength = useMemo(() => getPasswordStrength(formValue.password), [formValue.password])
 
   const resetForm = () => {
     setFormError('')
     setForgotStep('request')
-    setFormValue({ name: '', email: '', password: '', confirmPassword: '', resetCode: '' })
+    setShowPassword(false)
+    setFormValue({
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      resetCode: '',
+    })
   }
 
   const handleModeChange = (nextMode) => {
     setMode(nextMode)
     setFormError('')
     setForgotStep('request')
+    setShowPassword(false)
   }
 
   const handleInputChange = (event) => {
@@ -55,7 +96,7 @@ function SignInPage({ isMember, onMemberLogin, onMemberLogout, onNotify }) {
     if (mode === 'forgot') {
       if (forgotStep === 'request') {
         if (!formValue.email) {
-          setFormError('請先輸入你的會員 Email。')
+          setFormError('請先輸入你的會員電子郵件。')
           return
         }
         setForgotStep('verify')
@@ -67,10 +108,12 @@ function SignInPage({ isMember, onMemberLogin, onMemberLogout, onNotify }) {
         setFormError('請輸入 6 碼驗證碼。')
         return
       }
+
       if (formValue.password !== formValue.confirmPassword) {
         setFormError('新密碼與確認密碼不一致。')
         return
       }
+
       if (passwordStrength.score < 3) {
         setFormError('請把密碼強度提高到「高」，會比較像正式站喔。')
         return
@@ -87,13 +130,15 @@ function SignInPage({ isMember, onMemberLogin, onMemberLogout, onNotify }) {
         setFormError('密碼與確認密碼不一致。')
         return
       }
+
       if (passwordStrength.score < 3) {
         setFormError('請設定更完整的密碼，至少 8 碼並包含大寫英文與數字。')
         return
       }
+
       onMemberLogin({
-        name: formValue.name || 'Grace Lin',
-        email: formValue.email || 'member@bloomandgrace.tw',
+        name: formValue.name || '會員姓名',
+        email: formValue.email || 'member@flower.tw',
       })
       onNotify('註冊成功，已自動登入會員')
       resetForm()
@@ -101,41 +146,48 @@ function SignInPage({ isMember, onMemberLogin, onMemberLogout, onNotify }) {
     }
 
     if (!formValue.email || !formValue.password) {
-      setFormError('請輸入 Email 與密碼。')
+      setFormError('請輸入電子郵件與密碼。')
       return
     }
 
     onMemberLogin({
-      name: 'Grace Lin',
-      email: formValue.email || 'member@bloomandgrace.tw',
+      name: '會員姓名',
+      email: formValue.email || 'member@flower.tw',
     })
     onNotify('會員登入成功，已套用會員價')
     resetForm()
   }
 
-  const titleMap = {
-    login: '會員登入',
-    register: '註冊會員',
-    forgot: forgotStep === 'request' ? '重設密碼' : '設定新密碼',
-  }
-
-  const descriptionMap = {
-    login: '登入後即可查看會員價、帶入收件資料，並接續目前購物與付款流程。',
-    register: '建立帳號後可啟用會員價、保存送禮資料與後續訂單紀錄。',
-    forgot: forgotStep === 'request'
-      ? '先確認會員 Email，我們會寄出 6 碼驗證碼（示意）給你。'
-      : '請輸入驗證碼並設定新密碼，流程會更像正式電商會員頁。',
-  }
-
   if (isMember) {
     return (
-      <div className="page-stack auth-page-stack">
-        <section className="content-section auth-page-shell sign-page-shell-rebuild">
-          <div className="member-modal member-modal-page sign-page-panel-rebuild member-page-logged-in">
-            <p>你目前已登入會員，可以直接前往會員中心查看資料，或接續購物袋與結帳流程。</p>
-            <div className="member-modal-actions member-page-actions">
-              <button type="button" className="secondary-button" onClick={onMemberLogout}>登出</button>
-              <button type="button" className="primary-button" onClick={() => navigateTo('/profile')}>前往會員中心</button>
+      <div className="page-stack member-hub-page member-hub-page-logged-in">
+        <section className="page-container member-hub-shell">
+          <div className="member-hub-intro member-hub-intro-logged-in">
+            <div className="member-hub-brand-row">
+              <BrandLogo variant="primary" size="md" className="member-hub-brand-logo" />
+              <div>
+                <p className="section-kicker">會員服務中心</p>
+                <h1 className="member-hub-title">你目前已經登入會員</h1>
+              </div>
+            </div>
+            <p className="member-hub-lead">
+              會員價已套用完成，現在可以直接前往會員中心查看資料，或回到選品頁繼續挑花。
+            </p>
+          </div>
+
+          <div className="member-hub-logged-card">
+            <div className="member-hub-logged-copy">
+              <p className="section-kicker">登入狀態</p>
+              <h2>登入成功，會員流程已準備好</h2>
+              <p>如果想繼續購物，可以直接回到選品頁；如果想查看會員資料，也可以前往會員中心。</p>
+            </div>
+            <div className="member-hub-logged-actions">
+              <button type="button" className="secondary-button" onClick={onMemberLogout}>
+                登出
+              </button>
+              <button type="button" className="primary-button" onClick={() => navigateTo('/profile')}>
+                前往會員中心
+              </button>
             </div>
           </div>
         </section>
@@ -144,136 +196,248 @@ function SignInPage({ isMember, onMemberLogin, onMemberLogout, onNotify }) {
   }
 
   return (
-    <div className="page-stack auth-page-stack">
-      <section className="content-section auth-page-shell sign-page-shell-rebuild">
-        <div className="section-heading auth-page-heading sign-page-heading-rebuild">
-          <div>
-            <p className="section-kicker">會員登入入口</p>
-            <h1 className="page-title">登入 Bloom & Grace 會員帳戶</h1>
-            <p className="page-description">這一頁重新收斂成更貼近 Stitch 的雙欄登入入口：左側品牌敘事與會員權益，右側是登入、註冊與重設密碼表單。</p>
+    <div className="page-stack member-hub-page">
+      <section className="page-container member-hub-shell">
+        <header className="member-hub-intro">
+          <div className="member-hub-brand-row">
+            <BrandLogo variant="primary" size="md" className="member-hub-brand-logo" />
+            <div>
+              <p className="section-kicker">會員服務中心</p>
+              <h1 className="member-hub-title">登入後，會員價與收件資料都會更順手</h1>
+            </div>
           </div>
-        </div>
+          <p className="member-hub-lead">
+            這個入口保留登入、註冊與重設密碼，讓你可以先整理好常用資料，再繼續回到選購與結帳流程。
+          </p>
+        </header>
 
-        <div className="member-modal member-modal-page sign-page-panel-rebuild" role="region" aria-label="會員登入與註冊區塊">
-          <div className="sign-page-layout">
-            <div className="sign-page-visual-column">
-              <div className="sign-page-brand-card">
-                <span className="member-modal-brand-mark sign-page-brand-mark"><FloralLogo /></span>
-                <div>
-                  <p className="section-kicker">Bloom & Grace 會員禮遇</p>
-                  <h2>{titleMap[mode]}</h2>
-                  <p className="member-modal-description">{descriptionMap[mode]}</p>
-                </div>
-              </div>
+        <div className="member-hub-grid">
+          <aside className="member-hub-story-card">
+            <figure className="member-hub-visual">
+              <img
+                src="/images/products/baskets/pink-rose-arrangement-01.jpg"
+                alt="會員中心花禮示意"
+                className="member-hub-visual-image"
+                loading="eager"
+              />
+              <figcaption className="member-hub-visual-note">
+                <span className="section-kicker">會員視角</span>
+                <strong>把常用資料整理好，下一次就能更輕鬆送花。</strong>
+                <p>登入後可以更快帶入收件資料，也能保留會員價與個人資訊。</p>
+              </figcaption>
+            </figure>
 
-              <div className="sign-page-hero-card">
-                <img src={memberVisuals.welcome} alt="Bloom & Grace 會員登入視覺" className="sign-page-hero-image" />
-                <div className="sign-page-hero-copy">
-                  <span className="cart-banner-label">會員專屬入口</span>
-                  <strong>登入後就能接續購物袋與結帳流程</strong>
-                  <p>登入後即可延續購物袋、套用會員價格，並直接進入結帳與付款流程。</p>
-                </div>
-              </div>
-
-              <div className="sign-page-benefit-grid">
-                <article>
-                  <span>01</span>
-                  <strong>會員價格同步</strong>
-                  <p>蝴蝶蘭、花籃與季節花禮都能同步顯示會員價差異。</p>
+            <div className="member-hub-benefit-grid">
+              {memberBenefits.map((benefit, index) => (
+                <article key={benefit.label} className={`member-hub-benefit-card ${benefit.badge === '未來規劃' ? 'is-future' : ''}`}>
+                  <span>{`0${index + 1}`}</span>
+                  <strong>{benefit.badge}</strong>
+                  <h3>{benefit.label}</h3>
+                  <p>{benefit.description}</p>
                 </article>
-                <article>
-                  <span>02</span>
-                  <strong>常用收件資料</strong>
-                  <p>常用收件人與配送資訊可快速帶入，結帳更順。</p>
-                </article>
-              </div>
+              ))}
+            </div>
+          </aside>
+
+          <section className="member-hub-auth-card">
+            <div className="member-hub-auth-head">
+              <p className="section-kicker">會員登入</p>
+              <h2>花店會員入口</h2>
+              <p>登入、註冊與重設密碼都放在同一個安靜的入口裡，操作時不會打散節奏。</p>
             </div>
 
-            <div className="sign-page-form-column">
-              <div className="member-tab-group sign-page-tab-group">
-                <button type="button" className={mode === 'login' ? 'member-tab active' : 'member-tab'} onClick={() => handleModeChange('login')}>登入</button>
-                <button type="button" className={mode === 'register' ? 'member-tab active' : 'member-tab'} onClick={() => handleModeChange('register')}>註冊</button>
-                <button type="button" className={mode === 'forgot' ? 'member-tab active' : 'member-tab'} onClick={() => handleModeChange('forgot')}>重設密碼</button>
-              </div>
+            <div className="member-hub-mode-row" role="tablist" aria-label="會員流程切換">
+              <button
+                type="button"
+                className={mode === 'login' ? 'member-hub-mode active' : 'member-hub-mode'}
+                onClick={() => handleModeChange('login')}
+                role="tab"
+                aria-selected={mode === 'login'}
+              >
+                登入
+              </button>
+              <button
+                type="button"
+                className={mode === 'register' ? 'member-hub-mode active' : 'member-hub-mode'}
+                onClick={() => handleModeChange('register')}
+                role="tab"
+                aria-selected={mode === 'register'}
+              >
+                註冊
+              </button>
+              <button
+                type="button"
+                className={mode === 'forgot' ? 'member-hub-mode active' : 'member-hub-mode'}
+                onClick={() => handleModeChange('forgot')}
+                role="tab"
+                aria-selected={mode === 'forgot'}
+              >
+                重設密碼
+              </button>
+            </div>
 
-              {mode === 'forgot' ? (
-                <div className="member-process-strip">
-                  <span className={forgotStep === 'request' ? 'active' : 'is-complete'}>1. 驗證 Email</span>
-                  <span className={forgotStep === 'verify' ? 'active' : ''}>2. 設定新密碼</span>
+            <form className="member-hub-form" onSubmit={handleSubmit}>
+              {mode === 'register' ? (
+                <label className="member-hub-field">
+                  <span>姓名</span>
+                  <input
+                    id={nameId}
+                    name="name"
+                    value={formValue.name}
+                    onChange={handleInputChange}
+                    placeholder="請輸入你的姓名"
+                    autoComplete="name"
+                    required
+                  />
+                </label>
+              ) : null}
+
+              <label className="member-hub-field">
+                <span>電子郵件</span>
+                <input
+                  id={emailId}
+                  name="email"
+                  type="email"
+                  value={formValue.email}
+                  onChange={handleInputChange}
+                  placeholder="請輸入電子郵件"
+                  autoComplete="email"
+                  aria-describedby={`${helperId} ${formError ? errorId : ''}`.trim()}
+                  required
+                />
+              </label>
+
+              {mode !== 'forgot' || forgotStep === 'verify' ? (
+                <label className="member-hub-field member-hub-password-field">
+                  <span>{mode === 'forgot' ? '新密碼' : '密碼'}</span>
+                  <div className="member-hub-password-row">
+                    <input
+                      id={passwordId}
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={formValue.password}
+                      onChange={handleInputChange}
+                      placeholder="請輸入安全密碼"
+                      autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
+                      aria-describedby={`${helperId} ${formError ? errorId : ''}`.trim()}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle-button"
+                      onClick={() => setShowPassword((previous) => !previous)}
+                      aria-label={showPassword ? '隱藏密碼' : '顯示密碼'}
+                      aria-pressed={showPassword}
+                    >
+                      {showPassword ? '隱藏' : '顯示'}
+                    </button>
+                  </div>
+                </label>
+              ) : null}
+
+              {mode === 'register' || (mode === 'forgot' && forgotStep === 'verify') ? (
+                <label className="member-hub-field">
+                  <span>確認密碼</span>
+                  <input
+                    id={confirmId}
+                    name="confirmPassword"
+                    type={showPassword ? 'text' : 'password'}
+                    value={formValue.confirmPassword}
+                    onChange={handleInputChange}
+                    placeholder="請再次輸入密碼"
+                    autoComplete="new-password"
+                    required
+                  />
+                </label>
+              ) : null}
+
+              {mode === 'forgot' && forgotStep === 'verify' ? (
+                <label className="member-hub-field">
+                  <span>6 碼驗證碼</span>
+                  <input
+                    id={resetCodeId}
+                    name="resetCode"
+                    value={formValue.resetCode}
+                    onChange={handleInputChange}
+                    inputMode="numeric"
+                    maxLength={6}
+                    placeholder="例如：482913"
+                    required
+                  />
+                </label>
+              ) : null}
+
+              {mode === 'register' || (mode === 'forgot' && forgotStep === 'verify') ? (
+                <div className="password-strength-card member-hub-strength-card">
+                  <div className="password-strength-header">
+                    <strong>{mode === 'register' ? '建立安全密碼' : '新密碼強度'}</strong>
+                    <span className={`password-strength-pill tone-${passwordStrength.tone}`}>{passwordStrength.label}</span>
+                  </div>
+                  <div className="password-strength-bar">
+                    <span style={{ width: `${(passwordStrength.score / 3) * 100}%` }} />
+                  </div>
+                  <div className="password-rule-list">
+                    {passwordRules.map((rule) => (
+                      <span key={rule.key} className={rule.test(formValue.password) ? 'is-pass' : ''}>
+                        {rule.label}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               ) : null}
 
-              <form className="member-modal-body member-form-shell sign-page-form-shell" onSubmit={handleSubmit}>
-                <div className={mode === 'login' ? 'member-form-grid member-form-grid-login' : 'member-form-grid'}>
-                  {mode === 'register' ? (
-                    <label>
-                      姓名
-                      <input name="name" value={formValue.name} onChange={handleInputChange} placeholder="請輸入你的姓名" required />
-                    </label>
-                  ) : null}
+              <p className="member-hub-helper" id={helperId}>
+                目前沒有第三方登入按鈕；如果要註冊或重設密碼，可以直接切換上方模式。
+              </p>
 
-                  <label>
-                    Email
-                    <input name="email" type="email" value={formValue.email} onChange={handleInputChange} placeholder="member@bloomandgrace.tw" required />
-                  </label>
-
-                  {mode !== 'forgot' || forgotStep === 'verify' ? (
-                    <label>
-                      {mode === 'forgot' ? '新密碼' : '密碼'}
-                      <input name="password" type="password" value={formValue.password} onChange={handleInputChange} placeholder="請輸入安全密碼" required />
-                    </label>
-                  ) : null}
-
-                  {mode === 'register' || (mode === 'forgot' && forgotStep === 'verify') ? (
-                    <label>
-                      確認密碼
-                      <input name="confirmPassword" type="password" value={formValue.confirmPassword} onChange={handleInputChange} placeholder="請再次輸入密碼" required />
-                    </label>
-                  ) : null}
-
-                  {mode === 'forgot' && forgotStep === 'verify' ? (
-                    <label>
-                      6 碼驗證碼
-                      <input name="resetCode" value={formValue.resetCode} onChange={handleInputChange} inputMode="numeric" maxLength={6} placeholder="例如：482913" required />
-                    </label>
-                  ) : null}
+              {formError ? (
+                <div className="member-hub-error" id={errorId} role="alert" aria-live="polite">
+                  {formError}
                 </div>
+              ) : null}
 
-                {mode === 'register' || (mode === 'forgot' && forgotStep === 'verify') ? (
-                  <div className="password-strength-card">
-                    <div className="password-strength-header">
-                      <strong>{mode === 'register' ? '建立安全密碼' : '新密碼強度'}</strong>
-                      <span className={`password-strength-pill tone-${passwordStrength.tone}`}>{passwordStrength.label}</span>
-                    </div>
-                    <div className="password-strength-bar">
-                      <span style={{ width: `${(passwordStrength.score / 3) * 100}%` }} />
-                    </div>
-                    <div className="password-rule-list">
-                      {passwordRules.map((rule) => (
-                        <span key={rule.key} className={rule.test(formValue.password) ? 'is-pass' : ''}>{rule.label}</span>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
+              <div className="member-hub-actions">
+                <button type="button" className="secondary-button" onClick={() => navigateTo('/shop')}>
+                  前往選購
+                </button>
+                <button type="submit" className="primary-button">
+                  {mode === 'login'
+                    ? '安全登入會員'
+                    : mode === 'register'
+                      ? '建立帳號並登入'
+                      : forgotStep === 'request'
+                        ? '寄送驗證碼'
+                        : '更新密碼'}
+                </button>
+              </div>
 
-                {formError ? <div className="member-form-error">{formError}</div> : null}
-
-                <div className="member-modal-actions member-page-actions sign-page-actions">
-                  <button type="button" className="secondary-button" onClick={() => navigateTo('/')}>返回首頁</button>
-                  <button type="submit" className="primary-button">
-                    {mode === 'login'
-                      ? '安全登入會員'
-                      : mode === 'register'
-                        ? '建立帳號並登入'
-                        : forgotStep === 'request'
-                          ? '寄送驗證碼'
-                          : '更新密碼'}
+              <div className="member-hub-inline-links">
+                {mode !== 'login' ? (
+                  <button type="button" className="member-subtle-link" onClick={() => handleModeChange('login')}>
+                    返回登入
                   </button>
-                </div>
-              </form>
-            </div>
-          </div>
+                ) : null}
+                {mode !== 'register' ? (
+                  <button type="button" className="member-subtle-link" onClick={() => handleModeChange('register')}>
+                    還沒有帳號？先建立會員
+                  </button>
+                ) : null}
+                {mode !== 'forgot' ? (
+                  <button type="button" className="member-subtle-link" onClick={() => handleModeChange('forgot')}>
+                    忘記密碼了嗎？
+                  </button>
+                ) : null}
+              </div>
+            </form>
+          </section>
         </div>
+
+        <footer className="member-hub-footer">
+          <span>會員中心入口</span>
+          <button type="button" className="text-button" onClick={() => navigateTo('/profile')}>
+            前往會員資料頁
+          </button>
+        </footer>
       </section>
     </div>
   )

@@ -21,8 +21,11 @@ import { navigateTo, useRouter } from './hooks/useRouter'
 import { fetchMemberProfile, fetchProducts } from './lib/api'
 
 function enrichProduct(product) {
+  const localProduct = getProductById(product.id)
+
   return {
     ...product,
+    ...localProduct,
     categoryLabel: getCategoryLabel(product.category),
   }
 }
@@ -51,10 +54,10 @@ function App() {
   const { path } = useRouter()
   const [isMember, setIsMember] = useState(false)
   const [memberProfile, setMemberProfile] = useState({
-    name: 'Grace Lin',
-    email: 'member@bloomandgrace.tw',
+    name: '會員姓名',
+    email: 'member@flower.tw',
     phone: '0912-345-678',
-    level: 'Bloom Select',
+    level: '花選會員',
     joinedAt: '2026-03-08',
     birthday: '1996-05-20',
     favoriteCategories: ['蝴蝶蘭', '花籃'],
@@ -77,10 +80,10 @@ function App() {
   const [productListState, setProductListState] = useState([])
 
   const marqueeMessages = [
-    'Bloom & Grace｜自然奢雅 × 編輯感極簡的花藝電商體驗',
-    'Orchid 與 Flower Basket 為核心品項，會員登入後可接續購物袋與結帳流程',
-    '結帳送出後將導向綠界測試付款，回站後再透過本地 server 查單確認結果',
-    '品牌介面已依照 Stitch 專案方向重構，保留高級花藝網站的留白與秩序感',
+    '花店品牌｜自然奢雅 × 編輯感極簡的花藝選品體驗',
+    '蝴蝶蘭與花藝花籃為核心品項，登入後可接續購物袋與結帳流程',
+    '結帳送出後將導向綠界測試付款，回站後再透過本地伺服器查單確認結果',
+    '品牌介面已依照設計稿方向重構，保留高級花藝網站的留白與秩序感',
   ]
 
   const showToast = useCallback((message, tone) => {
@@ -133,11 +136,28 @@ function App() {
   const activeProduct = activeProductId
     ? productList.find((product) => product.id === activeProductId) || enrichProduct(getProductById(activeProductId))
     : null
+  const curatedRelatedIds = [
+    'verdant-fern-11',
+    'dune-grasses-13',
+    'roseate-orchid-12',
+    'archival-mix-10',
+    'monstera-deliciosa-06',
+  ]
   const relatedProducts = activeProduct
-    ? productList
-        .filter((product) => product.id !== activeProduct.id && product.category === activeProduct.category)
-        .slice(0, 3)
+    ? [
+        ...productList.filter((product) => product.id !== activeProduct.id && product.category === activeProduct.category),
+        ...curatedRelatedIds
+          .map((productId) => productList.find((product) => product.id === productId))
+          .filter(Boolean),
+      ]
+        .filter((product, index, array) => array.findIndex((item) => item.id === product.id) === index)
+        .filter((product) => product.id !== activeProduct.id)
+        .slice(0, 4)
     : []
+
+  const isStoreSurface = path === '/' || path === '/shop' || path === '/cart' || path.startsWith('/products/')
+  const isAuthSurface = path === '/sign-in' || path === '/admin'
+  const headerVariant = path === '/' ? 'home' : 'collection'
 
   const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0)
 
@@ -250,7 +270,6 @@ function App() {
         searchText={searchText}
         onCategoryChange={setCurrentCategory}
         onSearchChange={setSearchText}
-        onAddToCart={handleAddToCart}
       />
     )
   } else if (path === '/about') {
@@ -332,6 +351,7 @@ function App() {
   } else if (path.startsWith('/products/')) {
     pageContent = (
       <ProductDetailPage
+        key={activeProductId}
         product={activeProduct}
         relatedProducts={relatedProducts}
         quantity={selectedQuantity}
@@ -345,7 +365,6 @@ function App() {
     pageContent = (
       <HomePage
         isMember={isMember}
-        onAddToCart={handleAddToCart}
         onOpenMemberModal={() => openMemberEntryForPath('/sign-in')}
       />
     )
@@ -353,26 +372,32 @@ function App() {
 
   return (
     <div className="app-shell app-shell-rebuild">
-      <Navbar
-        cartCount={cartCount}
-        isMember={isMember}
-        onToggleMemberModal={() => openMemberEntryForPath('/profile')}
-      />
+      {!isAuthSurface ? (
+        <Navbar
+          currentPath={path}
+          cartCount={cartCount}
+          isMember={isMember}
+          onToggleMemberModal={() => openMemberEntryForPath('/profile')}
+          variant={headerVariant}
+        />
+      ) : null}
 
-      <div className="announcement-bar">
-        <div className="announcement-marquee">
-          <div className="announcement-marquee-track">
-            {[...marqueeMessages, ...marqueeMessages].map((message, index) => (
-              <span key={`${message}-${index}`}>{message}</span>
-            ))}
+      {!isStoreSurface && !isAuthSurface ? (
+        <div className="announcement-bar">
+          <div className="announcement-marquee">
+            <div className="announcement-marquee-track">
+              {[...marqueeMessages, ...marqueeMessages].map((message, index) => (
+                <span key={`${message}-${index}`}>{message}</span>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
       <Toast message={toast.message} tone={toast.tone} isVisible={Boolean(toast.message)} />
 
       <main className="main-content">{pageContent}</main>
 
-      <Footer />
+      {!isAuthSurface ? <Footer /> : null}
     </div>
   )
 }
