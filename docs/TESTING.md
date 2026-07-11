@@ -1,123 +1,123 @@
 # TESTING.md
 
-## 驗收前準備
+## 驗收目標
+本檔用來確認兩件事：
+1. AI Agent 協作資料夾是否整理完成
+2. 專案功能是否可正常建置與基本驗證
+
+## A. 協作資料夾驗收
+
+### 1. 主要記憶文件
+請確認以下檔案存在，且內容維持精簡：
+- `AGENTS.md`
+- `CLAUDE.md`
+
+檢查重點：
+- 主記憶文件控制在 100 行內
+- 內容只放高頻規則與入口資訊
+- 延伸內容導向 `docs/`
+
+### 2. 文件資料夾
+請確認以下檔案存在：
+- `docs/DEVELOPMENT.md`
+- `docs/ARCHITECTURE.md`
+- `docs/FEATURES.md`
+- `docs/TESTING.md`
+- `docs/plans/README.md`
+- `docs/plans/2026-07-12-ecpay-lv2-plan.md`
+- `docs/plans/archive/`
+
+檢查重點：
+- 每份文件不超過 500 行
+- 文件職責清楚，不互相混寫
+- LV2 active plan 存在且可追蹤
+- 計畫完成後有歸檔紀錄
+
+### 3. Codex 設定集
+請確認以下檔案存在：
+- `.codex/config.toml`
+
+檢查重點：
+- 有指定 `AGENTS.md` 作為主記憶入口
+- 有設定 `docs`、`plans`、`plan_archive` 路徑
+- 設定內容與實際資料夾一致
+
+## B. LV2 綠界驗收資料
+
+### 1. 參考計畫檔
+- `docs/plans/2026-07-12-ecpay-lv2-plan.md`
+
+### 2. 測試帳號密碼
+#### 會員測試帳密
+- Email：`member@bloomandgrace.tw`
+- Password：`Aa123456`
+
+#### Admin 驗收帳密
+- Email：`admin@hexschool.com`
+- Password：`12345678`
+
+### 3. 綠界測試卡資訊
+- 綠界測試卡：`4311-9522-2222-2222`
+- 有效年月：任意未來日期
+- 安全碼：任意 3 碼
+- 3D 驗證：`1234`
+
+## C. 專案基本驗證
 
 ### 1. 安裝依賴
 ```bash
 npm install
 ```
 
-### 2. 設定環境變數
-請建立 `.env`，可直接複製 `.env.example`。
-
-這次驗收主要會用到：
-- `APP_BASE_URL`
-- `FRONTEND_BASE_URL`
-- `VITE_API_BASE_URL`
-- `ECPAY_ENV`
-- `ECPAY_MERCHANT_ID`
-- `ECPAY_HASH_KEY`
-- `ECPAY_HASH_IV`
-- `VITE_ADMIN_EMAIL`
-- `VITE_ADMIN_PASSWORD`
-
-### 3. 啟動前後端
-先開本地 server：
-```bash
-npm run server
-```
-
-再開前端：
+### 2. 啟動開發環境
 ```bash
 npm run dev
 ```
 
-### 4. 建置檢查
+若專案有本地 API server，也可另外啟動：
+```bash
+npm run server
+```
+
+### 3. 建置與靜態檢查
 ```bash
 npm run build
 npm run lint
 ```
 
----
+若專案提供 typecheck，再補跑：
+```bash
+npm run typecheck
+```
 
-## 前台驗收流程
+## D. 綠界流程驗收
+1. 啟動前端與本地 server。
+2. 從商品頁或購物袋進入結帳頁。
+3. 填寫收件人資料並送出訂單。
+4. 確認頁面有導向綠界測試付款頁。
+5. 使用上方測試卡完成付款。
+6. 付款完成後確認已回到前端結果頁。
+7. 確認前端會透過本地 server 查單，而不是只顯示跳轉成功。
+8. 若查單失敗，應顯示可理解的錯誤訊息。
 
-### A. 商品與購物車
-1. 進入首頁或 `/shop`
-2. 找到 `1 元測試花禮`（專門測付款流程用）
-3. 將 `1 元測試花禮` 加入購物車
-4. 前往 `/cart`
-5. 確認可調整數量與移除商品
+## E. 目前人工檢查缺口
+- 是否所有必要環境變數都已在 `.env` 設定完成。
+- 是否已實際驗證 `merchantTradeNo` 能在結果頁查到資料。
+- 是否已完成本輪 build / lint 驗證。
+- 若付款結果只顯示回站訊息但無查單成功，不能直接當作完成。
 
-### B. 未登入不可結帳
-1. 在未登入狀態下，從購物車點擊「前往結帳」
-2. 預期結果：
-   - 系統提示先登入會員
-   - 不會直接進入完整結帳流程
+## F. 文件同步驗證
+當新增功能或調整流程後，請確認：
+- `docs/FEATURES.md` 已更新功能狀態
+- `docs/ARCHITECTURE.md` 已更新結構或資料流
+- `docs/TESTING.md` 已更新驗收步驟
+- 若有計畫檔，完成後已移到 `docs/plans/archive/`
 
-### C. 會員登入後結帳
-本作業會員登入為 mock 流程，可使用下列測試資料：
-- Email：`member@bloomandgrace.tw`
-- 密碼：`Aa123456`
-
-步驟：
-1. 開啟會員登入視窗
-2. 輸入任一有效格式 Email 與密碼（建議直接用上方測試資料）
-3. 登入成功後重新進入 `/checkout`
-4. 確認可看到收件資料與訂單摘要
-
-### D. 綠界付款流程
-1. 在結帳頁填寫收件資料
-2. 點擊送出後，應導向綠界測試付款頁
-3. 使用綠界測試信用卡完成付款
-4. 成功後返回本地前端 `/payment-result`
-5. 前端會再透過本地 server 查詢綠界付款結果
-
----
-
-## 綠界測試卡資訊
-- 信用卡號：`4311-9522-2222-2222`
-- 安全碼：任意 3 碼
-- 有效年月：大於現在月份
-- 3D 驗證簡訊：`1234`
-
-資料來源：綠界測試介接資訊官方文件。
-
----
-
-## 付款結果頁驗收重點
-進入 `/payment-result?merchantTradeNo=...` 後，確認：
-- 可看到 MerchantTradeNo
-- 可看到付款狀態
-- 可看到付款方式
-- 可看到付款時間或查單回覆
-- 若查單失敗，畫面會顯示可讀訊息
-
-> 注意：本地端通常收不到 `ReturnURL` 的 server 通知，
-> 本作業以回站後再由本地 server 呼叫 `QueryTradeInfo` 查單為主。
-
----
-
-## Admin 驗收流程
-1. 前往 `/admin`
-2. 頁面上可直接看到測試帳號密碼
-3. 使用頁面提供的帳密登入
-
-預設測試帳密：
-- Email：`admin@hexschool.com`
-- Password：`12345678`
-
-登入後預期可看到：
-- 商品管理區
-- 會員資料頁籤或後台示意內容
-
----
-
-## 建議截圖紀錄
-建議至少保留以下畫面：
-- 商品列表頁
-- 購物車頁
-- 未登入被擋下的結帳提示
-- 綠界付款成功頁
-- 回站後的付款結果頁
-- Admin 登入頁與後台頁
+## G. 建議回報格式
+完成後建議至少回報：
+- 本次修改檔案
+- 是否通過 build
+- 是否通過 lint
+- 是否有 typecheck
+- 哪些內容仍為 mock
+- 哪份計畫已歸檔

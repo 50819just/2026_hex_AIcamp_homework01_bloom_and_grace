@@ -12,7 +12,12 @@ confirm_before_destructive = true
 docs = "docs"
 plans = "docs/plans"
 plan_archive = "docs/plans/archive"
+dev_rules = "docs/DEVELOPMENT.md"
+architecture = "docs/ARCHITECTURE.md"
+features = "docs/FEATURES.md"
+testing = "docs/TESTING.md"
 
 [guards]
 hide_secrets_in_frontend = true
 require_docs_update_for_feature = true
+prefer_codex_over_claude_setup = true

@@ -4,6 +4,20 @@
 This project is a florist e-commerce frontend MVP for a single-brand flower shop.
 Main product categories include orchids, flower baskets, potted flowers, and sympathy floral gifts.
 
+## Agent Scope
+- This repository uses **Codex CLI** as the primary AI agent setup.
+- Main memory file: `AGENTS.md`
+- Extended project documents live in `./docs/`
+- Do not create or rely on `.claude/` settings for this assignment version.
+
+## Docs Map
+- `docs/DEVELOPMENT.md`: coding rules, naming, wording, error handling
+- `docs/ARCHITECTURE.md`: folder structure, module boundaries, data flow
+- `docs/FEATURES.md`: current feature status and update checklist
+- `docs/TESTING.md`: verification steps and acceptance flow
+- `docs/plans/`: active plans and planning notes
+- `docs/plans/archive/`: completed plan records
+
 ## Working Rules
 - Preserve the existing project structure when possible.
 - Prefer small, reusable React components.
@@ -22,12 +36,18 @@ Main product categories include orchids, flower baskets, potted flowers, and sym
 - Member price must be visually more prominent than original price.
 - Orchid and flower basket products are mandatory.
 - Responsive behavior for desktop and mobile is required.
+- Frontend visible text should use Traditional Chinese.
 
 ## Non-Goals
-- No real payment integration
-- No real backend authentication
-- No large marketplace features
-- No coupon engine
+- No real backend authentication.
+- No coupon engine.
+- No unnecessary marketplace-scale features.
+- Do not expand scope beyond assignment requirements.
+
+## Planning Workflow
+- Use `docs/plans/` for active or generated plans.
+- After implementation is finished, move completed plans into `docs/plans/archive/`.
+- When features change, sync related docs in `docs/`.
 
 ## Verification
 Before finishing:
@@ -44,7 +64,3 @@ When done, summarize:
 - routes created
 - mock data structure
 - known limitations
-## ECPay API Skill
-- 讀取 `.ecpay-skill/AGENTS.md` 作為綠界整合知識庫入口。
-- 常用指南：`.ecpay-skill/guides/01-payment-aio.md`、`13-checkmacvalue.md`、`15-troubleshooting.md`、`16-go-live-checklist.md`。
-- 本專案若有綠界串接、查單、正式環境切換問題，優先參考 `docs/ECPAY_SKILL_USAGE.md` 與 `.ecpay-skill/`。

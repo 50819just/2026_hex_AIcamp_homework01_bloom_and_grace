@@ -2737,6 +2737,18 @@
   align-content: center;
 }
 
+.checkout-banner-head {
+  display: grid;
+  gap: 6px;
+}
+
+.checkout-test-card-note {
+  color: #b42318;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
 .checkout-process-copy strong {
   color: var(--text-strong);
   font-size: 1.05rem;
@@ -3449,6 +3461,27 @@
   border: 1px solid transparent;
 }
 
+.payment-result-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.payment-result-badge.is-success {
+  background: rgba(79, 138, 92, 0.14);
+  color: #315f3d;
+}
+
+.payment-result-badge.is-pending {
+  background: rgba(181, 111, 47, 0.14);
+  color: #8a5720;
+}
+
 .payment-result-status strong {
   display: block;
   margin-bottom: 8px;
@@ -3515,6 +3548,32 @@
   font-weight: 600;
 }
 
+.payment-result-row-copy dd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.payment-result-copy-button {
+  border: 1px solid rgba(34, 34, 34, 0.12);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--text-strong);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-result-copy-button:hover,
+.payment-result-copy-button:focus-visible {
+  border-color: rgba(122, 84, 45, 0.28);
+  background: rgba(251, 247, 242, 0.96);
+}
+
 .payment-result-card-full {
   grid-column: 1 / -1;
 }
@@ -3536,6 +3595,31 @@
   color: #f6f1ec;
   font-size: 13px;
   line-height: 1.6;
+}
+
+.payment-result-summary-wrap {
+  display: grid;
+  gap: 12px;
+}
+
+.payment-result-code-summary {
+  font-size: 14px;
+}
+
+.payment-result-copy-button-inline {
+  justify-self: start;
+}
+
+.payment-result-details {
+  margin-top: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.payment-result-details summary {
+  cursor: pointer;
+  color: var(--text-soft);
+  font-weight: 700;
 }
 
 .payment-result-actions {
