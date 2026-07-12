@@ -1,123 +1,139 @@
 # TESTING.md
 
 ## 驗收目標
-本檔用來確認兩件事：
-1. AI Agent 協作資料夾是否整理完成
-2. 專案功能是否可正常建置與基本驗證
+本檔給老師、助教與未來維護者確認三件事：
+1. 專案是否可正常 build / lint
+2. 前台購物、登入、結帳與付款結果頁是否可重現
+3. 綠界驗證流程是否符合「本地端主動查單」的課程要求
 
-## A. 協作資料夾驗收
-
-### 1. 主要記憶文件
-請確認以下檔案存在，且內容維持精簡：
-- `AGENTS.md`
-- `CLAUDE.md`
-
-檢查重點：
-- 主記憶文件控制在 100 行內
-- 內容只放高頻規則與入口資訊
-- 延伸內容導向 `docs/`
-
-### 2. 文件資料夾
-請確認以下檔案存在：
-- `docs/DEVELOPMENT.md`
-- `docs/ARCHITECTURE.md`
-- `docs/FEATURES.md`
-- `docs/TESTING.md`
-- `docs/plans/README.md`
-- `docs/plans/2026-07-12-ecpay-lv2-plan.md`
-- `docs/plans/archive/`
-
-檢查重點：
-- 每份文件不超過 500 行
-- 文件職責清楚，不互相混寫
-- LV2 active plan 存在且可追蹤
-- 計畫完成後有歸檔紀錄
-
-### 3. Codex 設定集
-請確認以下檔案存在：
-- `.codex/config.toml`
-
-檢查重點：
-- 有指定 `AGENTS.md` 作為主記憶入口
-- 有設定 `docs`、`plans`、`plan_archive` 路徑
-- 設定內容與實際資料夾一致
-
-## B. LV2 綠界驗收資料
-
-### 1. 參考計畫檔
-- `docs/plans/2026-07-12-ecpay-lv2-plan.md`
-
-### 2. 測試帳號密碼
-#### 會員測試帳密
-- Email：`member@bloomandgrace.tw`
-- Password：`Aa123456`
-
-#### Admin 驗收帳密
-- Email：`admin@hexschool.com`
-- Password：`12345678`
-
-### 3. 綠界測試卡資訊
-- 綠界測試卡：`4311-9522-2222-2222`
-- 有效年月：任意未來日期
-- 安全碼：任意 3 碼
-- 3D 驗證：`1234`
-
-## C. 專案基本驗證
-
+## A. 環境準備
 ### 1. 安裝依賴
 ```bash
 npm install
 ```
 
-### 2. 啟動開發環境
+### 2. 建立 `.env`
+可從 `.env.example` 複製，至少要有：
+- `APP_BASE_URL=http://localhost:3000`
+- `FRONTEND_BASE_URL=http://localhost:5173`
+- `VITE_API_BASE_URL=http://localhost:3000`
+- `ECPAY_ENV=stage`
+- `ECPAY_MERCHANT_ID=3002607`
+- `ECPAY_HASH_KEY=pwFHCqoQZGmho4w6`
+- `ECPAY_HASH_IV=EkRm7iFT261dpevs`
+- `VITE_ADMIN_EMAIL`
+- `VITE_ADMIN_PASSWORD`
+
+### 3. 啟動前後端
 ```bash
+npm run server
 npm run dev
 ```
 
-若專案有本地 API server，也可另外啟動：
+若想一起開：
 ```bash
-npm run server
+npm run dev:all
 ```
 
-### 3. 建置與靜態檢查
+### 4. 建置檢查
 ```bash
 npm run build
 npm run lint
 ```
 
-若專案提供 typecheck，再補跑：
-```bash
-npm run typecheck
-```
+> `package.json` 目前沒有 `typecheck` script，這點符合現況，但驗收時要一併註記。
 
-## D. 綠界流程驗收
-1. 啟動前端與本地 server。
-2. 從商品頁或購物袋進入結帳頁。
-3. 填寫收件人資料並送出訂單。
-4. 確認頁面有導向綠界測試付款頁。
-5. 使用上方測試卡完成付款。
-6. 付款完成後確認已回到前端結果頁。
-7. 確認前端會透過本地 server 查單，而不是只顯示跳轉成功。
-8. 若查單失敗，應顯示可理解的錯誤訊息。
+## B. 前台驗收流程
+### 1. 商品與購物車
+1. 進入 `/shop`
+2. 加入任一花禮到購物車
+3. 進 `/cart`
+4. 確認可調整數量與刪除商品
 
-## E. 目前人工檢查缺口
-- 是否所有必要環境變數都已在 `.env` 設定完成。
-- 是否已實際驗證 `merchantTradeNo` 能在結果頁查到資料。
-- 是否已完成本輪 build / lint 驗證。
-- 若付款結果只顯示回站訊息但無查單成功，不能直接當作完成。
+### 2. 未登入不可結帳
+1. 在未登入狀態按「前往結帳」
+2. 預期結果：
+   - 顯示需先登入會員的提示
+   - 不會直接進入 `/checkout`
 
-## F. 文件同步驗證
-當新增功能或調整流程後，請確認：
-- `docs/FEATURES.md` 已更新功能狀態
-- `docs/ARCHITECTURE.md` 已更新結構或資料流
-- `docs/TESTING.md` 已更新驗收步驟
-- 若有計畫檔，完成後已移到 `docs/plans/archive/`
+### 3. 會員登入
+#### 畫面建議測試資料
+- 測試用帳號：`member@flower.tw`
+- 測試用密碼：`Flower1234`
 
-## G. 建議回報格式
-完成後建議至少回報：
-- 本次修改檔案
-- 是否通過 build
-- 是否通過 lint
-- 是否有 typecheck
-- 哪些內容仍為 mock
-- 哪份計畫已歸檔
+> 目前會員登入屬於 mock 流程，主要驗證的是「登入後可進入結帳」，不是後端真實帳密比對。
+
+步驟：
+1. 進入 `/sign-in`
+2. 輸入任意非空的帳號與密碼（建議直接使用頁面顯示的測試資料）
+3. 成功後重新進入 `/checkout`
+4. 確認可看到收件資料、發票資訊與付款提醒
+
+## C. Admin 驗收流程
+### 建議帳密
+- `.env.example` 預設：`admin@hexschool.com / 12345678`
+- 若前端未吃到 `.env`，程式 fallback 可能顯示：`admin@flower.tw / 12345678`
+
+> 因 build-time env 影響，**請以當下頁面顯示或實際 `.env` 值為準**。
+
+步驟：
+1. 進入 `/admin`
+2. 用頁面顯示的管理員帳密登入
+3. 預期結果：可進入後台商品與會員示意頁
+
+## D. 綠界付款驗收
+### 測試信用卡資料
+- 測試信用卡卡號：`4311-9522-2222-2222`
+- 到期年月：任意未來日期
+- 安全碼：任意 3 碼
+- 3D 驗證碼：`1234`
+
+### 驗收步驟
+1. 以會員身份進入 `/checkout`
+2. 填完收件資料
+3. 點擊「前往綠界付款」
+4. 確認導向綠界測試付款頁
+5. 使用上方測試卡完成付款
+6. 成功後應回到 `/payment-result?merchantTradeNo=...`
+7. 前端會再透過本地 server 呼叫 `/api/ecpay/query`
+8. 結果頁應可看到：
+   - 前台回傳摘要字串
+   - 商店訂單編號
+   - 綠界付款流水號
+   - 付款方式
+   - 付款金額
+   - 付款時間
+   - 原始查單 JSON（可收合）
+
+### 本題關鍵驗收點
+- **不是只看有沒有成功跳回前台**
+- **而是要確認前端有沒有在回站後主動查單**
+- `tradeStatus === '1'` 時，付款結果頁應顯示付款成功
+
+## E. 常見錯誤排查
+### 1. Checkout 顯示連不到付款服務
+可能原因：`npm run server` 沒有啟動。
+
+### 2. 綠界付款完成但結果頁查不到資料
+先檢查：
+- URL 是否有 `merchantTradeNo`
+- `server/data/ecpay-orders.json` 是否有該筆資料
+- server console 是否有查單錯誤
+
+### 3. `ReturnURL` 沒收到
+在 localhost 很常見，**本專案不以此當作失敗**。
+只要 `/payment-result` 頁面能主動查單成功，就符合課程要求。
+
+### 4. GitHub Pages 無法完整測金流
+這是正常的，因為 GitHub Pages 沒有本地 Node server。
+老師若要驗綠界流程，需在本地環境啟動前後端。
+
+## F. 文件同步驗收
+若本輪有改功能或流程，請確認：
+- `docs/README.md`
+- `docs/ARCHITECTURE.md`
+- `docs/FEATURES.md`
+- `docs/DEVELOPMENT.md`
+- `docs/TESTING.md`
+- `docs/CHANGELOG.md`
+都已反映實際現況。
