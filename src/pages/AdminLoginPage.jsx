@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 import BrandLogo from '../components/BrandLogo'
 import { navigateTo } from '../hooks/useRouter'
+import { withBaseUrl } from '../lib/assetUrl'
 
 const adminCredentials = {
   email: import.meta.env.VITE_ADMIN_EMAIL || 'admin@flower.tw',
@@ -50,7 +51,7 @@ function AdminLoginPage({ onAdminLogin, onNotify }) {
           <aside className="admin-hub-visual-card">
             <figure className="admin-hub-figure">
               <img
-                src="/images/products/orchids/white-orchid-03.jpg"
+                src={withBaseUrl('images/products/orchids/white-orchid-03.jpg')}
                 alt="花店後台登入示意"
                 className="admin-hub-image"
                 loading="eager"

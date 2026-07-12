@@ -1,4 +1,6 @@
-const localImage = (path) => `/images/products/${path}`
+import { withBaseUrl } from '../lib/assetUrl'
+
+const localImage = (path) => withBaseUrl(`images/products/${path}`)
 
 const CATEGORY_META = {
   orchid: {

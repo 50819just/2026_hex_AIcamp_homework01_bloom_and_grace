@@ -1,4 +1,5 @@
 import { navigateTo } from '../hooks/useRouter'
+import { withBaseUrl } from '../lib/assetUrl'
 
 const originParagraphs = [
   'Bloom & Grace 的起點很簡單：希望花禮不只好看，也能真的說中送禮者的心意。',
@@ -9,13 +10,13 @@ const philosophyCards = [
   {
     title: '以感受為設計起點',
     body: '從色調、姿態與用途出發，讓每個作品都保有情感與秩序。',
-    src: '/images/products/potted/glass-potted-01.jpg',
+    src: withBaseUrl('images/products/potted/glass-potted-01.jpg'),
     alt: '以感受為設計起點的花藝示意',
   },
   {
     title: '層次比堆疊更重要',
     body: '透過比例與留白，讓祝福能被看見，也不會過度喧鬧。',
-    src: '/images/products/baskets/pink-rose-arrangement-01.jpg',
+    src: withBaseUrl('images/products/baskets/pink-rose-arrangement-01.jpg'),
     alt: '花材層次與比例示意',
   },
 ]
@@ -49,19 +50,19 @@ const brandValues = [
 
 const galleryImages = [
   {
-    src: '/images/products/orchids/white-orchid-03.jpg',
+    src: withBaseUrl('images/products/orchids/white-orchid-03.jpg'),
     alt: '白蝴蝶蘭的細節展示',
   },
   {
-    src: '/images/products/baskets/pink-rose-bouquet-01.jpg',
+    src: withBaseUrl('images/products/baskets/pink-rose-bouquet-01.jpg'),
     alt: '粉色花束的工作室桌面視角',
   },
   {
-    src: '/images/products/potted/green-potted-01.jpg',
+    src: withBaseUrl('images/products/potted/green-potted-01.jpg'),
     alt: '綠植與玻璃器皿的清爽擺設',
   },
   {
-    src: '/images/products/sympathy/sympathy-white-02.jpg',
+    src: withBaseUrl('images/products/sympathy/sympathy-white-02.jpg'),
     alt: '白色弔唁花禮的安靜層次',
   },
 ]
@@ -87,7 +88,7 @@ function AboutPage() {
         </div>
 
         <div className="story-hero-visual">
-          <img src="/images/products/baskets/opening-bouquet-01.jpg" alt="Bloom & Grace 品牌主視覺花禮" loading="eager" />
+          <img src={withBaseUrl('images/products/baskets/opening-bouquet-01.jpg')} alt="Bloom & Grace 品牌主視覺花禮" loading="eager" />
           <div className="story-hero-quote">
             <span className="section-kicker">我們的故事</span>
             <strong>花不是裝飾，而是一種能被記住的情感語言。</strong>
@@ -98,7 +99,7 @@ function AboutPage() {
 
       <section className="page-container story-split">
         <div className="story-split-visual">
-          <img src="/images/products/orchids/white-orchid-01.jpg" alt="品牌起點的蝴蝶蘭花禮" loading="lazy" />
+          <img src={withBaseUrl('images/products/orchids/white-orchid-01.jpg')} alt="品牌起點的蝴蝶蘭花禮" loading="lazy" />
         </div>
         <div className="story-split-copy">
           <p className="section-kicker">品牌起源</p>

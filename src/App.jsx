@@ -19,15 +19,25 @@ import SignInPage from './pages/SignInPage'
 import { getCategoryLabel, getProductById, products } from './data/products'
 import { navigateTo, useRouter } from './hooks/useRouter'
 import { fetchMemberProfile, fetchProducts } from './lib/api'
+import { withBaseUrl } from './lib/assetUrl'
+
+function normalizeProductAssets(product) {
+  return {
+    ...product,
+    image: product.image ? withBaseUrl(product.image) : product.image,
+    gallery: Array.isArray(product.gallery) ? product.gallery.map((item) => withBaseUrl(item)) : product.gallery,
+  }
+}
 
 function enrichProduct(product) {
   const localProduct = getProductById(product.id)
-
-  return {
+  const mergedProduct = {
     ...product,
     ...localProduct,
     categoryLabel: getCategoryLabel(product.category),
   }
+
+  return normalizeProductAssets(mergedProduct)
 }
 
 function getToastTone(message, preferredTone) {
